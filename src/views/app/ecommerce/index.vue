@@ -396,7 +396,6 @@ import ProductList from "@/components/Ecommerce/product-list.vue";
 import Select from "@/components/Select";
 import { ref } from "vue";
 import { useQuery } from "@tanstack/vue-query";
-import { getProducts } from "@/plugins/axios";
 
 const selected = ref(null);
 
