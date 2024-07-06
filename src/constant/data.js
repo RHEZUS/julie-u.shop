@@ -1294,124 +1294,346 @@ import redTshirt from "@/assets/images/e-commerce/product-card/red-t-shirt.png";
 import yellowFrok from "@/assets/images/e-commerce/product-card/yellow-frok.png";
 import yellowJumper from "@/assets/images/e-commerce/product-card/yellow-jumper.png";
 
-export const products = [
+export const products =
+[
   {
-    id: 1,
-    img: blackJumper,
-    category: "men",
-    name: "Classical Black T-Shirt Classical Black T-Shirt",
-    subtitle: "The best cotton black branded shirt.",
-    desc: "The best cotton black branded shirt. The best cotton black branded shirt. The best cotton black branded shirt. The best cotton black branded shirt. The best cotton black branded shirt.",
-    rating: "4.8",
-    price: 489,
-    oldPrice: "$700",
-    percent: "40%",
-    brand: "apple",
+    "id": 1,
+    "title": "Smartphone X200",
+    "slug": "smartphone-x200",
+    "description": "The latest Smartphone X200 with advanced features and sleek design. A modern coffee table with a minimalist design, perfect for any living room. A stylish denim jacket that fits perfectly for casual outings.",
+    "brand_id": 1,
+    "category_id": 1,
+    "tags": "[\"smartphone\", \"electronics\"]",
+    "images_urls": "[\"https://lrumeur.com/cdn/shop/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=360\", \"https://cdn.shopify.com/s/files/1/0564/9740/6031/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=493\"]",
+    "status": "published",
+    "created_at Francs CFA": "2024-07-04T15:25:00.000000Z",
+    "updated_at": "2024-07-04T15:25:00.000000Z",
+    "deleted_at": null,
+    "brand": {
+      "id": 1,
+      "name": "Victoria Secret",
+      "slug": "victoria-secret",
+      "created_at": "2024-07-04T15:24:57.000000Z",
+      "updated_at": "2024-07-04T15:24:57.000000Z",
+      "deleted_at": null
   },
-  {
-    id: 2,
-    img: blackTshirt,
-    category: "men",
-    name: "Classical Black T-Shirt",
-    subtitle: "The best cotton black branded shirt.",
-    desc: "The best cotton black branded shirt",
-    rating: "4.8",
-    price: 20,
-    oldPrice: "$700",
-    percent: "40%",
-    brand: "apex",
-  },
-  {
-    id: 3,
-    img: checkShirt,
-    category: "women",
-    name: "Classical Black T-Shirt",
-    subtitle: "The best cotton black branded shirt.",
-    desc: "The best cotton black branded shirt",
-    rating: "4.8",
-    price: 120,
-    oldPrice: "$700",
-    percent: "40%",
-    brand: "easy",
-  },
-  {
-    id: 4,
-    img: grayJumper,
-    category: "women",
-    name: "Classical Black T-Shirt",
-    subtitle: "The best cotton black branded shirt.",
-    desc: "The best cotton black branded shirt",
-    rating: "4.8",
-    price: 70,
-    oldPrice: "$700",
-    percent: "40%",
-    brand: "pixel",
-  },
-  {
-    id: 5,
-    img: grayTshirt,
-    category: "baby",
-    name: "Classical Black T-Shirt",
-    subtitle: "The best cotton black branded shirt.",
-    desc: "The best cotton black branded shirt",
-    rating: "4.8",
-    price: 30,
-    oldPrice: "$700",
-    percent: "40%",
-    brand: "apex",
-  },
-  {
-    id: 6,
-    img: pinkBlazer,
-    category: "women",
-    name: "Classical Black T-Shirt",
-    subtitle: "The best cotton black branded shirt.",
-    desc: "The best cotton black branded shirt",
-    rating: "4.8",
-    price: 40,
-    oldPrice: "$700",
-    percent: "40%",
-    brand: "apple",
-  },
-  {
-    id: 7,
-    img: redTshirt,
-    category: "women",
-    name: "Classical Black T-Shirt",
-    subtitle: "The best cotton black branded shirt.",
-    desc: "The best cotton black branded shirt",
-    rating: "4.8",
-    price: 90,
-    oldPrice: "$700",
-    percent: "40%",
-    brand: "easy",
-  },
-  {
-    id: 8,
-    img: yellowFrok,
-    category: "women",
-    name: "Classical Black T-Shirt",
-    subtitle: "The best cotton black branded shirt.",
-    desc: "The best cotton black branded shirt",
-    rating: "4.8",
-    price: 80,
-    oldPrice: "$700",
-    percent: "40%",
-    brand: "pixel",
-  },
-  {
-    id: 9,
-    img: yellowJumper,
-    category: "furniture",
-    name: "Classical Black T-Shirt",
-    subtitle: "The best cotton black branded shirt.",
-    desc: "The best cotton black branded shirt",
-    rating: "4.8",
-    price: 20,
-    oldPrice: "$700",
-    percent: "40%",
-    brand: "samsung",
-  },
+  "category": {
+      "id": 1,
+      "name": "Bridal",
+      "slug": "bridal",
+      "parent_category_id": null,
+      "desc": null,
+      "created_at": "2024-07-04T15:24:56.000000Z",
+      "updated_at": "2024-07-04T15:24:56.000000Z",
+      "deleted_at": null
+    },
+    discount: null,
+    variants: [
+      {
+        "id": 1,
+        "product_id": 1,
+        "title": "Smartphone X200 - Black 128GB",
+        "price": "699.99",
+        "sku": "X200-BLK-128",
+        "position": 1,
+        "option1": "Black",
+        "option2": "128GB",
+        "barcode": "1234567890123",
+        "grams": 200,
+        "weight": "0.20",
+        "weight_unit": "kg",
+        "inventory_quantity": 50,
+        "old_inventory_quantity": 0,
+        "images": null,
+        "created_at": "2024-07-04T15:25:01.000000Z",
+        "updated_at": "2024-07-04T15:25:01.000000Z"
+      },
+      {
+        "id": 2,
+        "product_id": 1,
+        "title": "Smartphone X200 - White 256GB",
+        "price": "799.99",
+        "sku": "X200-WHT-256",
+        "position": 1,
+        "option1": "White",
+        "option2": "256GB",
+        "barcode": "1234567890124",
+        "grams": 200,
+        "weight": "0.20",
+        "weight_unit": "kg",
+        " Francs CFA Francs CFAory_quantity": 30,
+        "old_inventory_quantity": 0,
+        "images": null,
+        "created_at": "2024-07-04T15:25:02.000000Z",
+        "updated_at": "2024-07-04T15:25:02.000000Z"
+      }
+    ],
+    options: [
+      {
+        "id": 1,
+        "product_id": 1,
+        "name": "Color",
+        "position": 1,
+        "created_at": "2024-07-04T15:25:04.000000Z",
+        "updated_at": "2024-07-04T15:25:04.000000Z",
+        values: [
+          {
+            "id": 1,
+            "option_id": 1,
+            "value": "Black",
+            "created_at": "2024-07-04T15:25:05.000000Z",
+            "updated_at": "2024-07-04T15:25:05.000000Z"
+          },
+          {
+            "id": 2,
+            "option_id": 1,
+            "value": "White",
+            "created_at": "2024-07-04T15:25:07.000000Z",
+            "updated_at": "2024-07-04T15:25:07.000000Z"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "product_id": 1,
+        "name": "Storage",
+        "position": 2,
+        "created_at": "2024-07-04T15:25:09.000000Z",
+        "updated_at": "2024-07-04T15:25:09.000000Z",
+        "values": [
+          {
+            "id": 3,
+            "option_id": 2,
+            "value": "128GB",
+            "created_at": "2024-07-04T15:25:10.000000Z",
+            "updated_at": "2024-07-04T15:25:10.000000Z"
+          },
+          {
+            "id": 4,
+            "option_id": 2,
+            "value": "256GB",
+            "created_at": "2024-07-04T15:25:11.000000Z",
+            "updated_at": "2024-07-04T15:25:11.000000Z"
+          }
+        ]
+      }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Stylish Denim Jacket",
+        "slug": "stylish-denim-jacket",
+        "description": "A stylish denim jacket that fits perfectly for casual outings. A modern coffee table with a minimalist design, perfect for any living room. The latest Smartphone X200 with advanced features and sleek design.",
+        "brand_id": 2,
+        "category_id": 2,
+        "tags": "[\"denim\", \"jacket\", \"clothing\"]",
+        "images_urls": "[\"https://lrumeur.com/cdn/shop/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=360\", \"https://cdn.shopify.com/s/files/1/0564/9740/6031/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=493\"]",
+        "status": "published",
+        "created_at": "2024-07-04T15:25:13.000000Z",
+        "updated_at": "2024-07-04T15:25:13.000000Z",
+        "deleted_at": null,
+        "brand": {
+            "id": 2,
+            "name": "Calvin Klein",
+            "slug": "calvin-klein",
+            "created_at": "2024-07-04T15:24:57.000000Z",
+            "updated_at": "2024-07-04T15:24:57.000000Z",
+            "deleted_at": null
+        },
+        "category": {
+            "id": 2,
+            "name": "Collections",
+            "slug": "collections",
+            "parent_category_id": null,
+            "desc": null,
+            "created_at": "2024-07-04T15:24:56.000000Z",
+            "updated_at": "2024-07-04T15:24:56.000000Z",
+            "deleted_at": null
+        },
+        "discount": null,
+        "variants": [
+            {
+                "id": 3,
+                "product_id": 2,
+                "title": "Denim Jacket - Small",
+                "price": "59.99",
+                "sku": "DJ-SML",
+                "position": 1,
+                "option1": "Blue",
+                "option2": "Small",
+                "barcode": "2345678901234",
+                "grams": 500,
+                "weight": "0.50",
+                "weight_unit": "kg",
+                "inventory_quantity": 20,
+                "old_inventory_quantity": 0,
+                "images": null,
+                "created_at": "2024-07-04T15:25:15.000000Z",
+                "updated_at": "2024-07-04T15:25:15.000000Z"
+            },
+            {
+                "id": 4,
+                "product_id": 2,
+                "title": "Denim Jacket - Medium",
+                "price": "59.99",
+                "sku": "DJ-MED",
+                "position": 1,
+                "option1": "Blue",
+                "option2": "Medium",
+                "barcode": "2345678901235",
+                "grams": 550,
+                "weight": "0.55",
+                "weight_unit": "kg",
+                "inventory_quantity": 30,
+                "old_inventory_quantity": 0,
+                "images": null,
+                "created_at": "2024-07-04T15:25:17.000000Z",
+                "updated_at": "2024-07-04T15:25:17.000000Z"
+            }
+        ],
+        "options": [
+            {
+                "id": 3,
+                "product_id": 2,
+                "name": "Color",
+                "position": 1,
+                "created_at": "2024-07-04T15:25:18.000000Z",
+                "updated_at": "2024-07-04T15:25:18.000000Z",
+                "values": [
+                    {
+                        "id": 5,
+                        "option_id": 3,
+                        "value": "Blue",
+                        "created_at": "2024-07-04T15:25:19.000000Z",
+                        "updated_at": "2024-07-04T15:25:19.000000Z"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "product_id": 2,
+                "name": "Size",
+                "position": 2,
+                "created_at": "2024-07-04T15:25:20.000000Z",
+                "updated_at": "2024-07-04T15:25:20.000000Z",
+                "values": [
+                    {
+                        "id": 6,
+                        "option_id": 4,
+                        "value": "Small",
+                        "created_at": "2024-07-04T15:25:21.000000Z",
+                        "updated_at": "2024-07-04T15:25:21.000000Z"
+                    },
+                    {
+                        "id": 7,
+                        "option_id": 4,
+                        "value": "Medium",
+                        "created_at": "2024-07-04T15:25:23.000000Z",
+                        "updated_at": "2024-07-04T15:25:23.000000Z"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Modern Coffee Table",
+        "slug": "modern-coffee-table",
+        "description": "A modern coffee table with a minimalist design, perfect for any living room. A stylish denim jacket that fits perfectly for casual outings. The latest Smartphone X200 with advanced features and sleek design.",
+        "brand_id": 3,
+        "category_id": 3,
+        "tags": "[\"furniture\", \"coffee table\", \"living room\"]",
+        "images_urls": "[\"https://lrumeur.com/cdn/shop/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=360\", \"https://cdn.shopify.com/s/files/1/0564/9740/6031/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=493\"]",
+        "status": "published",
+        "created_at": "2024-07-04T15:25:25.000000Z",
+        "updated_at": "2024-07-04T15:25:25.000000Z",
+        "deleted_at": null,
+        "brand": {
+            "id": 3,
+            "name": "H&M",
+            "slug": "h-and-m",
+            "created_at": "2024-07-04T15:24:57.000000Z",
+            "updated_at": "2024-07-04T15:24:57.000000Z",
+            "deleted_at": null
+        },
+        "category": {
+            "id": 3,
+            "name": "Bestsellers",
+            "slug": "bestsellers",
+            "parent_category_id": null,
+            "desc": null,
+            "created_at": "2024-07-04T15:24:56.000000Z",
+            "updated_at": "2024-07-04T15:24:56.000000Z",
+            "deleted_at": null
+        },
+        "discount": null,
+        "variants": [
+            {
+                "id": 5,
+                "product_id": 3,
+                "title": "Coffee Table - Oak",
+                "price": "149.99",
+                "sku": "CT-OAK",
+                "position": 1,
+                "option1": "Oak",
+                "option2": "Standard",
+                "barcode": "3456789012345",
+                "grams": 10000,
+                "weight": "10.00",
+                "weight_unit": "kg",
+                "inventory_quantity": 15,
+                "old_inventory_quantity": 0,
+                "images": null,
+                "created_at": "2024-07-04T15:25:27.000000Z",
+                "updated_at": "2024-07-04T15:25:27.000000Z"
+            },
+            {
+                "id": 6,
+                "product_id": 3,
+                "title": "Coffee Table - Walnut",
+                "price": "169.99",
+                "sku": "CT-WAL",
+                "position": 1,
+                "option1": "Walnut",
+                "option2": "Standard",
+                "barcode": "3456789012346",
+                "grams": 10000,
+                "weight": "10.00",
+                "weight_unit": "kg",
+                "inventory_quantity": 10,
+                "old_inventory_quantity": 0,
+                "images": null,
+                "created_at": "2024-07-04T15:25:28.000000Z",
+                "updated_at": "2024-07-04T15:25:28.000000Z"
+            }
+        ],
+        "options": [
+            {
+                "id": 5,
+                "product_id": 3,
+                "name": "Finish",
+                "position": 1,
+                "created_at": "2024-07-04T15:25:30.000000Z",
+                "updated_at": "2024-07-04T15:25:30.000000Z",
+                "values": [
+                    {
+                        "id": 8,
+                        "option_id": 5,
+                        "value": "Oak",
+                        "created_at": "2024-07-04T15:25:31.000000Z",
+                        "updated_at": "2024-07-04T15:25:31.000000Z"
+                    },
+                    {
+                        "id": 9,
+                        "option_id": 5,
+                        "value": "Walnut",
+                        "created_at": "2024-07-04T15:25:32.000000Z",
+                        "updated_at": "2024-07-04T15:25:32.000000Z"
+                    }
+                ]
+            }
+        ]
+    }
 ];
 
 export const categories = [

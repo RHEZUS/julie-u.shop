@@ -4,33 +4,18 @@ import guest from "@/middleware/guest";
 const routes = [
   {
     path: "/",
+    name: "Home",
+    component: () => import("@/views/Home.vue"),
+  },
+  {
+    path: "/login",
     name: "Login",
     component: () => import("@/views/auth/login/login.vue"),
-  },
-  {
-    path: "/login2",
-    name: "login2",
-    component: () => import("@/views/auth/login/login2.vue"),
-  },
-  {
-    path: "/login3",
-    name: "login3",
-    component: () => import("@/views/auth/login/login3.vue"),
   },
   {
     path: "/register",
     name: "reg",
     component: () => import("@/views/auth/register"),
-  },
-  {
-    path: "/register2",
-    name: "reg2",
-    component: () => import("@/views/auth/register/register2"),
-  },
-  {
-    path: "/register3",
-    name: "reg3",
-    component: () => import("@/views/auth/register/register3"),
   },
   {
     path: "/forgot-password",
@@ -72,9 +57,9 @@ const routes = [
     name: "Layout",
     redirect: "/dashboard/home",
     component: () => import("@/Layout/index.vue"),
-    meta: {
-      middleware: [auth],
-    },
+    //meta: {
+    //  middleware: [auth],
+    //},
     children: [
       {
         path: "home",
