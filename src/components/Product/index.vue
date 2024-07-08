@@ -21,20 +21,20 @@
             <Modal themeClass="bg-white " labelClass="btn-outline-dark  bg-white" ref="modal4" sizeClass="max-w-5xl">
               <!-- Product Image -->
                <div class="grid grid-cols-12">
-                <div class="modal-inner modal-image col-span-12 sm:col-span-6 group flex items-center overflow-hidden justify-center">
-                  <img class="h-full w-full" :src="`${JSON.parse(product.images_urls)[0]}`" alt="">
+                <div class="modal-inner modal-image col-span-12 lg:col-span-6 group flex items-center overflow-hidden justify-center">
+                  <img class="w-full h-full" :src="`${JSON.parse(product.images_urls)[0]}`" alt="">
                 </div>
                 <!-- Product Info -->
-                <div class="modal-inner modal-details bg-white  col-span-12 sm:col-span-6 relative bg-transparent scrollCard">
+                <div class="modal-inner modal-details bg-white  col-span-12 lg:col-span-6 relative bg-transparent scrollCard">
           
-                  <form @submit.prevent="addToCard()" class="w-full h-full px-5 py-5">
+                  <form @submit.prevent="addToCart()" class="w-full flex flex-col h-full px-5 py-5">
                     <a href="#">
-                      <h1 class="text-2xl font-medium mt-3 text-black">{{ product.name }}</h1>
+                      <p class="text-2xl font-medium mt-3 text-black">{{ product.title }}</p>
                     </a>
                     <p class="text-xl font-medium text-black mt-4 flex flex-wrap items-center gap-4">
                       <p class="text-md font-medium text-black-500">
                         <span  v-if="product.discount">699.00 Francs CFA </span>
-                        <span class="" :class="{'text-[#afaeae] line-through':product.discount, 'text-black-500':!product.discount}">{{ price + ' Francs CFA'}}</span>
+                        <span class="" :class="{'text-[#afaeae] line-through':product.discount, 'text-black-500':!product.discount}">{{ (price * form.quantity).toFixed(2) + ' Francs CFA' }}</span>
                       </p>
                       <span class=" bg-red-600 h-3 flex items-center p-1 text-white text-[10px] rounded-lg">EARNINGS: 12%</span>
                     </p>
@@ -50,65 +50,84 @@
                     
                     <!-- products without options -->
                     <div class="mt-4">
-                      <div v-if="product.options.length == 0" class="flex gap-4 text-black-500 items-center px-2 py-5">
-                        <input 
-                          type="text"  
-                          v-model="form.product_variant_id"
-                          class="hidde"
-                          :id="'color-' + color.id"
-                          @change="console.log('Size ID:', size.id, 'Has size:', hasSize(size.id))"
-                        >
-                      </div>
-                      <div v-if="product.options.length > 1 && product.options[1].name == 'Color'" class="flex gap-4 items-center px-2 py-5">
-                        <div v-for="color in product.product_color" :class="[ 'bg-[' + color.color + ']' ]" class="w-7 h-7 rounded-full border hover:cursor-pointer" @click="loadData(key)"></div>
-                      </div>
+                      
                     </div>
 
                     <!-- product which options is only the color -->
-          
-                    <div class="mt-4">
+                    <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name == 'Color'">
                       <p><span class="font-semibold">{{ 'Color' }}:</span> black</p>
-                      <div v-if="product.options[0].length == 1 && product.options[0].name == 'Color'" class="flex gap-4 text-black-500 items-center px-2 py-5">
-                        <div  v-for="color in product.options[0].values">
-                          <label :for="'color-' + color.id">
-                            <div :class="[ 'bg-[' + color.value + ']' ]" class="w-8 h-8 rounded-full border  hover:cursor-pointer" @click="loadData(key)"></div>
+                      <div class="flex gap-4 text-black-500 items-center px-2 py-5">
+                        <div  v-for="variant in product.variants">
+                          <label :for="'variant-' + variant.id">
+                            <div :style="{ backgroundColor: variant.option1 }"  :class="{'ring-black-500': isSelectedVariant(variant.id), 'ring-black-300':!isSelectedVariant(variant.id)}" class="w-8 h-8 rounded-full border-2 ring-2 border-white  hover:cursor-pointer"></div>
                           </label>
                           <input 
-                            type="text"  
-                            v-model="form.product_variant_id"
-                            class="hidde" 
-                            :id="'color-' + color.id"
-                            @change="console.log('Size ID:', size.id, 'Has size:', hasSize(size.id))"
+                            type="radio"
+                            class="hidden"
+                            name="product_variant_id"
+                            :id="'variant-' + variant.id"
+                            @change="selectVariant(variant.id);"
                           >
                         </div>
                         
                       </div>
+                    </div>
+
+                    <!-- product which options is only one and is not the color -->
+                    <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name != 'Color'">
+                      <p><span class="font-semibold">{{ product.options[0].name }}:</span></p>
+                      <div class="flex gap-4 text-black-500 items-center px-2 py-5">
+                        
+                        <div v-for="variant in product.variants" :class="{'text-neutral-400 hover:bg-white hover:text-neutral-400' : variant.inventory_quantity == 0, 'hover:text-white': variant.inventory_quantity > 0 , 'bg-black-500 text-white': isSelectedVariant(variant.id), 'bg-white': !isSelectedVariant(variant.id)}" class="w-fit p-1 h-9 hover:cursor-pointer rounded-md flex items-center justify-center hover:bg-black-500  border">
+                          <label :for="'variant-' + variant.id" class="w-full h-full flex justify-center items-center">
+                            {{ variant.option1 }}
+                          </label>
+                          <input 
+                            type="radio"
+                            class="hidden"
+                            name="product_variant_id"
+                            :id="'variant-' + variant.id" 
+                            :disabled="variant.inventory_quantity == 0 ? true : false"
+                            @change="selectVariant(variant.id);"
+                          >
+          
+                        </div>
+                        
+                      </div>
                       <div v-if="product.options.length > 1 && product.options[1].name == 'Color'" class="flex gap-4 items-center px-2 py-5">
-                        <div v-for="color in product.product_color" :class="[ 'bg-[' + color.color + ']' ]" class="w-7 h-7 rounded-full border hover:cursor-pointer" @click="loadData(key)"></div>
+                        <div v-for="color in product.product_color" :class="[ 'bg-[' + color.color + ']' ]"  class="w-7 h-7 rounded-full border hover:cursor-pointer" @click="loadData(key)"></div>
                       </div>
                     </div>
                     
                     <!-- product with more than one option options -->
-                    <div class="mt-4" v-if="product.options[0].name == 'Color'">
-                      <p><span class="font-semibold">{{ 'Sizes' }}: </span> L</p>
+                    <div class="mt-4" v-if="product.options.length > 1 && product.options[0].name == 'Color'">
+                      <!-- List colors -->
+                      <p><span class="font-semibold">{{ 'Color' }}:</span></p>
+                      <div class="flex gap-4 text-black-500 items-center px-2 py-5">
+                        <div v-for="(color, index) in product.options[0].values" :key="index" :style="{ backgroundColor: color.value }"  :class="{'ring-black-500': color.value == selected_color, 'ring-black-300':color.value != selected_color}" class="w-8 h-8 rounded-full border-2 ring-2 border-white" @click="loadData(index)"></div>
+                      </div>
+                      <!-- List variants -->
+                      <p><span class="font-semibold">{{ product.options[1].name }}: </span></p>
                       <div class="flex gap-4 items-center py-5 flex-wrap">
-                        <div v-for="size in sizes" :class="{'text-neutral-400 hover:bg-white hover:text-neutral-400' : !hasSize(size.id), 'hover:text-white': hasSize(size.id) , 'bg-black text-white': isSelected(size.id), 'bg-white': !isSelected(size.id)}" class="w-9 h-9 hover:cursor-pointer rounded-md flex items-center justify-center hover:bg-black  border">
-                          <label :for="['size-' + size.id]" class="w-full h-full flex justify-center items-center">
-                            {{ size.name }}
+                        <div v-for="variant in colorVariants" :class="{'text-neutral-400 hover:bg-white hover:text-neutral-400' : variant.inventory_quantity == 0, 'hover:text-white': variant.inventory_quantity > 0 , 'bg-black-500 text-white': isSelectedVariant(variant.id), 'bg-white': !isSelectedVariant(variant.id)}" class="w-fit p-1 h-9 hover:cursor-pointer rounded-md flex items-center justify-center hover:bg-black-500  border">
+                          <label :for="['variant-' + variant.id]" class="w-full h-full flex justify-center items-center">
+                            {{ variant.option2 }}
                           </label>
                           <input 
                             type="radio"  
-                            v-model="form.size_id"
+                            v-model="form.product_variant_id"
                             class="hidden" 
-                            :id="'size-' + size.id" 
-                            :value="size.id" 
-                            :disabled="hasSize(size.id) ? false : true"
-                            @change="console.log('Size ID:', size.id, 'Has size:', hasSize(size.id))"
+                            :id="'variant-' + variant.id" 
+                            :value="variant.id" 
+                            :disabled="variant.inventory_quantity == 0 ? true : false"
+                            @change="selectVariant(variant.id);"
                           >
           
                         </div>
                       </div>
                     </div>
+
+                    <!-- Successfully added to cart -->
                     <div  v-if="success" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
                       {{ success }}
                     </div>
@@ -154,8 +173,8 @@
         </p>
       </div>
       
-      <div v-if="product.options[0].name == 'Color'" class="flex gap-4 text-black-500 items-center px-2 py-5">
-        <div v-for="color in product.options[0].values" :class="[ 'bg-[' + color.value + ']' ]" class="w-8 h-8 rounded-full border"></div>
+      <div v-if="product.options.length > 0 && product.options[0].name == 'Color'" class="flex gap-4 text-black-500 items-center px-2 py-5">
+        <div v-for="color in product.options[0].values" :style="{ backgroundColor: color.value }"  class="w-8 h-8 rounded-full border"></div>
       </div>
       
     </div>
@@ -180,6 +199,7 @@
           price: 0,
           success: null,
           loadAddToCart: false,
+          colorVariants: [],
           form: {
             product_variant_id: null,
             quantity: 1,
@@ -205,19 +225,36 @@
         },
       },
       methods: {
-        loadData(index=0){
+        loadData(index=0, variant=null){
           if (this.product.options.length == 0){
             this.price = this.product.variants[0].price;
             this.form.product_variant_id = this.product.variants[0].id;
           } else if (this.product.options.length == 1 && this.product.options[0].name == 'Color'){
-            this.selected_color = this.product.variants[index].id;
             this.price = this.product.variants[index].price;
             this.form.product_variant_id = this.product.variants[index].id;
-          } else if (this.product.options.length > 1 && this.product.options[1].name == 'Color'){
-            this.selected_color = this.product.variants[index].id;
+          } else if (this.product.options.length == 1 && this.product.options[0].name != 'Color'){
             this.price = this.product.variants[index].price;
             this.form.product_variant_id = this.product.variants[index].id;
+          } else if (this.product.options.length > 1 && this.product.options[0].name == 'Color'){
+            this.selected_color = this.product.options[0].values[index].value;
+            const variants = this.getColorsVariants(this.selected_color);
+            this.colorVariants = variants;
+            this.price = variants[0].price;
+            this.form.product_variant_id = variants[0].id;
           }
+        },
+        getVariantPrice(variantId){
+          return this.product.variants.find(variant => variant.id === variantId).price;
+        },
+        selectVariant(variantId){
+          this.form.product_variant_id = variantId;
+          this.price = this.getVariantPrice(variantId);
+        },
+        getColorsVariants(color){
+          const variants = this.product.variants.filter(variant => variant.option1 === color);
+          this.form.product_variant_id = variants[0].id;
+          this.selected_color = color;
+          return variants;
         },
         addQuantity(){
           this.form.quantity++;
@@ -227,80 +264,56 @@
             this.form.quantity--;
           }
         },
-        isSelected(sizeId){
-          return this.form.size_id == sizeId;
+        isSelectedVariant(variantId){
+          return this.form.product_variant_id == variantId;
         },
-        async addToCard() {
-          console.log('Add to cart: ', this.form);
-          /*const isAuthenticatedAndHasRole = await checkAuthAndRole('admin', 'vendor', 'user');
-          if (!isAuthenticatedAndHasRole){
-              //localStorage.setItem('umberOfItemInCart', this.cart.length);
-              //console.log(this.token);
-              this.$router.push('/login/');
-          }else{
-            //console.log(this.form);
-            this.loadAddToCart = true;
-            try {
-                const response = await axios.post(`${API_URL}/cart/add`, this.form, {
-                    headers: {
-                        'Authorization': `Bearer ${this.token}`
-                    }
-                });
-                
-                console.log(response.data);
-                this.displayMessage(response.data.success);
-                //console.log('emittingMessage cartUpdate');
-                EventBus.emit('cartUpdated'); // Emit event to refresh cart items
-                EventBus.emit('showCartModal'); // Emit event to show cart modal
-                
-                this.form.quantity = 1;
-            } catch (error) {
-                console.error(error);
-            } finally {
-                this.loadAddToCart = false;
-            }
-          }*/
+        isSelected(variantId){
+          return this.form.product_variant_id == variantId;
         },
-  
-        closeModal () {
-          this.isShowModal = false
+
+        addToCart() {
+          let productVariantId = this.form.product_variant_id;
+          let quantity = this.form.quantity;
+          let cart = JSON.parse(localStorage.getItem('cart')) || [];
+          const itemIndex = cart.findIndex(item => item.productVariantId === productVariantId);
+
+          if (itemIndex !== -1) {
+            // Update quantity if the item is already in the cart
+            cart[itemIndex].quantity += quantity;
+          } else {
+            // Add new item to the cart
+            cart.push({ productVariantId, quantity });
+          }
+
+          localStorage.setItem('cart', JSON.stringify(cart));
+          console.log('cart: ', cart);
         },
-        showModal () {
-          this.isShowModal = true
-        },
+
         addToWishlist() {
+          let productId = this.product.id;
           let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-          //console.log(wishlist);
-          if (!wishlist.find(item => item.id === this.product.id)) {
-            wishlist.push(this.product);
+          if (!wishlist.includes(productId)) {
+            wishlist.push(productId);
             localStorage.setItem('wishlist', JSON.stringify(wishlist));
             this.inWishlist = true;
           }
+          
         },
         isInWishlist(){
-          let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-          return wishlist.some(item => item.id === this.product.id);
-        },
-        hasSize(sizeId) {
-          const product = this.color_sizes.find(item => item.size_id === sizeId && item.stock > 0);
-          return !!product;
+          const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+          return wishlist.includes(this.product.id);
         },
         removeFromWishlist() {
           let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-          wishlist = wishlist.filter(item => item.id !== this.product.id);
+          wishlist = wishlist.filter(id => id !== this.product.id);
           localStorage.setItem('wishlist', JSON.stringify(wishlist));
           this.inWishlist = false;
-          if (this.willFetch)
-          {
-            this.fetchData();
-          }
         },
         
         handleClickOutside(event) {
             // Check if the click was outside the referenced element
             if (this.$refs.ProductCart && !this.$refs.ProductCart.contains(event.target)) {
                 this.showProductModal = false;
-                console.log('check if the click was outside the referenced element');
             }
         },
       },
@@ -310,6 +323,8 @@
         // Add the event listener when the component is mounted
         document.addEventListener('click', this.handleClickOutside);
         this.loadData(0);
+        //localStorage.clear();
+
         //this.fetchSizes();
       },
       oreDestroy() {

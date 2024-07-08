@@ -85,11 +85,7 @@
         methods:{
             fetchBrands() {
                 //this.tableData.loading = true;
-                axios.get(`${API_URL}/brands/limit`, {
-                    headers: {
-                    'Authorization': `Bearer ${this.token}`
-                    }
-                })
+                apiClient.get('/brands/top')
                 .then(response => {
                     const results = response.data;
                     this.brands = results.brands;
@@ -101,11 +97,7 @@
             },
             fetchCategories() {
                 //this.tableData.loading = true;
-                axios.get(`${API_URL}/categories/limit/{7}`, {
-                    headers: {
-                    'Authorization': `Bearer ${this.token}`
-                    }
-                })
+                apiClient.get('/categories/top')
                 .then(response => {
                     const results = response.data;
                     this.categories = results.categories;
@@ -117,8 +109,8 @@
             },
         },
         mounted(){
-            //this.fetchBrands();
-            //this.fetchCategories();
+            this.fetchBrands();
+            this.fetchCategories();
         }
     }
 </script>

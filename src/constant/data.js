@@ -1327,8 +1327,8 @@ export const products =
       "updated_at": "2024-07-04T15:24:56.000000Z",
       "deleted_at": null
     },
-    discount: null,
-    variants: [
+    "discount": null,
+    "variants": [
       {
         "id": 1,
         "product_id": 1,
@@ -1368,7 +1368,7 @@ export const products =
         "updated_at": "2024-07-04T15:25:02.000000Z"
       }
     ],
-    options: [
+    "options": [
       {
         "id": 1,
         "product_id": 1,
@@ -1376,7 +1376,7 @@ export const products =
         "position": 1,
         "created_at": "2024-07-04T15:25:04.000000Z",
         "updated_at": "2024-07-04T15:25:04.000000Z",
-        values: [
+        "values": [
           {
             "id": 1,
             "option_id": 1,
@@ -1417,9 +1417,9 @@ export const products =
           }
         ]
       }
-        ]
-    },
-    {
+    ]
+  },
+  {
         "id": 2,
         "title": "Stylish Denim Jacket",
         "slug": "stylish-denim-jacket",
@@ -1534,106 +1534,346 @@ export const products =
                 ]
             }
         ]
+  },
+  {
+    "id": 3,
+    "title": "Modern Coffee Table",
+    "slug": "modern-coffee-table",
+    "description": "A modern coffee table with a minimalist design, perfect for any living room. A stylish denim jacket that fits perfectly for casual outings. The latest Smartphone X200 with advanced features and sleek design.",
+    "brand_id": 3,
+    "category_id": 3,
+    "tags": "[\"furniture\", \"coffee table\", \"living room\"]",
+    "images_urls": "[\"https://lrumeur.com/cdn/shop/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=360\", \"https://cdn.shopify.com/s/files/1/0564/9740/6031/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=493\"]",
+    "status": "published",
+    "created_at": "2024-07-04T15:25:25.000000Z",
+    "updated_at": "2024-07-04T15:25:25.000000Z",
+    "deleted_at": null,
+    "brand": {
+      "id": 3,
+      "name": "H&M",
+      "slug": "h-and-m",
+      "created_at": "2024-07-04T15:24:57.000000Z",
+      "updated_at": "2024-07-04T15:24:57.000000Z",
+      "deleted_at": null
     },
-    {
-        "id": 3,
-        "title": "Modern Coffee Table",
-        "slug": "modern-coffee-table",
-        "description": "A modern coffee table with a minimalist design, perfect for any living room. A stylish denim jacket that fits perfectly for casual outings. The latest Smartphone X200 with advanced features and sleek design.",
-        "brand_id": 3,
-        "category_id": 3,
-        "tags": "[\"furniture\", \"coffee table\", \"living room\"]",
-        "images_urls": "[\"https://lrumeur.com/cdn/shop/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=360\", \"https://cdn.shopify.com/s/files/1/0564/9740/6031/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=493\"]",
-        "status": "published",
-        "created_at": "2024-07-04T15:25:25.000000Z",
-        "updated_at": "2024-07-04T15:25:25.000000Z",
-        "deleted_at": null,
-        "brand": {
-            "id": 3,
-            "name": "H&M",
-            "slug": "h-and-m",
-            "created_at": "2024-07-04T15:24:57.000000Z",
-            "updated_at": "2024-07-04T15:24:57.000000Z",
-            "deleted_at": null
-        },
-        "category": {
-            "id": 3,
-            "name": "Bestsellers",
-            "slug": "bestsellers",
-            "parent_category_id": null,
-            "desc": null,
-            "created_at": "2024-07-04T15:24:56.000000Z",
-            "updated_at": "2024-07-04T15:24:56.000000Z",
-            "deleted_at": null
-        },
-        "discount": null,
-        "variants": [
-            {
-                "id": 5,
-                "product_id": 3,
-                "title": "Coffee Table - Oak",
-                "price": "149.99",
-                "sku": "CT-OAK",
-                "position": 1,
-                "option1": "Oak",
-                "option2": "Standard",
-                "barcode": "3456789012345",
-                "grams": 10000,
-                "weight": "10.00",
-                "weight_unit": "kg",
-                "inventory_quantity": 15,
-                "old_inventory_quantity": 0,
-                "images": null,
-                "created_at": "2024-07-04T15:25:27.000000Z",
-                "updated_at": "2024-07-04T15:25:27.000000Z"
-            },
-            {
-                "id": 6,
-                "product_id": 3,
-                "title": "Coffee Table - Walnut",
-                "price": "169.99",
-                "sku": "CT-WAL",
-                "position": 1,
-                "option1": "Walnut",
-                "option2": "Standard",
-                "barcode": "3456789012346",
-                "grams": 10000,
-                "weight": "10.00",
-                "weight_unit": "kg",
-                "inventory_quantity": 10,
-                "old_inventory_quantity": 0,
-                "images": null,
-                "created_at": "2024-07-04T15:25:28.000000Z",
-                "updated_at": "2024-07-04T15:25:28.000000Z"
-            }
-        ],
-        "options": [
-            {
-                "id": 5,
-                "product_id": 3,
-                "name": "Finish",
-                "position": 1,
-                "created_at": "2024-07-04T15:25:30.000000Z",
-                "updated_at": "2024-07-04T15:25:30.000000Z",
-                "values": [
-                    {
-                        "id": 8,
-                        "option_id": 5,
-                        "value": "Oak",
-                        "created_at": "2024-07-04T15:25:31.000000Z",
-                        "updated_at": "2024-07-04T15:25:31.000000Z"
-                    },
-                    {
-                        "id": 9,
-                        "option_id": 5,
-                        "value": "Walnut",
-                        "created_at": "2024-07-04T15:25:32.000000Z",
-                        "updated_at": "2024-07-04T15:25:32.000000Z"
-                    }
-                ]
-            }
+    "category": {
+      "id": 3,
+      "name": "Bestsellers",
+      "slug": "bestsellers",
+      "parent_category_id": null,
+      "desc": null,
+      "created_at": "2024-07-04T15:24:56.000000Z",
+      "updated_at": "2024-07-04T15:24:56.000000Z",
+      "deleted_at": null
+    },
+    "discount": null,
+    "variants": [
+      {
+        "id": 5,
+        "product_id": 3,
+        "title": "Coffee Table - Oak",
+        "price": "149.99",
+        "sku": "CT-OAK",
+        "position": 1,
+        "option1": "Oak",
+        "option2": "Standard",
+        "barcode": "3456789012345",
+        "grams": 10000,
+        "weight": "10.00",
+        "weight_unit": "kg",
+        "inventory_quantity": 15,
+        "old_inventory_quantity": 0,
+        "images": null,
+        "created_at": "2024-07-04T15:25:27.000000Z",
+        "updated_at": "2024-07-04T15:25:27.000000Z"
+      },
+      {
+        "id": 6,
+        "product_id": 3,
+        "title": "Coffee Table - Walnut",
+        "price": "169.99",
+        "sku": "CT-WAL",
+        "position": 1,
+        "option1": "Walnut",
+        "option2": "Standard",
+        "barcode": "3456789012346",
+        "grams": 10000,
+        "weight": "10.00",
+        "weight_unit": "kg",
+        "inventory_quantity": 10,
+        "old_inventory_quantity": 0,
+        "images": null,
+        "created_at": "2024-07-04T15:25:28.000000Z",
+        "updated_at": "2024-07-04T15:25:28.000000Z"
+      }
+    ],
+    "options": [
+      {
+        "id": 5,
+        "product_id": 3,
+        "name": "Finish",
+        "position": 1,
+        "created_at": "2024-07-04T15:25:30.000000Z",
+        "updated_at": "2024-07-04T15:25:30.000000Z",
+        "values": [
+          {
+            "id": 8,
+            "option_id": 5,
+            "value": "Oak",
+            "created_at": "2024-07-04T15:25:31.000000Z",
+            "updated_at": "2024-07-04T15:25:31.000000Z"
+          },
+          {
+            "id": 9,
+            "option_id": 5,
+            "value": "Walnut",
+            "created_at": "2024-07-04T15:25:32.000000Z",
+            "updated_at": "2024-07-04T15:25:32.000000Z"
+          }
         ]
-    }
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Radiance Elixir Face Serum",
+    "slug": "radiance-elixir-face-serum",
+    "description": "A luxurious serum designed to hydrate and rejuvenate your skin, giving you a radiant glow.",
+    "tags": "[\"denim\", \"jacket\", \"clothing\"]",
+    "images_urls": "[\"https://lrumeur.com/cdn/shop/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=360\", \"https://cdn.shopify.com/s/files/1/0564/9740/6031/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=493\"]",
+    "status": "published",
+    "created_at": "2024-07-04T15:25:13.000000Z",
+    "updated_at": "2024-07-04T15:25:13.000000Z",
+    "deleted_at": null,
+    "brand": {
+      "id": 1,
+      "name": "Victoria Secret",
+      "slug": "victoria-secret",
+      "created_at": "2024-07-04T15:24:57.000000Z",
+      "updated_at": "2024-07-04T15:24:57.000000Z",
+      "deleted_at": null,
+      "products_count": 1
+    },
+    "category": {
+      "id": 3,
+      "name": "Bestsellers",
+      "slug": "bestsellers",
+      "created_at": "2024-07-04T15:24:56.000000Z",
+      "updated_at": "2024-07-04T15:24:56.000000Z",
+      "deleted_at": null,
+      "products_count": 1
+    },
+    "discount": null,
+    "variants": [
+      {
+        "id": 1,
+        "title": "Radiance Elixir Face Serum - 30 ml",
+        "price": 45.00,
+        "sku": "REFS30ML",
+        "option1": null,
+        "option2": null,
+        "barcode": "1234567890123",
+        "grams": 30,
+        "weight": 0.03,
+        "inventory_quantity": 100
+      }
+    ],
+    "options": []
+  },
+  {
+    "id": 5,
+    "title": "Glamour Lash Mascara",
+    "slug": "glamour-lash-mascara",
+    "description": "A volumizing and lengthening mascara that enhances your lashes with a single swipe.",
+    "tags": "[\"denim\", \"jacket\", \"clothing\"]",
+    "images_urls": "[\"https://lrumeur.com/cdn/shop/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=360\", \"https://cdn.shopify.com/s/files/1/0564/9740/6031/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=493\"]",
+    "status": "published",
+    "created_at": "2024-07-04T15:25:13.000000Z",
+    "updated_at": "2024-07-04T15:25:13.000000Z",
+    "deleted_at": null,
+    "brand": {
+      "id": 2,
+      "name": "Calvin Klein",
+      "slug": "calvin-klein",
+      "created_at": "2024-07-04T15:24:57.000000Z",
+      "updated_at": "2024-07-04T15:24:57.000000Z",
+      "deleted_at": null,
+      "products_count": 1
+    },
+    "category": {
+      "id": 2,
+      "name": "Collections",
+      "slug": "collections",
+      "created_at": "2024-07-04T15:24:56.000000Z",
+      "updated_at": "2024-07-04T15:24:56.000000Z",
+      "deleted_at": null,
+      "products_count": 1
+    },
+    "discount": null,
+    "variants": [
+      {
+        "id": 2,
+        "title": "Glamour Lash Mascara - 10 ml",
+        "price": 22.00,
+        "sku": "GLM10ML",
+        "option1": null,
+        "option2": null,
+        "barcode": "1234567890124",
+        "grams": 10,
+        "weight": 0.01,
+        "inventory_quantity": 200
+      }
+    ],
+    "options": []
+  },
+  {
+    "id": 6,
+    "title": "Velvet Kiss Lipstick",
+    "slug": "velvet-kiss-lipstick",
+    "description": "A creamy, highly pigmented lipstick that offers a luxurious, velvety finish.",
+    "images_urls": "[\"https://lrumeur.com/cdn/shop/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=360\", \"https://cdn.shopify.com/s/files/1/0564/9740/6031/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=493\"]",
+    "status": "published",
+    "created_at": "2024-07-04T15:25:13.000000Z",
+    "updated_at": "2024-07-04T15:25:13.000000Z",
+    "deleted_at": null,
+    "brand": {
+      "id": 3,
+      "name": "H&M",
+      "slug": "h-and-m",
+      "created_at": "2024-07-04T15:24:57.000000Z",
+      "updated_at": "2024-07-04T15:24:57.000000Z",
+      "deleted_at": null,
+      "products_count": 1
+    },
+    "category": {
+      "id": 4,
+      "name": "Bras & Panties",
+      "slug": "bras-panties",
+      "created_at": "2024-07-04T15:24:56.000000Z",
+      "updated_at": "2024-07-04T15:24:56.000000Z",
+      "deleted_at": null,
+      "products_count": 0
+    },
+    "discount": null,
+    "variants": [
+      {
+        "id": 3,
+        "title": "Velvet Kiss Lipstick - Ruby Red",
+        "price": 18.00,
+        "sku": "VKL-RR",
+        "option1": "Ruby Red",
+        "option2": null,
+        "barcode": "1234567890125",
+        "grams": 3.5,
+        "weight": 0.0035,
+        "inventory_quantity": 150
+      },
+      {
+        "id": 4,
+        "title": "Velvet Kiss Lipstick - Nude Beige",
+        "price": 18.00,
+        "sku": "VKL-NB",
+        "option1": "Nude Beige",
+        "option2": null,
+        "barcode": "1234567890126",
+        "grams": 3.5,
+        "weight": 0.0035,
+        "inventory_quantity": 150
+      },
+      {
+        "id": 5,
+        "title": "Velvet Kiss Lipstick - Plum Passion",
+        "price": 18.00,
+        "sku": "VKL-PP",
+        "option1": "Plum Passion",
+        "option2": null,
+        "barcode": "1234567890127",
+        "grams": 3.5,
+        "weight": 0.0035,
+        "inventory_quantity": 150
+      }
+    ],
+    "options": [
+      {
+        "id": 1,
+        "name": "Color",
+        "position": 1,
+        "values": [
+          {"id": 1, "value": "#E0115F"},
+          {"id": 2, "value": "#cab9a7"},
+          {"id": 3, "value": "#9E4780"}
+        ]
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Bliss Vibe Personal Massager",
+    "slug": "bliss-vibe-personal-massager",
+    "description": "A discreet and powerful personal massager designed for maximum pleasure.",
+    "images_urls": "[\"https://lrumeur.com/cdn/shop/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=360\", \"https://cdn.shopify.com/s/files/1/0564/9740/6031/files/106_front_black_SiyahOn_mockup.png?v=1719816551&width=493\"]",
+    "status": "published",
+    "created_at": "2024-07-04T15:25:13.000000Z",
+    "updated_at": "2024-07-04T15:25:13.000000Z",
+    "deleted_at": null,
+    "brand": {
+      "id": 1,
+      "name": "Victoria Secret",
+      "slug": "victoria-secret",
+      "created_at": "2024-07-04T15:24:57.000000Z",
+      "updated_at": "2024-07-04T15:24:57.000000Z",
+      "deleted_at": null,
+      "products_count": 1
+    },
+    "category": {
+      "id": 5,
+      "name": "Lingerie",
+      "slug": "lingerie",
+      "created_at": "2024-07-04T15:24:56.000000Z",
+      "updated_at": "2024-07-04T15:24:56.000000Z",
+      "deleted_at": null,
+      "products_count": 0
+    },
+    "discount": null,
+    "variants": [
+      {
+        "id": 6,
+        "title": "Bliss Vibe Personal Massager - Pink",
+        "price": 55.00,
+        "sku": "BVPM-PINK",
+        "option1": "Pink",
+        "option2": null,
+        "barcode": "1234567890128",
+        "grams": 200,
+        "weight": 0.2,
+        "inventory_quantity": 80
+      },
+      {
+        "id": 7,
+        "title": "Bliss Vibe Personal Massager - Purple",
+        "price": 55.00,
+        "sku": "BVPM-PURPLE",
+        "option1": "Purple",
+        "option2": null,
+        "barcode": "1234567890129",
+        "grams": 200,
+        "weight": 0.2,
+        "inventory_quantity": 80
+      }
+    ],
+    "options": [
+      {
+        "id": 2,
+        "name": "Color",
+        "position": 1,
+        "values": [
+          {"id": 4, "value": "Pink"},
+          {"id": 5, "value": "Purple"}
+        ]
+      }
+    ]
+  }
+    
 ];
 
 export const categories = [

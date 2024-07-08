@@ -5,13 +5,25 @@
             <Carousel :carousels="carouselsWithCaption" :autoplay="{  delay: 2500, disableOnInteraction: false, }" />
         </div>
         <div class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6">
-            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products">
+            <div class="col-span-full">
+                <p class="text-2xl font-bold text-center">Best sellers</p>
+            </div>
+            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products.slice(0, 4)">
+                <ProductCart :product="product" />
+            </div>
+            
+        </div>
+        <div class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6">
+            <div class="col-span-full">
+                <p class="text-2xl font-bold text-center">New Arrivals</p>
+            </div>
+            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products.slice(3, 8)">
                 <ProductCart :product="product" />
             </div>
             
         </div>
         <Footer />
-    </div>
+    </div>New Arrivals
 </template>
 <script>
 import Carousel from '@/components/Carousel/HeroCarousel.vue';

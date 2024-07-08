@@ -231,6 +231,7 @@
             await apiClient.get(`/api/admin/categories`, { withCredentials: true })
             .then((response) => {
                 this.categories = response.data.categories;
+                //console.log(this.categories);
             }).catch((error) => {
                 this.toast.error('Failed to fetch categories', { timeout: 2000 });
             });

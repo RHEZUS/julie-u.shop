@@ -25,14 +25,17 @@
 
             <div class="col-span-4 md:col-span-4 lg:col-span-4 text-left md:text-center">
                 <a href="" class="uppercase font-bold text-[30px] whitespace-nowrap inline text-white">
-                    <span class="bg-black-500 px-2">Julie</span>
-                    <span class="text-white bg-pink-600 px-2 hidden sm:inline">Underwear</span>
-                    <span class="text-white bg-pink-600 px-2 inline sm:hidden">U</span>
+                    <div class="pointer-events-none">
+                        <span class="text-black-500 px-2">Julie</span>
+                        <span class="text-pink-600 px-2 hidden sm:inline">Underwear</span>
+                        <span class="text-white bg-pink-600 px-2 inline sm:hidden">U</span>
+                    </div>
+                    
                 </a>
             </div>
             <div class="col-span-7 md:col-span-5 lg:col-span-4 flex items-center justify-end gap-4 md:gap-6">
                 <Search />
-                <button class="group relative">
+                <button class="group relative" style="z-index: 1;">
                     <i class='text-2xl bx bx-user'></i>
                     <div v-if="!isAuth" class="bg-white w-max hidden group-hover:inline-block font-medium hover:cursor-pointer flex-col gap-3 absolute -right-2 top-8 border h-max" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
                         <div class="border-b-2 p-6 flex flex-col gap-4">

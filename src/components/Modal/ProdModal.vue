@@ -40,13 +40,13 @@
             >
               <DialogPanel
                 class="w-full transform overflow-hidden rounded-md bg-white text-black-500 text-left align-middle z-50 shadow-xl transition-all"
-                :class="'max-w-[960px]'"
+                :class="'max-w-[960px] min-h-[400px]'"
               >
                 <div
-                  class="px-6 py-8 relative"
-                  :class="scrollContent ? 'overflow-y-auto max-h-[400px]' : ''"
+                  class="px-6 relative"
+                  :class="scrollContent ? 'overflow-y-auto min-h-[400] max-h-[400px]' : ''"
                 >
-                <div @click="closeModal()" class="absolute top-2 z-20 w-8 h-8 flex items-center justify-center rounded-full right-6 text-2xl hover:bg-black-200">
+                <div @click="closeModal()" class="absolute top-2 z-20 w-8 h-8 flex items-center justify-center rounded-full right-6 text-2xl hover:bg-black-200" style="z-index: 100;">
                   <i class='bx bx-x'></i> 
                 </div>
                   <slot />

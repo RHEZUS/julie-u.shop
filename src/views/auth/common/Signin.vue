@@ -106,7 +106,7 @@ export default {
           this.router.push("/");
           console.log('Login response: ', response);
         }).catch((error) => {
-          console.log('Error message: ', error.message);
+          console.log('Error message: ', error);
           this.toast.error(error.message, { timeout: 2000 });
         });
       })

@@ -26,7 +26,7 @@
                 {{ item.description }}
               </p>
               <div class="">
-                <a :href="link" class="bg-white act-btn text-black-500 px-10 py-4 rounded-md font-bold text-sm">
+                <a :href="link" class="bg-white act-btn text-black-500 px-10 py-3 rounded-md font-bold text-sm">
                   Discover Now
                 </a>
               </div>

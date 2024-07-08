@@ -231,6 +231,7 @@
             await apiClient.get(`/api/admin/brands`, { withCredentials: true })
             .then((response) => {
                 this.brands = response.data.brands;
+                //console.log(this.brands);
             }).catch((error) => {
                 this.toast.error('Failed to fetch brands', { timeout: 2000 });
             });
