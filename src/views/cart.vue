@@ -4,9 +4,9 @@
 
         <div class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6" v-if="cartItems && cartItems.length > 0">
           <div class="col-span-full">
-              <h1 class="text-2xl font-bold text-center">You may also like</h1>
+              <h1 class="text-2xl font-bold text-center">Shopping Cart</h1>
           </div>
-          <div class="col-span-full">
+          <div class="col-span-9">
             <table class="table-auto w-full">
               <thead >
                 <tr class="border-b">
@@ -44,19 +44,36 @@
               </tbody>
             </table>
           </div>
-          <div class="col-span-full md:col-span-4">
-            checkout
+          <div class="grid grid-cols-12 h-full sm:col-span-4 md:col-span-3 gap-2">
+            <div class="col-span-full p-2 flex justify-between text-lg font-medium bg-pink-500 text-white">
+                <div class=""> SubTotal </div>
+                <div class="">{{total + 'FCFA'}}TL</div>
+            </div>
+            <div class="col-span-full px-2 flex justify-between text-lg font-medium">
+              <div class=""> Subtotal </div>
+              <div class="">{{total + 'FCFA'}}TL</div>
+            </div>
+
+            <div class="col-span-full px-2 flex justify-between text-lg font-medium ">
+              <div class=""> Delivery </div>
+              <div class="">{{delivery + 'FCFA'}}TL</div>
+            </div>
+            <div class="col-span-full px-2 flex justify-between text-lg font-medium">
+              <div class=""> Total </div>
+              <div class="">{{total + delivery + 'FCFA'}}TL</div>
+            </div>
+            <div class="col-span-full">
+              <button  @click="cart.length > 0 ? placeOrder() : ''" :class="{'pointer-events-none':cart.length <=0, 'pointer-events-auto':cart.length > 0}" class="text-center w-full mt-10 font-medium text-base text-white bg-[#0e0e0e] py-3 rounded">
+                Proceed to Checkout
+              </button>
+            </div>
           </div>
         </div>
-        <!-- Single result -->
-        <div class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6" v-if="products.length > 0">
-            <div class="col-span-full">
-                <h1 class="text-2xl font-bold text-center">You may also like</h1>
-            </div>
-            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products.slice(3, 8)">
-                <ProductCart :product="product" />
-            </div>
-            
+        <div class="col-span-full px-2 md:px-10 min-h-80 py-10 flex flex-col justify-between" v-else>
+          <div class="w-full pb-5">
+            <h1 class="text-2xl font-bold text-center">Shopping Cart</h1>
+          </div>
+          <p class="text-lg font-medium text-slate-500 text-center">No products in cart. <a href="/" class="underline">Go shopping</a></p>
         </div>
         <Footer />
     </div>
@@ -80,6 +97,8 @@ export default {
             cartItems: [],
             products: [],
             loading: false,
+            total: 0,
+            delivery: 2500,
             cart: JSON.parse(localStorage.getItem('cart')),
 
         }
@@ -107,6 +126,7 @@ export default {
                 let products = response.data.products;
                 for (let index = 0; index < products.length; index++) {
                   products[index].quantity = cart.find(item => item.productVariantId == products[index].id).quantity;
+                  this.total += products[index].price * products[index].quantity;
                 }
                 this.cartItems = products;
               }).catch((error) => {

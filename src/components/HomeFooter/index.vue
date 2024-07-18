@@ -1,6 +1,6 @@
 <template>
-    <div class="page-padding footer-container bg-white border-t py-10 gap-8 text-black-500">
-        <div class="capitalize col-span-2">
+    <div class="px-2 md:px-10 grid grid-cols-12 lg:grid-cols-10 bg-white border-t py-10 gap-8 text-black-500">
+        <div class="capitalize col-span-full md:col-span-6 lg:col-span-4">
             <p class="text-xl font-medium py-3"> Julie Underweare</p>
             <p class="py-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia, nulla rem.</p>
             <ul>
@@ -24,7 +24,7 @@
                 </li>
             </ul>
         </div>
-        <div class="capitalize text-base">
+        <div class="capitalize text-base col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2">
             <p class="text-xl font-medium py-3"> Useful Links</p>
             <a href="/">
                 <li class="py-2 text-base text-black-500 flex items-start gap-4">
@@ -52,7 +52,7 @@
                 </li>
             </a>
         </div>
-        <div class="capitalize">
+        <div class="capitalize col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2">
             <p class="text-xl font-medium py-3"> Categories</p>
             <a v-for="category in categories.slice(0, 6)"  :href="'/product/category/' + category.name">
                 <li class="py-2 text-black-500 flex items-start gap-4">
@@ -60,7 +60,7 @@
                 </li>
             </a>
         </div>
-        <div class="capitalize text-base">
+        <div class="capitalize text-base col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2">
             <p class=" text-xl font-medium py-3"> Brands</p>
             <a v-for="brand in brands.slice(0, 6)"  :href="'/product/brand/' + brand.name">
                 <li class="py-2 text-black-500 flex items-start gap-4">
@@ -115,34 +115,4 @@
     }
 </script>
 <style scoped>
-    .footer-container{
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-    } 
-    .page-padding{
-        padding-left: 12px;
-        padding-right: 12px;
-    } 
-    @media screen and (max-width: 768px) {
-        .footer-container{
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-        } 
-    }
-    @media screen and (min-width: 768px) {
-        .footer-container{
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-        } 
-    }
-    @media screen and (min-width: 1024px) {
-        .footer-container{
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-        }
-        .page-padding{
-            padding-left: 48px;
-            padding-right: 48px;
-        } 
-    }
 </style>

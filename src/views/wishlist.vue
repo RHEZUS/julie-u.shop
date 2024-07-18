@@ -5,8 +5,11 @@
             <div class="col-span-full">
                 <p class="text-2xl font-bold text-center">My Wishlist</p>
             </div>
-            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products">
+            <div v-if="products.length > 0" class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products">
                 <ProductCart :product="product" :fetch-data="loadProducts" />
+            </div>
+            <div v-else class="col-span-full self-end">
+                <p class="text-lg font-medium text-slate-500 text-center">No products in wishlist. <a href="/" class="underline">Go shopping</a></p>
             </div>
         </div>
         <Footer />
@@ -48,10 +51,10 @@ export default {
                     apiClient.post('api/wishlist/products', {'productIds': wishlist})
                     .then((response) => {
                         this.products = response.data.products;
-                        console.log(this.products);
+                        //console.log(this.products);
                     }).catch((error) => {
-                        console.log(error);
-                        this.toast.error('Failed to fetch products');
+                        //console.log(error);
+                        //this.toast.error('Failed to fetch products');
                     });
                 }else{
                     this.products = [];
@@ -72,4 +75,5 @@ export default {
     }
 };
 </script>
-<style lang=""></style>
+
+

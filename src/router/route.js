@@ -73,7 +73,7 @@ const routes = [
     redirect: "/dashboard/home",
     component: () => import("@/Layout/index.vue"),
     meta: {
-      middleware: [auth(["user"])],
+      middleware: [auth(["admin"])],
     },
     children: [
       {
