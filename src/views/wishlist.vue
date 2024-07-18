@@ -5,7 +5,7 @@
             <div class="col-span-full">
                 <p class="text-2xl font-bold text-center">My Wishlist</p>
             </div>
-            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in productsW">
+            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products">
                 <ProductCart :product="product" :fetch-data="loadProducts" />
             </div>
         </div>
@@ -16,14 +16,13 @@
 import ProductCart from '@/components/Product/index.vue';
 import HomeHeader from '@/components/HomeHeader/index.vue';
 import Footer from '@/components/HomeFooter/index.vue';
-import { products } from '@/constant/data';
 import apiClient from '@/plugins/axios';
 import { useToast } from 'vue-toastification';
 export default {
     name: 'Wishlist',
     data() {
         return {
-            products: products,
+            products: [],
             productsW: [],
             toast: useToast(),
         };
@@ -36,11 +35,20 @@ export default {
     methods: {
         getProducts(){
             try{
-                const wishlist = JSON.parse(localStorage.getItem('wishlist'));
+                let wishlist = JSON.parse(localStorage.getItem('wishlist'));
+                for (let i = wishlist.length - 1; i >= 0; i--) {
+                    if (typeof wishlist[i] === 'string' || typeof wishlist[i] === 'number') {
+                        wishlist[i] = parseInt(wishlist[i]);
+                    } else if (typeof wishlist[i] === 'object') {
+                        wishlist.splice(i, 1);
+                    }
+                }
+                console.log(wishlist);
                 if (wishlist.length > 0) {
-                    apiClient.post('api/wishlist/products', JSON.stringify({ productIds: wishlist }))
+                    apiClient.post('api/wishlist/products', {'productIds': wishlist})
                     .then((response) => {
                         this.products = response.data.products;
+                        console.log(this.products);
                     }).catch((error) => {
                         console.log(error);
                         this.toast.error('Failed to fetch products');

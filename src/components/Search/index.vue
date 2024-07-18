@@ -16,7 +16,7 @@
           <div class="w-full grid grid-cols-12 items-center">
             <div class="hidden md:flex col-span-3">
               <a href="/">
-                <img src="../assets/logo.svg" alt="logo" class="w-9 h-9">
+                <img src="../../assets/images/logo/logo-j.svg" alt="logo" class="w-9 h-9">
               </a>
             </div>
             <form @keyup.prevent="search()" class="col-span-12 md:col-span-6 relative w-full h-10 border border-black rounded">
@@ -84,13 +84,10 @@
 <script>
     import ProductCart from "./ProductCart.vue";
     import apiClient from "@/plugins/axios";
-    import axios from "axios";
       export default {
       data() {
         return {
-            token: localStorage.getItem('authToken'),
             showSearch: false,
-            apiUrl: apiClient,
             keywordSet: false,
             keyword: '',
             products: [],
@@ -106,11 +103,7 @@
           const trimmedKeyword = this.keyword.trim();
           
           if (trimmedKeyword) {
-              apiClient.get(`/products/search/${trimmedKeyword}`, {
-                headers: {
-                  'Authorization': `Bearer ${this.token}`
-                }
-              }).then(response => {
+              apiClient.get(`/products/search/${trimmedKeyword}`).then(response => {
                 this.products = response.data.products;
                 this.keywordSet = true;
                 console.log(response.data);
