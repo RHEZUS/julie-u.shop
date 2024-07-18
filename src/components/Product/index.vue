@@ -7,7 +7,7 @@
         <!-- Image -->
         <div class="flex items-center justify-center">
         <a :href="'/product/' + product.slug" class="">
-          <img class="h-full w-full" :src="`${JSON.parse(product.images_urls)[0]}`" alt="">
+          <img class="h-full w-full" :src="apiClient + '/storage/' + JSON.parse(product.images_urls)[0]" alt="">
         </a>
         </div>
         <!-- Product buttons -->
@@ -22,7 +22,7 @@
               <!-- Product Image -->
                <div class="grid grid-cols-12">
                 <div class="modal-inner modal-image col-span-12 lg:col-span-6 group flex items-center overflow-hidden justify-center">
-                  <img class="w-full h-full" :src="`${JSON.parse(product.images_urls)[0]}`" alt="">
+                  <img class="w-full h-full" :src="apiClient + '/storage/' + `${JSON.parse(product.images_urls)[0]}`" alt="">
                 </div>
                 <!-- Product Info -->
                 <div class="modal-inner modal-details bg-white  col-span-12 lg:col-span-6 relative bg-transparent scrollCard">
@@ -183,155 +183,156 @@
       
   </template>
   
-  <script>
-    //import { EventBus } from '@/eventBus';
-    import apiClient from '@/plugins/axios';
-    import Modal from '@/components/Modal/ProdModal.vue';
-    import Button from '@/components/Button';
-    import axios from "axios";
-    import { products } from '@/constant/data';
-    export default {
-      data() {
-        return {
-          apiUrl: apiClient,
-          inWishlist: this.isInWishlist(),
-          selected_color: null,
-          price: 0,
-          success: null,
-          loadAddToCart: false,
-          colorVariants: [],
-          form: {
-            product_variant_id: null,
-            quantity: 1,
-          }
+<script>
+  //import { EventBus } from '@/eventBus';
+  import apiClient from '@/plugins/axios';
+  import Modal from '@/components/Modal/ProdModal.vue';
+  import Button from '@/components/Button';
+  export default {
+    data() {
+      return {
+        apiClient: apiClient,
+        inWishlist: this.isInWishlist(),
+        selected_color: null,
+        price: 0,
+        success: null,
+        loadAddToCart: false,
+        colorVariants: [],
+        form: {
+          product_variant_id: null,
+          quantity: 1,
+        }
+      }
+    },
+    components:{
+      Modal,
+      Button,
+    },
+    props: {
+      product: {
+        type: Object,
+        required: true,
+      },
+      fetchData: {
+        type: Function,
+        required: false,
+      },
+      willFetch: {
+        type: Boolean,
+        required: false, 
+      },
+    },
+    methods: {
+      loadData(index=0, variant=null){
+        if (this.product.options.length == 0){
+          this.price = this.product.variants[0].price;
+          this.form.product_variant_id = this.product.variants[0].id;
+        } else if (this.product.options.length == 1 && this.product.options[0].name == 'Color'){
+          this.price = this.product.variants[index].price;
+          this.form.product_variant_id = this.product.variants[index].id;
+        } else if (this.product.options.length == 1 && this.product.options[0].name != 'Color'){
+          this.price = this.product.variants[index].price;
+          this.form.product_variant_id = this.product.variants[index].id;
+        } else if (this.product.options.length > 1 && this.product.options[0].name == 'Color'){
+          this.selected_color = this.product.options[0].values[index].value;
+          const variants = this.getColorsVariants(this.selected_color);
+          this.colorVariants = variants;
+          this.price = variants[0].price;
+          this.form.product_variant_id = variants[0].id;
         }
       },
-      components:{
-        Modal,
-        Button,
+      getVariantPrice(variantId){
+        return this.product.variants.find(variant => variant.id === variantId).price;
       },
-      props: {
-        product: {
-          type: Object,
-          required: true,
-        },
-        fetchData: {
-          type: Function,
-          required: false,
-        },
-        willFetch: {
-          type: Boolean,
-          required: false, 
-        },
+      selectVariant(variantId){
+        this.form.product_variant_id = variantId;
+        this.price = this.getVariantPrice(variantId);
       },
-      methods: {
-        loadData(index=0, variant=null){
-          if (this.product.options.length == 0){
-            this.price = this.product.variants[0].price;
-            this.form.product_variant_id = this.product.variants[0].id;
-          } else if (this.product.options.length == 1 && this.product.options[0].name == 'Color'){
-            this.price = this.product.variants[index].price;
-            this.form.product_variant_id = this.product.variants[index].id;
-          } else if (this.product.options.length == 1 && this.product.options[0].name != 'Color'){
-            this.price = this.product.variants[index].price;
-            this.form.product_variant_id = this.product.variants[index].id;
-          } else if (this.product.options.length > 1 && this.product.options[0].name == 'Color'){
-            this.selected_color = this.product.options[0].values[index].value;
-            const variants = this.getColorsVariants(this.selected_color);
-            this.colorVariants = variants;
-            this.price = variants[0].price;
-            this.form.product_variant_id = variants[0].id;
-          }
-        },
-        getVariantPrice(variantId){
-          return this.product.variants.find(variant => variant.id === variantId).price;
-        },
-        selectVariant(variantId){
-          this.form.product_variant_id = variantId;
-          this.price = this.getVariantPrice(variantId);
-        },
-        getColorsVariants(color){
-          const variants = this.product.variants.filter(variant => variant.option1 === color);
-          this.form.product_variant_id = variants[0].id;
-          this.selected_color = color;
-          return variants;
-        },
-        addQuantity(){
-          this.form.quantity++;
-        },
-        reduceQuantity(){
-          if(this.form.quantity > 1){
-            this.form.quantity--;
-          }
-        },
-        isSelectedVariant(variantId){
-          return this.form.product_variant_id == variantId;
-        },
-        isSelected(variantId){
-          return this.form.product_variant_id == variantId;
-        },
+      getColorsVariants(color){
+        const variants = this.product.variants.filter(variant => variant.option1 === color);
+        this.form.product_variant_id = variants[0].id;
+        this.selected_color = color;
+        return variants;
+      },
+      addQuantity(){
+        this.form.quantity++;
+      },
+      reduceQuantity(){
+        if(this.form.quantity > 1){
+          this.form.quantity--;
+        }
+      },
+      isSelectedVariant(variantId){
+        return this.form.product_variant_id == variantId;
+      },
+      isSelected(variantId){
+        return this.form.product_variant_id == variantId;
+      },
 
-        addToCart() {
-          let productVariantId = this.form.product_variant_id;
-          let quantity = this.form.quantity;
-          let cart = JSON.parse(localStorage.getItem('cart')) || [];
-          const itemIndex = cart.findIndex(item => item.productVariantId === productVariantId);
+      addToCart() {
+        let productVariantId = this.form.product_variant_id;
+        let quantity = this.form.quantity;
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const itemIndex = cart.findIndex(item => item.productVariantId === productVariantId);
 
-          if (itemIndex !== -1) {
-            // Update quantity if the item is already in the cart
-            cart[itemIndex].quantity += quantity;
-          } else {
-            // Add new item to the cart
-            cart.push({ productVariantId, quantity });
-          }
+        if (itemIndex !== -1) {
+          // Update quantity if the item is already in the cart
+          cart[itemIndex].quantity += quantity;
+        } else {
+          // Add new item to the cart
+          cart.push({ productVariantId, quantity });
+        }
 
-          localStorage.setItem('cart', JSON.stringify(cart));
-          console.log('cart: ', cart);
-        },
+        localStorage.setItem('cart', JSON.stringify(cart));
+        console.log('cart: ', cart);
+      },
 
-        addToWishlist() {
-          let productId = this.product.id;
-          let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-          if (!wishlist.includes(productId)) {
-            wishlist.push(productId);
-            localStorage.setItem('wishlist', JSON.stringify(wishlist));
-            this.inWishlist = true;
-          }
-          
-        },
-        isInWishlist(){
-          const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-          return wishlist.includes(this.product.id);
-        },
-        removeFromWishlist() {
-          let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-          wishlist = wishlist.filter(id => id !== this.product.id);
+      addToWishlist() {
+        let productId = this.product.id;
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        if (!wishlist.includes(productId)) {
+          wishlist.push(productId);
           localStorage.setItem('wishlist', JSON.stringify(wishlist));
-          this.inWishlist = false;
-        },
+          this.inWishlist = true;
+        }
         
-        handleClickOutside(event) {
-            // Check if the click was outside the referenced element
-            if (this.$refs.ProductCart && !this.$refs.ProductCart.contains(event.target)) {
-                this.showProductModal = false;
-            }
-        },
+      },
+      isInWishlist(){
+        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        return wishlist.includes(this.product.id);
+      },
+      removeFromWishlist() {
+        let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        wishlist = wishlist.filter(id => id !== this.product.id);
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        this.inWishlist = false;
+        if (this.fetchData) {
+          this.fetchData();
+        }
       },
       
-      mounted() {
-        
-        // Add the event listener when the component is mounted
-        document.addEventListener('click', this.handleClickOutside);
-        this.loadData(0);
-        //localStorage.clear();
+      handleClickOutside(event) {
+          // Check if the click was outside the referenced element
+          if (this.$refs.ProductCart && !this.$refs.ProductCart.contains(event.target)) {
+              this.showProductModal = false;
+          }
+      },
+    },
+    
+    mounted() {
+      
+      // Add the event listener when the component is mounted
+      document.addEventListener('click', this.handleClickOutside);
+      this.loadData(0);
+      //localStorage.clear();
 
-        //this.fetchSizes();
-      },
-      oreDestroy() {
-          // Remove the event listener when the component is destroyed
-          document.removeEventListener('click', this.handleClickOutside);
-      },
-    }
+      //this.fetchSizes();
+    },
+    oreDestroy() {
+        // Remove the event listener when the component is destroyed
+        document.removeEventListener('click', this.handleClickOutside);
+    },
+  }
 </script>
 <style scoped>
 .prod-btn-desc {

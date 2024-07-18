@@ -24,7 +24,7 @@
             </div>
 
             <div class="col-span-4 md:col-span-4 lg:col-span-4 text-left md:text-center">
-                <a href="" class="uppercase font-bold text-[30px] whitespace-nowrap inline text-white">
+                <a href="/" class="uppercase font-bold text-[30px] whitespace-nowrap inline text-white">
                     <div class="pointer-events-none">
                         <span class="text-black-500 px-2">Julie</span>
                         <span class="text-pink-600 px-2 hidden sm:inline">Underwear</span>
@@ -55,7 +55,7 @@
                         <div class="border-b p-4 flex flex-col gap-4">
                             <a href="#" class="text-start flex gap-2"><i class='text-lg bx bx-user'></i> Profile</a>
                             <a href="#" class="text-start flex gap-2"><i class="text-lg bi bi-cart3"></i> Track Orders</a>
-                            <a href="#" class="text-start flex gap-2"><i class='text-lg bx bx-heart' ></i> Wishlist</a>
+                            <a href="/wishlist" class="text-start flex gap-2"><i class='text-lg bx bx-heart' ></i> Wishlist</a>
                             <a href="#" class="text-start flex gap-2"><i class='text-lg bx bx-help-circle' ></i> Help</a>
                         </div>
                         <div class="flex justify-between items-center gap-4 p-4 text-base">
@@ -63,12 +63,12 @@
                         </div>
                     </div>
                 </button>
-                <button>
+                <a href="/wishlist">
                     <i class='text-2xl bx bx-heart' ></i>
-                </button>
-                <button>
+                </a>
+                <a href="/cart">
                     <i class="text-2xl bi bi-cart3"></i>
-                </button>
+                </a>
             </div>
         </div>
         <div class="hide-scroll px-10 hidden md:flex gap-6 justify-between min-h-12 items-center overflow-x-scroll">

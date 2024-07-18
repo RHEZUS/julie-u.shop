@@ -80,8 +80,8 @@
       </div> 
     </div>
       
-  </template>
-  <script>
+</template>
+<script>
     import ProductCart from "./ProductCart.vue";
     import apiClient from "@/plugins/axios";
     import axios from "axios";
@@ -106,19 +106,18 @@
           const trimmedKeyword = this.keyword.trim();
           
           if (trimmedKeyword) {
-            try {
-              const response = await axios.get(`${API_URL}/products/search/${trimmedKeyword}`, {
+              apiClient.get(`/products/search/${trimmedKeyword}`, {
                 headers: {
                   'Authorization': `Bearer ${this.token}`
                 }
+              }).then(response => {
+                this.products = response.data.products;
+                this.keywordSet = true;
+                console.log(response.data);
+                console.log('products length: ' + this.products.length);
+              }).catch(error => {
+                console.log(error);
               });
-              this.products = response.data.products;
-              this.keywordSet = true;
-              console.log(response.data);
-              console.log('products length: ' + this.products.length);
-            } catch (error) {
-              console.error(error);
-            }
           } else {
             this.keyword = '';
             this.keywordSet = false;

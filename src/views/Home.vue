@@ -8,7 +8,7 @@
             <div class="col-span-full">
                 <p class="text-2xl font-bold text-center">Best sellers</p>
             </div>
-            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products.slice(0, 4)">
+            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in bestsellers.slice(0, 8)">
                 <ProductCart :product="product" />
             </div>
             
@@ -17,25 +17,27 @@
             <div class="col-span-full">
                 <p class="text-2xl font-bold text-center">New Arrivals</p>
             </div>
-            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products.slice(3, 8)">
+            <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in newArrivals.slice(0, 8)">
                 <ProductCart :product="product" />
             </div>
             
         </div>
         <Footer />
-    </div>New Arrivals
+    </div>
 </template>
 <script>
 import Carousel from '@/components/Carousel/HeroCarousel.vue';
 import ProductCart from '@/components/Product/index.vue';
 import HomeHeader from '@/components/HomeHeader/index.vue';
 import Footer from '@/components/HomeFooter/index.vue';
-import { products } from '@/constant/data';
+import apiClient from "@/plugins/axios";
 export default {
     name: 'Home',
     data() {
         return {
-           products: products,
+           products: [],
+           bestsellers: [],
+           newArrivals: [],
            carouselsWithCaption: [
         {
           img: 'https://cdn.aboutstatic.com/file/dd5c376212b9d53632326cdbfa700fbd.jpg?width=2000&height=2000&quality=90&progressive=1',
@@ -67,7 +69,30 @@ export default {
     methods: {
         changeMsg() {
             this.msg = 'Welcome to Your Vue.js App';
-        }
+        },
+        async getBestsellers(){
+            try {
+                const response = await apiClient.get('api/products/bestsellers');
+                this.bestsellers = response.data.products;
+                console.log('BestSelling', this.bestsellers);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+
+        async getNewArrivals(){
+            try {
+                const response = await apiClient.get('api/products/new-arrivals');
+                this.newArrivals = response.data.products;
+                console.log('New Arrival', this.newArrivals);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+    },
+    mounted() {
+        this.getBestsellers();
+        this.getNewArrivals();
     }
 };
 </script>

@@ -4,8 +4,23 @@ import guest from "@/middleware/guest";
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "home-guest",
     component: () => import("@/views/Home.vue"),
+  },
+  {
+    path: "/product/:slug",
+    name: "product",
+    component: () => import("@/views/product-detail.vue"),
+  },
+  {
+    path: "/wishlist",
+    name: "wishlist",
+    component: () => import("@/views/wishlist.vue"),
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("@/views/cart.vue"),
   },
   {
     path: "/login",
@@ -57,9 +72,9 @@ const routes = [
     name: "Layout",
     redirect: "/dashboard/home",
     component: () => import("@/Layout/index.vue"),
-    //meta: {
-    //  middleware: [auth],
-    //},
+    meta: {
+      middleware: [auth(["user"])],
+    },
     children: [
       {
         path: "home",
@@ -525,15 +540,15 @@ const routes = [
       },
       {
         path: "cart",
-        name: "cart",
+        name: "cart-dashboard",
         component: () => import("@/views/app/ecommerce/cart.vue"),
         meta: {
           hide: true,
         },
       },
       {
-        path: "wishlist",
-        name: "wishlist",
+        path: "wishliste",
+        name: "wishliste",
         component: () => import("@/views/app/ecommerce/wishlist.vue"),
         meta: {
           hide: true,

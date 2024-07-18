@@ -49,6 +49,7 @@ app.mount("#app");
 app.use(VueQueryPlugin);
 
 import { useThemeSettingsStore } from "@/store/themeSettings";
+import axios from "axios";
 const themeSettingsStore = useThemeSettingsStore();
 if (localStorage.users === undefined) {
   let users = [
@@ -109,5 +110,6 @@ if (localStorage.getItem("monochrome") !== null) {
   themeSettingsStore.monochrome = true;
   document.getElementsByTagName("html")[0].classList.add("grayscale");
 }
+axios.defaults.headers.common["X-csrf-token"] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 // fake server
 //makeServer();

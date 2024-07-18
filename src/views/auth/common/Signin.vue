@@ -61,13 +61,11 @@
 
 <script>
 import Textinput from "@/components/Textinput";
-import { useField, useForm } from "vee-validate";
 import * as yup from "yup";
 
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import apiClient from '@/plugins/axios';
-import axios from "axios";
 
 export default {
   components: {
@@ -101,10 +99,11 @@ export default {
       .then(() => {
         console.log('Login in.......');
         apiClient.post(`/api/login/`, {'email': this.email, 'password': this.password})
-       .then(response => {
+       .then((response) => {
           this.toast.success("Login successfully", { timeout: 2000 });
+          localStorage.setItem('token', response.data.token);
+          console.log('Token: ', response.data);
           this.router.push("/");
-          console.log('Login response: ', response);
         }).catch((error) => {
           console.log('Error message: ', error);
           this.toast.error(error.message, { timeout: 2000 });

@@ -54,7 +54,7 @@
         </div>
         <div class="capitalize">
             <p class="text-xl font-medium py-3"> Categories</p>
-            <a v-for="category in categories"  :href="'/product/category/' + category.name">
+            <a v-for="category in categories.slice(0, 6)"  :href="'/product/category/' + category.name">
                 <li class="py-2 text-black-500 flex items-start gap-4">
                     {{category.name}}
                 </li>
@@ -62,7 +62,7 @@
         </div>
         <div class="capitalize text-base">
             <p class=" text-xl font-medium py-3"> Brands</p>
-            <a v-for="brand in brands"  :href="'/product/brand/' + brand.name">
+            <a v-for="brand in brands.slice(0, 6)"  :href="'/product/brand/' + brand.name">
                 <li class="py-2 text-black-500 flex items-start gap-4">
                     {{brand.name}}
                 </li>
@@ -85,7 +85,7 @@
         methods:{
             fetchBrands() {
                 //this.tableData.loading = true;
-                apiClient.get('/brands/top')
+                apiClient.get('api/brands/top')
                 .then(response => {
                     const results = response.data;
                     this.brands = results.brands;
@@ -97,7 +97,7 @@
             },
             fetchCategories() {
                 //this.tableData.loading = true;
-                apiClient.get('/categories/top')
+                apiClient.get('api/categories/top')
                 .then(response => {
                     const results = response.data;
                     this.categories = results.categories;

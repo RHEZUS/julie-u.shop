@@ -69,7 +69,7 @@
           to="#"
           class="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-slate-600 dark:text-slate-300"
         >
-          <span>Chnage Settings</span> <Icon icon="heroicons:arrow-right"
+          <span>Change Settings</span> <Icon icon="heroicons:arrow-right"
         /></router-link>
       </div>
     </Card>

@@ -3,6 +3,7 @@ import user2Img from "@/assets/images/all-img/user2.png";
 import user3Img from "@/assets/images/all-img/user3.png";
 import user4Img from "@/assets/images/all-img/user4.png";
 
+
 export const menuItems = [
   {
     isHeadr: true,
@@ -12,6 +13,11 @@ export const menuItems = [
     title: "Dashboard",
     icon: "heroicons-outline:home",
     link: "home",
+  },
+  {
+    title: 'Go To Website',
+    icon: 'bi:box-arrow-up-right',
+    link: '/',
   },
   {
     title: "Users",
@@ -1761,7 +1767,7 @@ export const products =
         "title": "Velvet Kiss Lipstick - Ruby Red",
         "price": 18.00,
         "sku": "VKL-RR",
-        "option1": "Ruby Red",
+        "option1": "#E0115F",
         "option2": null,
         "barcode": "1234567890125",
         "grams": 3.5,
@@ -1773,7 +1779,7 @@ export const products =
         "title": "Velvet Kiss Lipstick - Nude Beige",
         "price": 18.00,
         "sku": "VKL-NB",
-        "option1": "Nude Beige",
+        "option1": "#cab9a7",
         "option2": null,
         "barcode": "1234567890126",
         "grams": 3.5,
@@ -1785,7 +1791,7 @@ export const products =
         "title": "Velvet Kiss Lipstick - Plum Passion",
         "price": 18.00,
         "sku": "VKL-PP",
-        "option1": "Plum Passion",
+        "option1": "#9E4780",
         "option2": null,
         "barcode": "1234567890127",
         "grams": 3.5,
