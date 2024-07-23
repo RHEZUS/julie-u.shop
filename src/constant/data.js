@@ -50,6 +50,11 @@ export const menuItems = [
     ],
   },
   {
+    title: "Delivery Locations",
+    icon: "bi:geo-alt-fill",
+    link: "delivery-locations",
+  },
+  {
     title: "Orders",
     icon: "bi:cart4",
     link: "orders",

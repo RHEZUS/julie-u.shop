@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed w-full h-screen top-[59px] left-0 duration-700" style="background-color: rgb(0 0 0 / 50%);" :class="{'visible' : showSearch, 'hidden': !showSearch}"></div>
+    <div class="fixed w-full h-screen z-50 top-[59px] left-0 duration-700" style="background-color: rgb(0 0 0 / 50%);" :class="{'visible' : showSearch, 'hidden': !showSearch}"></div>
   
     <div class="" ref="searchModal">
       <li class="text-3xl hover:cursor-pointer flex items-center">
@@ -9,7 +9,7 @@
           </svg>
         </div>
       </li>
-      <div v-if="showSearch" class="fixed left-0 top-0 z-50 w-full  md:h-auto bg-white border overflow-y-hidden scrollCard">
+      <div v-if="showSearch" class="fixed left-0 top-0 z-50 w-full h-full  md:h-auto bg-white border overflow-y-scroll md:overflow-y-hidden">
         <div class="relative w-full bg-white text-black font-semibold px-5 py-4">
   
           <!-- Search Form -->
@@ -19,7 +19,7 @@
                 <img src="../../assets/images/logo/logo-j.svg" alt="logo" class="w-9 h-9">
               </a>
             </div>
-            <form @keyup.prevent="search()" class="col-span-12 md:col-span-6 relative w-full h-10 border border-black rounded">
+            <form @keyup.prevent="search()" class="col-span-10 md:col-span-6 relative w-full h-10 border border-black rounded">
               <input v-model="keyword" type="search" class="font-normal w-full h-full rounded focus:ring-0 border-none focus:border-none pl-4" :placeholder="'Search Product'" style="padding-right: 45px;"  name="" id="">
               
               <a v-if="keywordSet && !loading" :href="'/products/search/' + keyword" class="absolute top-2 right-0 w-[40px]  h-full">
@@ -42,14 +42,14 @@
               </button>
             </form>
   
-            <div class="hidden md:flex col-span-3 items-center  justify-end">
+            <div class="flex col-span-2 md:col-span-3 items-center  justify-end">
               <!-- Close Search Modal -->
-              <div class="text-black text-3xl mt-2" @click="showSearch = false"><i class='bx bx-x'></i></div>
+              <div class="text-black text-3xl mt-2 text-blue-600 hover:cursor-pointer" @click="showSearch = false"><i class='bx bx-x'></i></div>
             </div>
           </div>
           
           <!-- Popular Search -->
-          <div class="flex gap-1 mt-3 justify-center">
+          <div class="gap-1 mt-2 justify-center hidden">
             <div class="font-normal capitalize text-[#afaeae]">Popular Search: </div>
             <ul class="flex gap-3 font-normal">
               <a href=""><li class="underline font-medium text-black">Home</li></a>
@@ -59,43 +59,47 @@
           </div>
   
           <!-- Search Result -->
-          <div class="grid grid-cols-12 gap-8">
-            <h1 v-if="keywordSet" class="col-span-12 capitalize mb-2 text-lg text-center font-medium mt-3 text-[#afaeae]">{{products.length}} {{ $t('resultsFor') }}: <span class="text-black">{{'"' + keyword + '"'}}</span> </h1>
+          <div class="grid grid-cols-12 gap-3">
+            <h1 v-if="keywordSet" class="col-span-12 capitalize mb-2 text-lg text-center font-medium mt-3 text-[#afaeae]">{{products.length}} {{ 'Results For' }}: <span class="text-black">{{'"' + keyword + '"'}}</span> </h1>
             
             <!-- Single search result -->
   
-            <ProductCart v-if="products.length > 0" :product="products[0]"></ProductCart>
-            <ProductCart v-if="products.length > 1" :product="products[1]"></ProductCart> 
-            <ProductCart v-if="products.length > 2" :product="products[2]"></ProductCart>
-            <ProductCart v-if="products.length > 3" :product="products[3]"></ProductCart>
-            <ProductCart v-if="products.length > 4" :product="products[4]"></ProductCart>
-            <ProductCart v-if="products.length > 5" :product="products[5]"></ProductCart>        
+            <div  v-for="product in products.slice(0, 4)"  :product="product" class="col-span-6 sm:col-span-3 border md:col-span-3">
+              <a :href="'/product/' + product.slug">
+                  <img class="w-full max-h-[300px]" :src="`${apiUrl}/storage/${product.image_url}`" alt="">
+              </a>
+              <a href="#">
+                  <h1 class="text-base font-medium mt-3 text-black">{{product.title}}</h1>
+              </a>
+              <p class="text-md font-medium text-black"><span>{{product.variants[0].price + ' FCFA'}}</span></p>
+              <div v-if="product.options.length > 0 && product.options[0].name == 'color'" class="flex gap-4 text-black-500 items-center px-2 py-5">
+                <div v-for="color in product.options[0].values" :style="{ backgroundColor: color.value }"  class="w-8 h-8 rounded-full border"></div>
+              </div>
+            </div> 
+            <div v-if="keywordSet" class="col-span-full flex justify-center">
+              <a :href="'/products/search/' + keyword" class="mx-auto text-center px-3  font-medium text-base text-white bg-[#0e0e0e] py-2 rounded mb-3">Load More Results: </a>
+            </div>  
           </div>
   
           <!-- More result Button -->
-          <div v-if="keywordSet" class="col-span-12 mt-16 flex justify-center">
-            <a :href="'/products/search/' + keyword" class="mx-auto text-center px-3 mt-6 font-medium text-base text-white bg-[#0e0e0e] py-2 rounded mb-3">Load More Results: </a>
-          </div>
+          
         </div>
       </div> 
     </div>
       
 </template>
 <script>
-    import ProductCart from "./ProductCart.vue";
     import apiClient from "@/plugins/axios";
       export default {
       data() {
         return {
             showSearch: false,
             keywordSet: false,
+            apiUrl: apiClient.defaults.baseURL,
             keyword: '',
             products: [],
             loading: false,
         }
-      },
-      components:{
-        ProductCart,
       },
       methods:{
         async search() {
@@ -103,7 +107,7 @@
           const trimmedKeyword = this.keyword.trim();
           
           if (trimmedKeyword) {
-              apiClient.get(`/products/search/${trimmedKeyword}`).then(response => {
+              apiClient.get(`/api/products/search/${trimmedKeyword}`).then(response => {
                 this.products = response.data.products;
                 this.keywordSet = true;
                 console.log(response.data);

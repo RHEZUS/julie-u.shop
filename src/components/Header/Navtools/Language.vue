@@ -78,7 +78,7 @@ import {
 
 const months = [
   { name: "En", image: langImg1 },
-  { name: "Gn", image: langImg2 },
+  { name: "Fr", image: langImg2 },
 ];
 const selectLanguage = ref(months[0]);
 </script>

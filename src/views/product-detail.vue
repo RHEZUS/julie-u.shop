@@ -6,7 +6,7 @@
         <!-- Product Image -->
         <div class="grid grid-cols-12">
             <div class="modal-inner modal-image col-span-12 md:col-span-6 group flex items-center overflow-hidden justify-center">
-                <img class="max-w-full h-full"  :src="`${JSON.parse(product.images_urls)[0]}`" alt="">
+                <img class="max-w-full max-h-full h-full"  :src="`${apiUrl}/storage/${product.image_url}`" alt="">
             </div>
             <!-- Product Info -->
             <div class="modal-inner modal-details bg-white  col-span-12 md:col-span-6 relative bg-transparent scrollCard">
@@ -38,7 +38,7 @@
                 </div>
 
                 <!-- product which options is only the color -->
-                <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name == 'Color'">
+                <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name == 'color'">
                     <p><span class="font-semibold">{{ 'Color' }}:</span> black</p>
                     <div class="flex gap-4 text-black-500 items-center px-2 py-5">
                     <div  v-for="variant in product.variants">
@@ -58,7 +58,7 @@
                 </div>
 
                 <!-- product which options is only one and is not the color -->
-                <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name != 'Color'">
+                <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name != 'color'">
                     <p><span class="font-semibold">{{ product.options[0].name }}:</span></p>
                     <div class="flex gap-4 text-black-500 items-center px-2 py-5">
                     
@@ -78,13 +78,13 @@
                     </div>
                     
                     </div>
-                    <div v-if="product.options.length > 1 && product.options[1].name == 'Color'" class="flex gap-4 items-center px-2 py-5">
+                    <div v-if="product.options.length > 1 && product.options[1].name == 'color'" class="flex gap-4 items-center px-2 py-5">
                     <div v-for="color in product.product_color" :class="[ 'bg-[' + color.color + ']' ]"  class="w-7 h-7 rounded-full border hover:cursor-pointer" @click="loadData(key)"></div>
                     </div>
                 </div>
                 
                 <!-- product with more than one option options -->
-                <div class="mt-4" v-if="product.options.length > 1 && product.options[0].name == 'Color'">
+                <div class="mt-4" v-if="product.options.length > 1 && product.options[0].name == 'color'">
                     <!-- List colors -->
                     <p><span class="font-semibold">{{ 'Color' }}:</span></p>
                     <div class="flex gap-4 text-black-500 items-center px-2 py-5">
@@ -404,7 +404,7 @@ import Badge from "@/components/Badge";
     export default {
       data() {
         return {
-          apiUrl: apiClient,
+          apiUrl: apiClient.defaults.baseURL,
           inWishlist: null,
           loading: true,
           showTab: 'description',
@@ -462,13 +462,13 @@ import Badge from "@/components/Badge";
           if (this.product.options.length == 0){
             this.price = this.product.variants[0].price;
             this.form.product_variant_id = this.product.variants[0].id;
-          } else if (this.product.options.length == 1 && this.product.options[0].name == 'Color'){
+          } else if (this.product.options.length == 1 && this.product.options[0].name == 'color'){
             this.price = this.product.variants[index].price;
             this.form.product_variant_id = this.product.variants[index].id;
-          } else if (this.product.options.length == 1 && this.product.options[0].name != 'Color'){
+          } else if (this.product.options.length == 1 && this.product.options[0].name != 'color'){
             this.price = this.product.variants[index].price;
             this.form.product_variant_id = this.product.variants[index].id;
-          } else if (this.product.options.length > 1 && this.product.options[0].name == 'Color'){
+          } else if (this.product.options.length > 1 && this.product.options[0].name == 'color'){
             this.selected_color = this.product.options[0].values[index].value;
             const variants = this.getColorsVariants(this.selected_color);
             this.colorVariants = variants;

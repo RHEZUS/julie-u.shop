@@ -3,8 +3,13 @@ import apiClient from "@/plugins/axios";
 export default function auth (allowedRoles = []) {
   return async function ({ next, store }) {
     try {
+      const token = localStorage.getItem('token');
       // Fetch the current user's details
-      const response = await apiClient.get(`/api/user`);
+      const response = await apiClient.get(`/api/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const user = response.data.user;
 
       // Check if the user is authenticated

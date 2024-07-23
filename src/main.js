@@ -22,8 +22,8 @@ import "v-calendar/dist/style.css";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 
 // perfect scrollbar
-import PerfectScrollbar from "vue3-perfect-scrollbar";
-import "vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css";
+import { PerfectScrollbar } from "vue3-perfect-scrollbar";
+//import "vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css";
 
 const pinia = createPinia();
 

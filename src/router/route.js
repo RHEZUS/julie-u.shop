@@ -13,6 +13,11 @@ const routes = [
     component: () => import("@/views/product-detail.vue"),
   },
   {
+    path: "/products/category/:slug",
+    name: "category-products",
+    component: () => import("@/views/product-by-category.vue"),
+  },
+  {
     path: "/wishlist",
     name: "wishlist",
     component: () => import("@/views/wishlist.vue"),
@@ -23,9 +28,17 @@ const routes = [
     component: () => import("@/views/cart.vue"),
   },
   {
+    path: "/place-order",
+    name: "place-order",
+    component: () => import("@/views/place-order.vue"),
+  },
+  {
     path: "/login",
     name: "Login",
     component: () => import("@/views/auth/login/login.vue"),
+    meta: {
+      middleware: [guest],
+    },
   },
   {
     path: "/register",
@@ -140,6 +153,14 @@ const routes = [
         meta: {
           hide: true,
         },
+      },
+      {
+        path: 'delivery-locations',
+        name: 'delivery-locations',
+        component: () => import('@/views/dashboard/delivery-locations/index.vue'),
+        meta: {
+          hide: true
+        }
       },
       {
         path: "orders",

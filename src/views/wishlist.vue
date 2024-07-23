@@ -39,6 +39,10 @@ export default {
         getProducts(){
             try{
                 let wishlist = JSON.parse(localStorage.getItem('wishlist'));
+                if (!wishlist) {
+                    wishlist = [];
+                    return;
+                }
                 for (let i = wishlist.length - 1; i >= 0; i--) {
                     if (typeof wishlist[i] === 'string' || typeof wishlist[i] === 'number') {
                         wishlist[i] = parseInt(wishlist[i]);
@@ -62,7 +66,6 @@ export default {
 
             }catch(error){
                 console.log(error);
-                this.toast.error('Failed to fetch products');
             }
         },
         loadProducts(){

@@ -30,7 +30,7 @@
             <span v-if="props.column.field == 'image_url'" class="flex">
               <span class="w-24 h-full rounded-full  flex-none">
                 <img
-                  :src="apiClient + '/storage/' + JSON.parse(props.row.images_urls)[0]"
+                  :src="apiClient + '/storage/' + props.row.image_url"
                   :alt="props.row.name"
                   class="object-cover w-full h-full"
                 />

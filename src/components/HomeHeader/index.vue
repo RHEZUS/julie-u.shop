@@ -72,8 +72,8 @@
             </div>
         </div>
         <div class="hide-scroll px-10 hidden md:flex gap-6 justify-between min-h-12 items-center overflow-x-scroll">
-            <a class="text-base font-medium text-nowrap" href="#" v-for="category in categories.slice(0, 12)">
-                {{ category }}
+            <a class="text-base font-medium text-nowrap" v-for="category in categories.slice(0, 12)" :href="'/products/category/' + category.slug">
+                {{ category.name }}
             </a>
         </div>
         <div class="bg-black-500 text-black-300">
@@ -92,13 +92,14 @@ import Icon from "@/components/Icon/index.vue";
 import Button from "@/components/Button/index.vue";
 import { categories } from "@/constant/data";
 import Responsive from './Responsive.vue';
+import apiClient from '@/plugins/axios';
 export default {
     name: 'HomeHeader',
     data() {
         return {
             isShow: false,
             isAuth: true,
-            categories: ['victoria secret', 'calvin klein', 'tommy hilfiger', 'adidas', 'nike', 'puma', 'reebok', 'under armour', 'champion', 'fila', 'asics', 'new balance', 'skechers', 'converse', 'vans', 'birkenstock', 'dr martens', 'clarks', 'timberland', 'crocs', 'teva', 'sorel', 'ugg', 'hunter', 'salomon', 'merrell', 'keen', 'the north face', 'patagonia', 'arcteryx', 'marmot', 'columbia', 'mountain hardwear', 'black diamond', 'prana', 'icebreaker', 'smartwool', 'patagonia', 'arcteryx', 'marmot', 'columbia', 'mountain hardwear', 'black diamond', 'prana', 'icebreaker', 'smartwool', 'patagonia', 'arcteryx', 'marmot', 'columbia', 'mountain hardwear', 'black diamond', 'prana', 'icebreaker', 'smartwool', 'patagonia', 'arcteryx', 'marmot', 'columbia', 'mountain hardwear', 'black diamond', 'prana', 'icebreaker', 'smartwool', 'patagonia', 'arcteryx', 'marmot', 'columbia', 'mountain hardwear', 'black diamond', 'prana', 'icebreaker', 'smartwool'],
+            categories: [],
         }
     },
     components: {
@@ -110,7 +111,22 @@ export default {
     methods: {
         showLanguage() {
             this.isShow = !this.isShow
-        }
+        },
+        fetchCategories() {
+            //this.tableData.loading = true;
+            apiClient.get('api/categories/top')
+            .then(response => {
+                const results = response.data;
+                this.categories = results.categories;
+            })
+            .catch(message => {
+                console.error('Error fetching categories:', message);
+            });
+            //this.tableData.loading = false;
+        },
+    },
+    mounted() {
+        this.fetchCategories();
     }
 }
 </script>

@@ -47,9 +47,11 @@
 </template>
 <script>
 import { MenuItem } from "@headlessui/vue";
+import  { logout } from '@/utils/logout'
 import Dropdown from "@/components/Dropdown";
 import Icon from "@/components/Icon";
 import profileImg from "@/assets/images/all-img/user.png"
+
 export default {
   components: {
     Icon,
@@ -113,11 +115,12 @@ export default {
           label: "Logout",
           icon: "heroicons-outline:login",
           link: () => {
-            this.$router.push("/");
-            localStorage.removeItem("activeUser");
+            this.logout();
           },
         },
       ],
+
+      logout: logout,
     };
   },
 };

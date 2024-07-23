@@ -1,13 +1,13 @@
 <template>
     <!-- Single search result -->
      
-    <div class="w-full overflow-hidden" ref="ProductCart border">
+    <div class="w-full overflow-hidden pb-2" ref="ProductCart border">
       
       <div class="relative group z-0">
         <!-- Image -->
         <div class="flex items-center justify-center">
         <a :href="'/product/' + product.slug" class="">
-          <img class="h-full w-full" :src="apiClient + '/storage/' + JSON.parse(product.images_urls)[0]" alt="">
+          <img class="h-full w-full" :src="apiUrl + '/storage/' + product.image_url" alt="">
         </a>
         </div>
         <!-- Product buttons -->
@@ -22,7 +22,7 @@
               <!-- Product Image -->
                <div class="grid grid-cols-12">
                 <div class="modal-inner modal-image col-span-12 lg:col-span-6 group flex items-center overflow-hidden justify-center">
-                  <img class="w-full h-full" :src="apiClient + '/storage/' + `${JSON.parse(product.images_urls)[0]}`" alt="">
+                  <img class="w-full h-full" :src="apiUrl + '/storage/' + `${product.image_url}`" alt="">
                 </div>
                 <!-- Product Info -->
                 <div class="modal-inner modal-details bg-white  col-span-12 lg:col-span-6 relative bg-transparent scrollCard">
@@ -54,8 +54,8 @@
                     </div>
 
                     <!-- product which options is only the color -->
-                    <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name == 'Color'">
-                      <p><span class="font-semibold">{{ 'Color' }}:</span> black</p>
+                    <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name == 'color'">
+                      <p><span class="font-semibold">{{ 'color' }}:</span> black</p>
                       <div class="flex gap-4 text-black-500 items-center px-2 py-5">
                         <div  v-for="variant in product.variants">
                           <label :for="'variant-' + variant.id">
@@ -74,7 +74,7 @@
                     </div>
 
                     <!-- product which options is only one and is not the color -->
-                    <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name != 'Color'">
+                    <div class="mt-4" v-if="product.options.length == 1 && product.options[0].name != 'color'">
                       <p><span class="font-semibold">{{ product.options[0].name }}:</span></p>
                       <div class="flex gap-4 text-black-500 items-center px-2 py-5">
                         
@@ -94,15 +94,15 @@
                         </div>
                         
                       </div>
-                      <div v-if="product.options.length > 1 && product.options[1].name == 'Color'" class="flex gap-4 items-center px-2 py-5">
+                      <div v-if="product.options.length > 1 && product.options[1].name == 'color'" class="flex gap-4 items-center px-2 py-5">
                         <div v-for="color in product.product_color" :class="[ 'bg-[' + color.color + ']' ]"  class="w-7 h-7 rounded-full border hover:cursor-pointer" @click="loadData(key)"></div>
                       </div>
                     </div>
                     
                     <!-- product with more than one option options -->
-                    <div class="mt-4" v-if="product.options.length > 1 && product.options[0].name == 'Color'">
+                    <div class="mt-4" v-if="product.options.length > 1 && product.options[0].name == 'color'">
                       <!-- List colors -->
-                      <p><span class="font-semibold">{{ 'Color' }}:</span></p>
+                      <p><span class="font-semibold">{{ 'color' }}:</span></p>
                       <div class="flex gap-4 text-black-500 items-center px-2 py-5">
                         <div v-for="(color, index) in product.options[0].values" :key="index" :style="{ backgroundColor: color.value }"  :class="{'ring-black-500': color.value == selected_color, 'ring-black-300':color.value != selected_color}" class="w-8 h-8 rounded-full border-2 ring-2 border-white" @click="loadData(index)"></div>
                       </div>
@@ -110,7 +110,7 @@
                       <p><span class="font-semibold">{{ product.options[1].name }}: </span></p>
                       <div class="flex gap-4 items-center py-5 flex-wrap">
                         <div v-for="variant in colorVariants" :class="{'text-neutral-400 hover:bg-white hover:text-neutral-400' : variant.inventory_quantity == 0, 'hover:text-white': variant.inventory_quantity > 0 , 'bg-black-500 text-white': isSelectedVariant(variant.id), 'bg-white': !isSelectedVariant(variant.id)}" class="w-fit p-1 h-9 hover:cursor-pointer rounded-md flex items-center justify-center hover:bg-black-500  border">
-                          <label :for="['variant-' + variant.id]" class="w-full h-full flex justify-center items-center">
+                          <label :for="['variant-' + variant.id]" class="min-w-7 w-full h-full flex justify-center items-center">
                             {{ variant.option2 }}
                           </label>
                           <input 
@@ -164,7 +164,7 @@
       </div>
       <!-- Product details -->
       <div class="w-full px-2">
-        <a href="#">
+        <a :href="'/product/' + product.slug">
           <p class="text-lg font-medium mt-3 text-black-500">{{ product.title }}</p>
         </a>
         <p class="text-md font-medium text-black-500">
@@ -173,7 +173,7 @@
         </p>
       </div>
       
-      <div v-if="product.options.length > 0 && product.options[0].name == 'Color'" class="flex gap-4 text-black-500 items-center px-2 py-5">
+      <div v-if="product.options.length > 0 && product.options[0].name == 'color'" class="flex gap-4 text-black-500 items-center px-2 py-5">
         <div v-for="color in product.options[0].values" :style="{ backgroundColor: color.value }"  class="w-8 h-8 rounded-full border"></div>
       </div>
       
@@ -191,10 +191,11 @@
   export default {
     data() {
       return {
-        apiClient: apiClient,
         inWishlist: this.isInWishlist(),
+        apiUrl: apiClient.defaults.baseURL,
         selected_color: null,
         price: 0,
+        images: [],
         success: null,
         loadAddToCart: false,
         colorVariants: [],
@@ -227,16 +228,17 @@
         if (this.product.options.length == 0){
           this.price = this.product.variants[0].price;
           this.form.product_variant_id = this.product.variants[0].id;
-        } else if (this.product.options.length == 1 && this.product.options[0].name == 'Color'){
+        } else if (this.product.options.length == 1 && this.product.options[0].name == 'color'){
           this.price = this.product.variants[index].price;
           this.form.product_variant_id = this.product.variants[index].id;
-        } else if (this.product.options.length == 1 && this.product.options[0].name != 'Color'){
+        } else if (this.product.options.length == 1 && this.product.options[0].name != 'color'){
           this.price = this.product.variants[index].price;
           this.form.product_variant_id = this.product.variants[index].id;
-        } else if (this.product.options.length > 1 && this.product.options[0].name == 'Color'){
+        } else if (this.product.options.length > 1 && this.product.options[0].name == 'color'){
           this.selected_color = this.product.options[0].values[index].value;
           const variants = this.getColorsVariants(this.selected_color);
           this.colorVariants = variants;
+          console.log('variants', variants);
           this.price = variants[0].price;
           this.form.product_variant_id = variants[0].id;
         }
