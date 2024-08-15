@@ -154,12 +154,14 @@ import Navmenu from "./Navmenu";
 import { gsap } from "gsap";
 import simplebar from "simplebar-vue";
 import { ref, onMounted } from "vue";
+import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 
 export default defineComponent({
   components: {
     // Icon,
     Navmenu,
     simplebar,
+    PerfectScrollbar,
   },
   data() {
     return {

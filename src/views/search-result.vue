@@ -37,11 +37,12 @@ import ProductCart from '@/components/Product/index.vue';
 import Header from '@/components/HomeHeader/index.vue';
 import Footer from '@/components/HomeFooter/index.vue';
 import apiClient from '../plugins/axios';
+import axios from 'axios';
 export default {
     data(){
         return {
             keyword: this.$route.params.keyword,
-            token: localStorage.getItem('authToken'),
+            token: localStorage.getItem('token'),
             pageTitle: this.$route.name,
             products: [],
             categories: [],
@@ -73,7 +74,7 @@ export default {
 
             if (trimmedKeyword) {
                 try {
-                 apiClient.get(`/products/search/${trimmedKeyword}`, {
+                 axios.get(`/products/search/${trimmedKeyword}`, {
                     headers: {
                     'Authorization': `Bearer ${this.token}`
                     }

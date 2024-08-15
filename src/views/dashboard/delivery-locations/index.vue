@@ -104,11 +104,11 @@
           <template #pagination-bottom="props">
             <div class="py-4 px-3">
               <Pagination
-                :total="50"
+                :total="total"
                 :current="current"
                 :per-page="perpage"
                 :pageRange="pageRange"
-                @page-changed="current = $event"
+                @page-changed="current = $event; changePage($event)"
                 :pageChanged="props.pageChanged"
                 :perPageChanged="props.perPageChanged"
                 enableSearch
@@ -138,6 +138,7 @@
   import { useToast } from "vue-toastification";
   import apiClient from "@/plugins/axios";
   import Breadcrumb from "@/components/Breadcrumbs";
+import axios from "axios";
   export default {
     components: {
       Pagination,
@@ -169,6 +170,7 @@
         item: [],
         current: 1,
         perpage: 10,
+        total: 0,
         pageRange: 1,
         searchTerm: "",
         actions: [
@@ -228,15 +230,22 @@
       };
     },
     methods: {
-        async FetchData(){
-            await apiClient.get(`/api/admin/delivery-locations`,
+        async FetchData(page = 1){
+            await axios.get(`/api/admin/delivery-locations?page=${page}`,
             { withCredentials: true })
             .then((response) => {
-                this.locations = response.data.locations;
+                this.locations = response.data.locations.data;
+                this.total = response.data.locations.total;
+                this.perpage = response.data.locations.per_page;
+                this.current = response.data.locations.current_page;
                 //console.log(this.brands);
             }).catch((error) => {
                 this.toast.error('Failed to fetch locations', { timeout: 2000 });
             });
+        },
+
+        changePage(page) {
+          this.FetchData(page);
         },
   
         showCreateModal(){
@@ -266,7 +275,7 @@
           }
         },
         async deleteItem(itemId) {
-          await apiClient.delete(`/api/admin/delivery-location/delete/${itemId}`,
+          await axios.delete(`/api/admin/delivery-location/delete/${itemId}`,
           { withCredentials: true })
           .then((response) => {
               this.FetchData();

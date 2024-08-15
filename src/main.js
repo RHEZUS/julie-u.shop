@@ -20,12 +20,17 @@ import VCalendar from "v-calendar";
 import { createPinia } from "pinia";
 import "v-calendar/dist/style.css";
 import { VueQueryPlugin } from "@tanstack/vue-query";
-
 // perfect scrollbar
 import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 //import "vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css";
 
 const pinia = createPinia();
+
+//emit event
+import mitt from 'mitt'
+const emitter = mitt()
+
+import store from "./store";
 
 // vue use
 const app = createApp(App)
@@ -41,17 +46,28 @@ const app = createApp(App)
   .use(VueFlatPickr)
   .use(VueGoodTablePlugin)
   .use(VueApexCharts)
-  .use(PerfectScrollbar)
-  .use(VCalendar);
-
-app.config.globalProperties.$store = {};
+  //.use(PerfectScrollbar)
+  .use(VCalendar)
+  .use(store);
+app.config.globalProperties.emitter = emitter
+app.config.globalProperties.store = {};
 app.mount("#app");
 app.use(VueQueryPlugin);
+app.component('PerfectScrollbar', PerfectScrollbar);
 
-import { useThemeSettingsStore } from "@/store/themeSettings";
+
+// Axios default config
 import axios from "axios";
+axios.defaults.headers.common["X-csrf-token"] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+//https://api.Julie-u.shop
+//http://localhost:8000/
+axios.defaults.baseURL = 'http://localhost:8000/';
+axios.defaults.withCredentials = true;
+
+// Theme settings
+import { useThemeSettingsStore } from "@/store/themeSettings";
 const themeSettingsStore = useThemeSettingsStore();
-if (localStorage.users === undefined) {
+/*if (localStorage.users === undefined) {
   let users = [
     {
       name: "dashcode",
@@ -60,7 +76,7 @@ if (localStorage.users === undefined) {
     },
   ];
   localStorage.setItem("users", JSON.stringify(users));
-}
+}*/
 
 // check localStorage theme for dark light bordered
 if (localStorage.theme === "dark") {
@@ -110,6 +126,7 @@ if (localStorage.getItem("monochrome") !== null) {
   themeSettingsStore.monochrome = true;
   document.getElementsByTagName("html")[0].classList.add("grayscale");
 }
-axios.defaults.headers.common["X-csrf-token"] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+
 // fake server
 //makeServer();

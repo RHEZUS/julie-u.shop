@@ -4,7 +4,7 @@ import guest from "@/middleware/guest";
 const routes = [
   {
     path: "/",
-    name: "home-guest",
+    name: "homepage",
     component: () => import("@/views/Home.vue"),
   },
   {
@@ -39,6 +39,14 @@ const routes = [
     meta: {
       middleware: [guest],
     },
+  },
+  {
+    path: "/profile-setting",
+    name: "profile-setting",
+    component: () => import("@/views/profile-setting.vue"),
+    meta:{
+      middleware: [auth()]
+    }
   },
   {
     path: "/register",
@@ -139,20 +147,13 @@ const routes = [
         },
       },
       {
-        path: "products-edit",
-        name: "edit-product",
-        component: () => import("@/views/dashboard/products/update.vue"),
-        meta: {
+        path: "product/edit/:id",
+        name: "product-update",
+        component: () => import("@/views/dashboard/products/update-product.vue"),
+        meta:{
           hide: true,
-        },
-      },
-      {
-        path: "products/edit/:slug",
-        name: "edit-product",
-        component: () => import("@/views/dashboard/products/update.vue"),
-        meta: {
-          hide: true,
-        },
+          groupParent: "products",
+        }
       },
       {
         path: 'delivery-locations',
@@ -166,6 +167,14 @@ const routes = [
         path: "orders",
         name: "orders",
         component: () => import("@/views/dashboard/orders/index.vue"),
+        meta: {
+          hide: true,
+        },
+      },
+      {
+        path: "order-details/:id",
+        name: "order-details",
+        component: () => import("@/views/dashboard/orders/details.vue"),
         meta: {
           hide: true,
         },
@@ -584,14 +593,6 @@ const routes = [
           hide: true,
         },
       },
-      {
-        path: "edit-product",
-        name: "edit-product",
-        component: () => import("@/views/app/ecommerce/edit-product.vue"),
-        meta: {
-          hide: true,
-        },
-      },
 
       {
         path: "chat",
@@ -685,11 +686,7 @@ const routes = [
         name: "profile",
         component: () => import("@/views/profile.vue"),
       },
-      {
-        path: "profile-setting",
-        name: "profile-setting",
-        component: () => import("@/views/profile.vue"),
-      },
+      
       {
         path: "settings",
         name: "settings",

@@ -5,26 +5,26 @@
     <div class="py-5 px-2 md:px-10">
         <!-- Product Image -->
         <div class="grid grid-cols-12">
-            <div class="modal-inner modal-image col-span-12 md:col-span-6 group flex items-center overflow-hidden justify-center">
-                <img class="max-w-full max-h-full h-full"  :src="`${apiUrl}/storage/${product.image_url}`" alt="">
+            <div class="modal-inner modal-image col-span-12 md:col-span-6 group  flex items-center overflow-hidden justify-center">
+                <Carousel :carousels="images" :autoplay="{  delay: 2500, disableOnInteraction: false, }" />
             </div>
             <!-- Product Info -->
             <div class="modal-inner modal-details bg-white  col-span-12 md:col-span-6 relative bg-transparent scrollCard">
         
                 <form @submit.prevent="addToCart()" class="w-full flex flex-col h-full px-5 py-5">
-                <a href="#">
-                    <p class="text-2xl font-medium mt-3 text-black">{{ product.title }}</p>
-                </a>
+
+                <p class="text-2xl font-medium mt-3 text-black">{{ product.title }}</p>
+
                 <p class="text-xl font-medium text-black mt-4 flex flex-wrap items-center gap-4">
                     <p class="text-md font-medium text-black-500">
                     <span  v-if="product.discount">699.00 Francs CFA </span>
                     <span class="" :class="{'text-[#afaeae] line-through':product.discount, 'text-black-500':!product.discount}">{{ (price * form.quantity).toFixed(2) + ' Francs CFA' }}</span>
                     </p>
-                    <span class=" bg-red-600 h-3 flex items-center p-1 text-white text-[10px] rounded-lg">EARNINGS: 12%</span>
+                    <span class=" bg-red-600 h-3 hidden items-center p-1 text-white text-[10px] rounded-lg">EARNINGS: 12%</span>
                 </p>
                 <div class="">
                     <p class="text-gray-500 text-md mt-6">
-                    {{ product.description }}
+                      {{ product.description.length > 300 ? product.description.substring(0, 300) + '...' : product.description }}
                     </p>
                     <a class="text-md mt-4 underline font-medium" :href="'/product/' + product.slug">{{ 'ViewDetails' }} </a>
                 </div>
@@ -88,13 +88,13 @@
                     <!-- List colors -->
                     <p><span class="font-semibold">{{ 'Color' }}:</span></p>
                     <div class="flex gap-4 text-black-500 items-center px-2 py-5">
-                    <div v-for="(color, index) in product.options[0].values" :key="index" :style="{ backgroundColor: color.value }"  :class="{'ring-black-500': color.value == selected_color, 'ring-black-300':color.value != selected_color}" class="w-8 h-8 rounded-full border-2 ring-2 border-white" @click="loadData(index)"></div>
+                    <div v-for="(color, index) in product.options[0].values" :key="index" :style="{ backgroundColor: color.value }"  :class="{'ring-pink-600': color.value == selected_color, 'ring-black-300':color.value != selected_color}" class="w-8 h-8 rounded-full border-2 ring-2 border-white" @click="loadData(index)"></div>
                     </div>
                     <!-- List variants -->
                     <p><span class="font-semibold">{{ product.options[1].name }}: </span></p>
                     <div class="flex gap-4 items-center py-5 flex-wrap">
-                    <div v-for="variant in colorVariants" :class="{'text-neutral-400 hover:bg-white hover:text-neutral-400' : variant.inventory_quantity == 0, 'hover:text-white': variant.inventory_quantity > 0 , 'bg-black-500 text-white': isSelectedVariant(variant.id), 'bg-white': !isSelectedVariant(variant.id)}" class="w-fit p-1 h-9 hover:cursor-pointer rounded-md flex items-center justify-center hover:bg-black-500  border">
-                        <label :for="['variant-' + variant.id]" class="w-full h-full flex justify-center items-center">
+                    <div v-for="variant in colorVariants" :class="{'text-neutral-400 hover:bg-pink-600 hover:text-neutral-400' : variant.inventory_quantity == 0, 'hover:text-white': variant.inventory_quantity > 0 , 'bg-pink-600 text-white': isSelectedVariant(variant.id), 'bg-white': !isSelectedVariant(variant.id)}" class="w-fit p-1 h-9 hover:cursor-pointer rounded-md flex items-center justify-center hover:bg-pink-600  border">
+                        <label :for="['variant-' + variant.id]" class="w-full h-full min-w-6  flex justify-center items-center">
                         {{ variant.option2 }}
                         </label>
                         <input 
@@ -124,7 +124,7 @@
                         <input v-model="form.quantity" class="w-full h-full text-center outline-none border-none focus:ring-0 bg-transparent" readonly type="text" name="" id="" style="padding: 0 30px;">
                         <button @click="addQuantity()" type="button" class="absolute w-[30px] h-full bg-transparent right-0">+</button>
                     </div>
-                    <div class="col-span-8 bg-[#0e0e0e]  rounded">
+                    <div class="col-span-8 bg-pink-600  rounded">
                         <button type="submit" class="text-center w-full font-medium text-base text-white py-3">
                         <svg v-if="loadAddToCart" aria-hidden="true" class="mr-3 inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -156,7 +156,7 @@
 
     <!-- Reviews and Rating -->
     <div class="col-span-full py-5  px-2 md:px-10">
-      <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+      <div class="mb-4 border-b border-gray-200 ">
           <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
               <li class="me-2" role="presentation">
                   <button @click="showTab = 'description'"  class="inline-block p-4 border-b-2 rounded-t-lg" :class="{'border-pink-600': showTab == 'description'}" id="profile-tab" type="button">Description</button>
@@ -167,7 +167,7 @@
           </ul>
       </div>
       <div id="default-tab-content">
-          <div v-if="showTab === 'description'" class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" v-html="product.description">
+          <div v-if="showTab === 'description'" class="p-4 rounded-lg bg-gray-50" v-html="product.description">
               
           </div>
           <div v-if="showTab == 'reviews'" class="">
@@ -393,6 +393,7 @@
 <script>
 //import { EventBus } from '@/eventBus';
 import ProductCart from '@/components/Product/index.vue';
+import Carousel from '@/components/Carousel/ProductImageCarousel.vue';
 import Header from '@/components/HomeHeader/index.vue';
 import Footer from '@/components/HomeFooter/index.vue';
 import apiClient from '@/plugins/axios';
@@ -401,10 +402,14 @@ import Button from '@/components/Button';
 import { products } from '@/constant/data';
 import Icon from "@/components/Icon";
 import Badge from "@/components/Badge";
+import countCartItems from "@/utils/cart"
+import axios from 'axios';
+import { useToast } from 'vue-toastification';
     export default {
       data() {
         return {
           apiUrl: apiClient.defaults.baseURL,
+          images: [],
           inWishlist: null,
           loading: true,
           showTab: 'description',
@@ -417,6 +422,7 @@ import Badge from "@/components/Badge";
           success: null,
           loadAddToCart: false,
           colorVariants: [],
+          toast : useToast(),
           form: {
             product_variant_id: null,
             quantity: 1,
@@ -430,13 +436,14 @@ import Badge from "@/components/Badge";
         Footer,
         ProductCart,
         Icon,
-        Badge
+        Badge,
+        Carousel,
       },
       methods: {
         async getProduct(){
           try{
             const slug = this.$route.params.slug;
-            await apiClient.get(`api/product_by_slug/${slug}`).then(response => {
+            await axios.get(`api/product_by_slug/${slug}`).then(response => {
               this.product = response.data.product;
               console.log(this.product);
             });
@@ -448,9 +455,8 @@ import Badge from "@/components/Badge";
         async getRelatedProducts(){
           try{
             const slug = this.$route.params.slug;
-            await apiClient.get(`api/product/related/${slug}`).then(response => {
+            await axios.get(`api/product/related/${slug}`).then(response => {
               this.relatedProducts = response.data.products;
-              console.log('success Related',this.relatedProducts);
             });
           }
           catch(error){
@@ -462,10 +468,23 @@ import Badge from "@/components/Badge";
           if (this.product.options.length == 0){
             this.price = this.product.variants[0].price;
             this.form.product_variant_id = this.product.variants[0].id;
+            this.images = [],
+            this.images.push({img: this.apiUrl + '/storage/' + this.product.image_url})
           } else if (this.product.options.length == 1 && this.product.options[0].name == 'color'){
             this.price = this.product.variants[index].price;
             this.form.product_variant_id = this.product.variants[index].id;
+
+            // assign image carousel images
+            this.images = [];
+            const colorImages = JSON.parse(this.product.options[0].values[index].images_urls);
+            for (let i =0; i< colorImages.length; i++){
+              this.images.push({img: this.apiUrl + '/storage/' + colorImages[i]})
+            }
+
           } else if (this.product.options.length == 1 && this.product.options[0].name != 'color'){
+            this.images = [],
+            this.images.push({img: this.apiUrl + '/storage/' + this.product.image_url})
+
             this.price = this.product.variants[index].price;
             this.form.product_variant_id = this.product.variants[index].id;
           } else if (this.product.options.length > 1 && this.product.options[0].name == 'color'){
@@ -474,6 +493,13 @@ import Badge from "@/components/Badge";
             this.colorVariants = variants;
             this.price = variants[0].price;
             this.form.product_variant_id = variants[0].id;
+
+            // assign image carousel images
+            this.images = [];
+            const colorImages = JSON.parse(this.product.options[0].values[index].images_urls);
+            for (let i =0; i< colorImages.length; i++){
+              this.images.push({img: this.apiUrl + '/storage/' + colorImages[i]})
+            }
           }
         },
         getVariantPrice(variantId){
@@ -505,21 +531,25 @@ import Badge from "@/components/Badge";
         },
 
         addToCart() {
-          let productVariantId = this.form.product_variant_id;
-          let quantity = this.form.quantity;
-          let cart = JSON.parse(localStorage.getItem('cart')) || [];
-          const itemIndex = cart.findIndex(item => item.productVariantId === productVariantId);
+          try{
+            let productVariantId = this.form.product_variant_id;
+            let quantity = this.form.quantity;
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const itemIndex = cart.findIndex(item => item.productVariantId === productVariantId);
 
-          if (itemIndex !== -1) {
-            // Update quantity if the item is already in the cart
-            cart[itemIndex].quantity += quantity;
-          } else {
-            // Add new item to the cart
-            cart.push({ productVariantId, quantity });
+            if (itemIndex !== -1) {
+              // Update quantity if the item is already in the cart
+              cart[itemIndex].quantity += quantity;
+            } else {
+              // Add new item to the cart
+              cart.push({ productVariantId, quantity });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            this.emitter.emit('cartUpdated', {'eventContent': countCartItems()});
+            this.toast.success('Product added to cart');
+          } catch(error){
+            console.log(error);
           }
-
-          localStorage.setItem('cart', JSON.stringify(cart));
-          console.log('cart: ', cart);
         },
 
         addToWishlist() {

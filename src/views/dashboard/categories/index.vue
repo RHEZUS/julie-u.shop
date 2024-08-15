@@ -107,11 +107,11 @@
           <template #pagination-bottom="props">
             <div class="py-4 px-3">
               <Pagination
-                :total="50"
+                :total="total"
                 :current="current"
                 :per-page="perpage"
                 :pageRange="pageRange"
-                @page-changed="current = $event"
+                @page-changed="current = $event; changePage($event)"
                 :pageChanged="props.pageChanged"
                 :perPageChanged="props.perPageChanged"
                 enableSearch
@@ -141,6 +141,7 @@
   import { useToast } from "vue-toastification";
   import apiClient from "@/plugins/axios";
   import Breadcrumb from "@/components/Breadcrumbs";
+  import axios from "axios";
   export default {
     components: {
       Pagination,
@@ -173,6 +174,7 @@
         current: 1,
         perpage: 10,
         pageRange: 1,
+        total: 0,
         searchTerm: "",
         actions: [
           {
@@ -227,14 +229,21 @@
       };
     },
     methods: {
-        async FetchData(){
-            await apiClient.get(`/api/admin/categories`, { withCredentials: true })
+        async FetchData(page = 1) {
+            await axios.get(`/api/admin/categories?page=${page}`, { withCredentials: true })
             .then((response) => {
-                this.categories = response.data.categories;
+                this.categories = response.data.categories.data;
+                this.total = response.data.categories.total;
+                this.perpage = response.data.categories.per_page;
+                this.current = response.data.categories.current_page;
                 //console.log(this.categories);
             }).catch((error) => {
                 this.toast.error('Failed to fetch categories', { timeout: 2000 });
             });
+        },
+
+        changePage(page) {
+          this.FetchData(page);
         },
   
         showCreateModal(){
@@ -264,7 +273,7 @@
           }
         },
         async deleteItem(itemId) {
-          await apiClient.delete(`/api/admin/category/delete/${itemId}`, { withCredentials: true })
+          await axios.delete(`/api/admin/category/delete/${itemId}`, { withCredentials: true })
           .then((response) => {
               this.FetchData();
               this.toast.success('Category has been deleted successfully', { timeout: 2000 });

@@ -36,6 +36,7 @@ import * as yup from "yup";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import apiClient from "@/plugins/axios";
+import axios from "axios";
 export default {
     data(){
         return {
@@ -134,7 +135,7 @@ export default {
                 password: this.form.password,
             }).then(() =>{
                 console.log('Creating user...');
-                apiClient.post(`/api/admin/user/create`, this.form, {withCredentials:true})
+                axios.post(`/api/admin/user/create`, this.form, {withCredentials:true})
                .then(response => {
                     this.$refs.modal1.closeModal();
                     this.toast.success("Registered successfully", { timeout: 2000 });
@@ -191,7 +192,7 @@ export default {
                 telephone: this.form.telephone,
             }).then(() =>{
                 console.log('Updating user...', this.form);
-                apiClient.put(`/api/admin/user/update/${this.form.id}`, this.form)
+                axios.put(`/api/admin/user/update/${this.form.id}`, this.form)
                .then(response => {
                     this.$refs.modal1.closeModal();
                     this.toast.success("Registered successfully", { timeout: 2000 });

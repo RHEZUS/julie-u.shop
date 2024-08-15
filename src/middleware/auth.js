@@ -1,15 +1,12 @@
 import apiClient from "@/plugins/axios";
+import axios from "axios";
+
 // The auth middleware checks if the user is authenticated
 export default function auth (allowedRoles = []) {
   return async function ({ next, store }) {
     try {
-      const token = localStorage.getItem('token');
       // Fetch the current user's details
-      const response = await apiClient.get(`/api/user`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(`/api/user/`);
       const user = response.data.user;
 
       // Check if the user is authenticated
@@ -19,7 +16,7 @@ export default function auth (allowedRoles = []) {
           return next();
         } else {
           //console.warn(`Access denied. User role '${user.role}' is not in the allowed roles: ${allowedRoles.join(', ')}`);
-          return next({ name: "home-guest" }); // Change to a suitable route or name for access denied
+          return next({ name: "homepage" }); // Change to a suitable route or name for access denied
         }
         //return next();
       } else {
@@ -31,11 +28,4 @@ export default function auth (allowedRoles = []) {
       return next({ name: "Login" }); // Redirect to login on error
     }
   }
-  //const response = await apiClient.get(`/api/user`).then(response =>{
-  //    console.log(response);
-  //    return next()
-  //}).catch((error) =>{
-  //  console.log(error);
-  //  return next({ name: "Login" });
-  //});
 }

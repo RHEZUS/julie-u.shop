@@ -28,9 +28,9 @@
         >
           <template v-slot:table-row="props">
             <span v-if="props.column.field == 'image_url'" class="flex">
-              <span class="w-24 h-full rounded-full  flex-none">
+              <span class="w-12 h-12 overflow-hidden rounded flex-none">
                 <img
-                  :src="apiClient + '/storage/' + props.row.image_url"
+                  :src="apiClient + 'storage/' + props.row.image_url"
                   :alt="props.row.name"
                   class="object-cover w-full h-full"
                 />
@@ -87,7 +87,7 @@
                 </Tooltip>
                 <Tooltip placement="top" arrow theme="dark">
                   <template  #button>
-                    <a href="" @click="$router.push('/dashboard/products-edit/' + props.row.slug)" class="action-btn">
+                    <a :href="'/dashboard/product/edit/' + props.row.id" class="action-btn">
                       <Icon icon="heroicons:pencil-square" />
                     </a>
                   </template>
@@ -107,7 +107,7 @@
           <template #pagination-bottom="props">
             <div class="py-4 px-3">
               <Pagination
-                :total="50"
+                :total="total"
                 :current="current"
                 :per-page="perpage"
                 :pageRange="pageRange"
@@ -140,6 +140,7 @@
   import { useToast } from "vue-toastification";
   import apiClient from "@/plugins/axios";
   import Breadcrumb from "@/components/Breadcrumbs";
+import axios from "axios";
   export default {
     components: {
       Pagination,
@@ -160,7 +161,7 @@
         products: [],
         toast: useToast(),
         formMode: 'create',
-        apiClient: apiClient.defaults.baseURL,
+        apiClient: axios.defaults.baseURL,
         form: {
           name: '',
           email: '',
@@ -172,7 +173,9 @@
         current: 1,
         perpage: 10,
         pageRange: 1,
+        total: 0,
         searchTerm: "",
+
         actions: [
           {
             name: "view",
@@ -234,38 +237,46 @@
       };
     },
     methods: {
-        async FetchData(){
-            await apiClient.get(`/api/admin/products`, { withCredentials: true })
-            .then((response) => {
-                this.products = response.data.products;
-                console.log(this.products);
-            }).catch((error) => {
-                this.toast.error('Failed to fetch products', { timeout: 2000 });
-            });
-        },
-  
-        formatDate(dateString) {
-            const date = new Date(dateString);
-            const options = { day: '2-digit', month: 'short', year: 'numeric' };
-            //console.log(date.toLocaleDateString('en-US', options));
-            return date.toLocaleDateString('en-US', options);
-        },
-  
-        confirmDelete(itemId) {
-          if (confirm('Are you sure you want to delete this item?')) {
-            this.deleteItem(itemId);
-          }
-        },
-        async deleteItem(itemId) {
-          await apiClient.delete(`/api/admin/product/destroy/${itemId}`, { withCredentials: true })
+      async FetchData(){
+          await axios.get(`/api/admin/products`, { withCredentials: true })
           .then((response) => {
-              this.FetchData();
-              this.toast.success('Products has been deleted successfully', { timeout: 2000 });
+              this.products = response.data.products.data;
+              this.total = response.data.products.total;
+              this.perpage = response.data.products.per_page;
+              this.current = response.data.products.current_page;
+              console.log(this.products);
           }).catch((error) => {
-              this.toast.error('Failed to delete products', { timeout: 2000 });
-              console.log(error);
+              this.toast.error('Failed to fetch products', { timeout: 2000 });
           });
-        },
+      },
+
+      changePage(page) {
+        this.FetchData(page);
+      },
+
+      formatDate(dateString) {
+          const date = new Date(dateString);
+          const options = { day: '2-digit', month: 'short', year: 'numeric' };
+          //console.log(date.toLocaleDateString('en-US', options));
+          return date.toLocaleDateString('en-US', options);
+      },
+
+      confirmDelete(itemId) {
+        if (confirm('Are you sure you want to delete this item?')) {
+          this.deleteItem(itemId);
+        }
+      },
+
+      async deleteItem(itemId) {
+        await axios.delete(`/api/admin/product/destroy/${itemId}`, { withCredentials: true })
+        .then((response) => {
+            this.FetchData();
+            this.toast.success('Products has been deleted successfully', { timeout: 2000 });
+        }).catch((error) => {
+            this.toast.error('Failed to delete products', { timeout: 2000 });
+            console.log(error);
+        });
+      },
     },
     mounted() {
       this.FetchData();

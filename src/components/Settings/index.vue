@@ -83,6 +83,7 @@ import Theme from "./Tools/Theme";
 import Semidark from "./Tools/Semidark";
 import Monochrome from "./Tools/Monochrome";
 import Rlt from "./Tools/Rtl.vue";
+import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 export default {
   mixins: [window],
   components: {
@@ -96,6 +97,7 @@ export default {
     Semidark,
     Monochrome,
     Rlt,
+    PerfectScrollbar,
   },
   data() {
     return {};

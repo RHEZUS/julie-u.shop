@@ -116,11 +116,11 @@
           <template #pagination-bottom="props">
             <div class="py-4 px-3">
               <Pagination
-                :total="50"
+                :total="total"
                 :current="current"
                 :per-page="perpage"
                 :pageRange="pageRange"
-                @page-changed="current = $event"
+                @page-changed="current = $event; changePage($event)"
                 :pageChanged="props.pageChanged"
                 :perPageChanged="props.perPageChanged"
                 enableSearch
@@ -152,6 +152,7 @@
   import { formatDate } from "@/utils/ConvertDate.js";
   import Breadcrumbs2 from "@/components/Breadcrumbs/Breadcrumbs2.vue";
   import Breadcrumb from "@/components/Breadcrumbs";
+  import axios from "axios";
   export default {
     components: {
       Pagination,
@@ -183,6 +184,7 @@
         user: [],
         current: 1,
         perpage: 10,
+        total: 0,
         pageRange: 1,
         searchTerm: "",
         actions: [
@@ -246,15 +248,22 @@
       };
     },
     methods: {
-        async FetchData(){
-            await apiClient.get(`/api/admin/users`, { withCredentials: true })
+        async FetchData(page = 1) {
+            await axios.get(`/api/admin/users?page=${page}`, { withCredentials: true })
             .then((response) => {
-                this.users = response.data.users;
+                this.users = response.data.users.data;
+                this.total = response.data.users.total;
+                this.perpage = response.data.users.per_page;
+                this.current = response.data.users.current_page;
                 //console.table(this.users);
             }).catch((error) => {
                 this.toast.error('Failed to fetch Users', { timeout: 2000 });
                 console.log(error);
             });
+        },
+
+        changePage(page) {
+          this.FetchData(page);
         },
 
         formatDate(dateString) {
@@ -285,7 +294,7 @@
           }
         },
         async deleteItem(itemId) {
-          await apiClient.delete(`/api/admin/user/delete/${itemId}`, { withCredentials: true })
+          await axios.delete(`/api/admin/user/delete/${itemId}`, { withCredentials: true })
           .then((response) => {
               //this.users = response.data.users;
               //this.users = this.users.filter(item => item.id !== itemId);
@@ -298,7 +307,7 @@
           });
         },
         async activateItem(itemId){
-          await apiClient.get(`/api/admin/user/activate/${itemId}`, { withCredentials: true })
+          await axios.get(`/api/admin/user/activate/${itemId}`, { withCredentials: true })
           .then((response) => {
               //this.users = response.data.users;
               //this.users = this.items.filter(item => item.id !== itemId);
@@ -311,7 +320,7 @@
           });
         },
         async deactivateItem(itemId){
-          await apiClient.get(`/api/admin/user/deactivate/${itemId}`, { withCredentials: true })
+          await axios.get(`/api/admin/user/deactivate/${itemId}`, { withCredentials: true })
           .then((response) => {
               //this.users = response.data.users;
               this.FetchData();

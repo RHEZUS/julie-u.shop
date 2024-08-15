@@ -7,7 +7,7 @@
         <!-- Image -->
         <div class="flex items-center justify-center">
         <a :href="'/product/' + product.slug" class="">
-          <img class="h-full w-full" :src="apiUrl + '/storage/' + product.image_url" alt="">
+          <img class="h-[260px] w-full" :src="apiUrl + 'storage/' + product.image_url" alt="">
         </a>
         </div>
         <!-- Product buttons -->
@@ -21,12 +21,11 @@
             <Modal themeClass="bg-white " labelClass="btn-outline-dark  bg-white" ref="modal4" sizeClass="max-w-5xl">
               <!-- Product Image -->
                <div class="grid grid-cols-12">
-                <div class="modal-inner modal-image col-span-12 lg:col-span-6 group flex items-center overflow-hidden justify-center">
-                  <img class="w-full h-full" :src="apiUrl + '/storage/' + `${product.image_url}`" alt="">
+                <div class="col-span-full  lg:col-span-6 group  flex items-center justify-center overflow-hidden">
+                  <Carousel :carousels="images" :autoplay="{  delay: 2500, disableOnInteraction: false, }" />
                 </div>
                 <!-- Product Info -->
-                <div class="modal-inner modal-details bg-white  col-span-12 lg:col-span-6 relative bg-transparent scrollCard">
-          
+                <div class="bg-white col-span-12 lg:col-span-6 relative bg-transparent scrollCard">
                   <form @submit.prevent="addToCart()" class="w-full flex flex-col h-full px-5 py-5">
                     <a href="#">
                       <p class="text-2xl font-medium mt-3 text-black">{{ product.title }}</p>
@@ -36,11 +35,11 @@
                         <span  v-if="product.discount">699.00 Francs CFA </span>
                         <span class="" :class="{'text-[#afaeae] line-through':product.discount, 'text-black-500':!product.discount}">{{ (price * form.quantity).toFixed(2) + ' Francs CFA' }}</span>
                       </p>
-                      <span class=" bg-red-600 h-3 flex items-center p-1 text-white text-[10px] rounded-lg">EARNINGS: 12%</span>
+                      <span class="bg-red-600 h-3 hidden items-center p-1 text-white text-[10px] rounded-lg">EARNINGS: 12%</span>
                     </p>
                     <div class="">
                       <p class="text-gray-500 text-md mt-6">
-                        {{ product.description }}
+                        {{ product.description.length > 300 ? product.description.substring(0, 300) + '...' : product.description }}
                       </p>
                       <a class="text-md mt-4 underline font-medium" :href="'/product/' + product.slug">{{ 'ViewDetails' }} </a>
                     </div>
@@ -104,12 +103,12 @@
                       <!-- List colors -->
                       <p><span class="font-semibold">{{ 'color' }}:</span></p>
                       <div class="flex gap-4 text-black-500 items-center px-2 py-5">
-                        <div v-for="(color, index) in product.options[0].values" :key="index" :style="{ backgroundColor: color.value }"  :class="{'ring-black-500': color.value == selected_color, 'ring-black-300':color.value != selected_color}" class="w-8 h-8 rounded-full border-2 ring-2 border-white" @click="loadData(index)"></div>
+                        <div v-for="(color, index) in product.options[0].values" :key="index" :style="{ backgroundColor: color.value }"  :class="{'ring-pink-600': color.value == selected_color, 'ring-black-300':color.value != selected_color}" class="w-8 h-8 rounded-full border-2 ring-2 border-white" @click="loadData(index)"></div>
                       </div>
                       <!-- List variants -->
                       <p><span class="font-semibold">{{ product.options[1].name }}: </span></p>
                       <div class="flex gap-4 items-center py-5 flex-wrap">
-                        <div v-for="variant in colorVariants" :class="{'text-neutral-400 hover:bg-white hover:text-neutral-400' : variant.inventory_quantity == 0, 'hover:text-white': variant.inventory_quantity > 0 , 'bg-black-500 text-white': isSelectedVariant(variant.id), 'bg-white': !isSelectedVariant(variant.id)}" class="w-fit p-1 h-9 hover:cursor-pointer rounded-md flex items-center justify-center hover:bg-black-500  border">
+                        <div v-for="variant in colorVariants" :class="{'text-neutral-400 hover:bg-white hover:text-neutral-400' : variant.inventory_quantity == 0, 'hover:text-white': variant.inventory_quantity > 0 , 'bg-pink-600 text-white': isSelectedVariant(variant.id), 'bg-white': !isSelectedVariant(variant.id)}" class="w-fit p-1 h-9 hover:cursor-pointer rounded-md flex items-center justify-center hover:bg-pink-600  border">
                           <label :for="['variant-' + variant.id]" class="min-w-7 w-full h-full flex justify-center items-center">
                             {{ variant.option2 }}
                           </label>
@@ -140,7 +139,7 @@
                           <input v-model="form.quantity" class="w-full h-full text-center outline-none border-none focus:ring-0 bg-transparent" readonly type="text" name="" id="" style="padding: 0 30px;">
                           <button @click="addQuantity()" type="button" class="absolute w-[30px] h-full bg-transparent right-0">+</button>
                         </div>
-                        <div class="col-span-8 bg-[#0e0e0e]  rounded">
+                        <div class="col-span-8 bg-pink-600  rounded">
                           <button type="submit" class="text-center w-full font-medium text-base text-white py-3">
                             <svg v-if="loadAddToCart" aria-hidden="true" class="mr-3 inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -168,7 +167,7 @@
           <p class="text-lg font-medium mt-3 text-black-500">{{ product.title }}</p>
         </a>
         <p class="text-md font-medium text-black-500">
-          <span  v-if="product.discount">699.00 Francs CFA </span>
+          <span  v-if="product.discount">699.00 FCFA </span>
           <span class="" :class="{'text-[#afaeae] line-through':product.discount, 'text-black-500':!product.discount}">{{ product.variants[0].price + ' Francs CFA'}}</span>
         </p>
       </div>
@@ -184,15 +183,21 @@
   </template>
   
 <script>
-  //import { EventBus } from '@/eventBus';
+  import { EventBus } from '@/eventBus';
   import apiClient from '@/plugins/axios';
   import Modal from '@/components/Modal/ProdModal.vue';
   import Button from '@/components/Button';
+  import Carousel from '@/components/Carousel/ProductImageCarousel.vue';
+  import { useToast } from 'vue-toastification';
+  import countCartItems from "@/utils/cart"
+import axios from 'axios';
+
   export default {
     data() {
       return {
         inWishlist: this.isInWishlist(),
-        apiUrl: apiClient.defaults.baseURL,
+        apiUrl: axios.defaults.baseURL,
+        toast: useToast(),
         selected_color: null,
         price: 0,
         images: [],
@@ -208,6 +213,7 @@
     components:{
       Modal,
       Button,
+      Carousel,
     },
     props: {
       product: {
@@ -225,23 +231,42 @@
     },
     methods: {
       loadData(index=0, variant=null){
-        if (this.product.options.length == 0){
-          this.price = this.product.variants[0].price;
-          this.form.product_variant_id = this.product.variants[0].id;
-        } else if (this.product.options.length == 1 && this.product.options[0].name == 'color'){
-          this.price = this.product.variants[index].price;
-          this.form.product_variant_id = this.product.variants[index].id;
-        } else if (this.product.options.length == 1 && this.product.options[0].name != 'color'){
-          this.price = this.product.variants[index].price;
-          this.form.product_variant_id = this.product.variants[index].id;
-        } else if (this.product.options.length > 1 && this.product.options[0].name == 'color'){
-          this.selected_color = this.product.options[0].values[index].value;
-          const variants = this.getColorsVariants(this.selected_color);
-          this.colorVariants = variants;
-          console.log('variants', variants);
-          this.price = variants[0].price;
-          this.form.product_variant_id = variants[0].id;
-        }
+          if (this.product.options.length == 0){
+            this.price = this.product.variants[0].price;
+            this.form.product_variant_id = this.product.variants[0].id;
+            this.images = [],
+            this.images.push({img: this.apiUrl + '/storage/' + this.product.image_url})
+          } else if (this.product.options.length == 1 && this.product.options[0].name == 'color'){
+            this.price = this.product.variants[index].price;
+            this.form.product_variant_id = this.product.variants[index].id;
+
+            // assign image carousel images
+            this.images = [];
+            const colorImages = JSON.parse(this.product.options[0].values[index].images_urls);
+            for (let i =0; i< colorImages.length; i++){
+              this.images.push({img: this.apiUrl + '/storage/' + colorImages[i]})
+            }
+
+          } else if (this.product.options.length == 1 && this.product.options[0].name != 'color'){
+            this.images = [],
+            this.images.push({img: this.apiUrl + '/storage/' + this.product.image_url})
+
+            this.price = this.product.variants[index].price;
+            this.form.product_variant_id = this.product.variants[index].id;
+          } else if (this.product.options.length > 1 && this.product.options[0].name == 'color'){
+            this.selected_color = this.product.options[0].values[index].value;
+            const variants = this.getColorsVariants(this.selected_color);
+            this.colorVariants = variants;
+            this.price = variants[0].price;
+            this.form.product_variant_id = variants[0].id;
+
+            // assign image carousel images
+            this.images = [];
+            const colorImages = JSON.parse(this.product.options[0].values[index].images_urls);
+            for (let i =0; i< colorImages.length; i++){
+              this.images.push({img: this.apiUrl + '/storage/' + colorImages[i]})
+            }
+          }
       },
       getVariantPrice(variantId){
         return this.product.variants.find(variant => variant.id === variantId).price;
@@ -272,21 +297,27 @@
       },
 
       addToCart() {
-        let productVariantId = this.form.product_variant_id;
-        let quantity = this.form.quantity;
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const itemIndex = cart.findIndex(item => item.productVariantId === productVariantId);
+        try{
+          let productVariantId = this.form.product_variant_id;
+          let quantity = this.form.quantity;
+          let cart = JSON.parse(localStorage.getItem('cart')) || [];
+          const itemIndex = cart.findIndex(item => item.productVariantId === productVariantId);
 
-        if (itemIndex !== -1) {
-          // Update quantity if the item is already in the cart
-          cart[itemIndex].quantity += quantity;
-        } else {
-          // Add new item to the cart
-          cart.push({ productVariantId, quantity });
+          if (itemIndex !== -1) {
+            // Update quantity if the item is already in the cart
+            cart[itemIndex].quantity += quantity;
+          } else {
+            // Add new item to the cart
+            cart.push({ productVariantId, quantity });
+          }
+          localStorage.setItem('cart', JSON.stringify(cart));
+          this.$refs.modal4.closeModal();
+          this.emitter.emit('cartUpdated', {'eventContent': countCartItems()}) // Emit event to refresh cart items
+          this.toast.success('Product added to cart', { timeout: 2000 });
+        } catch (error) {
+          this.toast.error('An error occurred', { timeout: 2000 });
+          console.log(error);
         }
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-        console.log('cart: ', cart);
       },
 
       addToWishlist() {

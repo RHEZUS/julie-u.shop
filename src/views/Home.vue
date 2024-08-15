@@ -1,5 +1,12 @@
 <template>
-    <div class="bg-white text-black-500 h-max">
+    <div class="bg-white h-max w-full" v-if="pageLoading == true">
+        <NavLoader/>
+        <HeroLoader/>
+        <Section>
+            
+        </Section>
+    </div>
+    <div v-else class="bg-white text-black-500 h-max">
         <HomeHeader />
         <div class="">
             <Carousel :carousels="carouselsWithCaption" :autoplay="{  delay: 2500, disableOnInteraction: false, }" />
@@ -20,7 +27,6 @@
             <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in newArrivals.slice(0, 8)">
                 <ProductCart :product="product" />
             </div>
-            
         </div>
         <Footer />
     </div>
@@ -30,14 +36,22 @@ import Carousel from '@/components/Carousel/HeroCarousel.vue';
 import ProductCart from '@/components/Product/index.vue';
 import HomeHeader from '@/components/HomeHeader/index.vue';
 import Footer from '@/components/HomeFooter/index.vue';
+
+import NavLoader from "@/components/ComponentLoaders/NavbarLoader.vue";
+import HeroLoader from "@/components/ComponentLoaders/HeroLoader.vue";
+import Section from "@/components/ComponentLoaders/Section.vue";
+
 import apiClient from "@/plugins/axios";
+import axios from 'axios';
 export default {
     name: 'Home',
     data() {
         return {
            products: [],
            bestsellers: [],
+           loading: false,
            newArrivals: [],
+           pageLoading: false,
            carouselsWithCaption: [
         {
           img: 'https://cdn.aboutstatic.com/file/dd5c376212b9d53632326cdbfa700fbd.jpg?width=2000&height=2000&quality=90&progressive=1',
@@ -65,6 +79,10 @@ export default {
         HomeHeader,
         Footer,
         Carousel,
+
+        NavLoader,
+        HeroLoader,
+        Section
     },
     methods: {
         changeMsg() {
@@ -72,8 +90,9 @@ export default {
         },
         async getBestsellers(){
             try {
-                const response = await apiClient.get('api/products/bestsellers');
-                this.bestsellers = response.data.products;
+                const response = await axios.get('api/products/bestsellers');
+                const result = response.data.products
+                this.bestsellers = result.length < 8 ? result.slice(0, 4) : result.slice(0, 8);
                 console.log('BestSelling', this.bestsellers);
             } catch (error) {
                 console.error(error);
@@ -82,17 +101,25 @@ export default {
 
         async getNewArrivals(){
             try {
-                const response = await apiClient.get('api/products/new-arrivals');
-                this.newArrivals = response.data.products;
+                const response = await axios.get('api/products/new-arrivals');
+                const result = response.data.products
+                this.newArrivals = result.length < 8 ? result.slice(0, 4) : result.slice(0, 8);
                 console.log('New Arrival', this.newArrivals);
             } catch (error) {
                 console.error(error);
             }
         },
     },
-    mounted() {
-        this.getBestsellers();
-        this.getNewArrivals();
+    async mounted() {
+        this.pageLoading = true;
+        this.getBestsellers().then(() => {
+            this.getNewArrivals();
+        }).finally(() => {
+            setTimeout(() => {
+                this.pageLoading = false;
+            }, 1000);
+        });
+        
     }
 };
 </script>

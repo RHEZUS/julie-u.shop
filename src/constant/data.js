@@ -12,7 +12,7 @@ export const menuItems = [
   {
     title: "Dashboard",
     icon: "heroicons-outline:home",
-    link: "home",
+    link: "/dashboard/home",
   },
   {
     title: 'Go To Website',
@@ -22,17 +22,17 @@ export const menuItems = [
   {
     title: "Users",
     icon: "bi:person",
-    link: "users",
+    link: "/dashboard/users",
   },
   {
     title: "Brands",
     icon: "bi:tags-fill",
-    link: "brands",
+    link: "/dashboard/brands",
   },
   {
     title: "Category",
     icon: "bi:card-list",
-    link: "category",
+    link: "/dashboard/category",
   },
   {
     title: "Products",
@@ -41,12 +41,13 @@ export const menuItems = [
     child: [
       {
         childtitle: "List products",
-        childlink: "products",
+        childlink: "/dashboard/products",
       },
       {
         childtitle: "create product",
-        childlink: "product-create",
+        childlink: "/dashboard/product-create",
       },
+
     ],
   },
   {
@@ -69,6 +70,10 @@ export const menuItems = [
     isHeadr: true,
     title: "apps",
   },
+  //{
+  //  childtitle: "Update Product",
+  //  childlink: "product-update",
+  //},
 
   {
     title: "Chat",
@@ -234,6 +239,7 @@ export const menuItems = [
         childtitle: "Blank Page",
         childlink: "blank-page",
       },
+      
       {
         childtitle: "Profile",
         childlink: "profile",

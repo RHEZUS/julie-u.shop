@@ -13,35 +13,60 @@
             <div>
               <h4 class="text-xl font-medium text-white mb-2">
                 <span class="block font-normal">Good evening,</span>
-                <span class="block">Mr. Dianne Russell</span>
+                <span class="block">{{ authUser.name }}</span>
               </h4>
               <p class="text-sm text-white font-normal">Welcome to Dashcode</p>
             </div>
           </div>
         </div>
-        <div class="2xl:col-span-9 lg:col-span-8 col-span-12">
+        <div class="2xl:col-span-9 lg:col-span-8 col-span-12 " v-if="dashboardData">
           <div class="grid md:grid-cols-3 grid-cols-1 gap-4">
-            <div v-for="(item, i) in statistics" :key="i">
+            <div>
+              <Card bodyClass="pt-4 pb-3 px-4">
+                <div class="flex space-x-3 rtl:space-x-reverse">
+                  <div class="flex-none">
+                    <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl" :class="'bg-[#E5F9FF] dark:bg-slate-900 text-info-500'" >
+                      <Icon :icon="'heroicons:shopping-cart'" />
+                    </div>
+                  </div>
+                  <div class="flex-1">
+                    <div class="text-slate-600 dark:text-slate-300 text-sm mb-1 font-medium">
+                      Totel revenue
+                    </div>
+                    <div class="text-slate-900 dark:text-white text-lg font-medium" v-if="dashboardData.revenue">
+                      {{ dashboardData.revenue['count'] }}
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="ltr:ml-auto rtl:mr-auto max-w-[124px]">
+                  <apexchart
+                    type="area"
+                    height="41"
+                    width="124"
+                    :options="shapeLine1.chartOptions"
+                    :series="shapeLine1.series"
+                  />
+                </div>
+              </Card>
+            </div>
+            <div>
               <Card bodyClass="pt-4 pb-3 px-4">
                 <div class="flex space-x-3 rtl:space-x-reverse">
                   <div class="flex-none">
                     <div
                       class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl"
-                      :class="`${item.bg} ${item.text}`"
+                      :class="'bg-[#E5F9FF] dark:bg-slate-900 text-info-500'"
                     >
-                      <Icon :icon="item.icon" />
+                      <Icon :icon="'heroicons:cube'" />
                     </div>
                   </div>
                   <div class="flex-1">
-                    <div
-                      class="text-slate-600 dark:text-slate-300 text-sm mb-1 font-medium"
-                    >
-                      {{ item.title }}
+                    <div class="text-slate-600 dark:text-slate-300 text-sm mb-1 font-medium" >
+                      Products sold
                     </div>
-                    <div
-                      class="text-slate-900 dark:text-white text-lg font-medium"
-                    >
-                      {{ item.count }}
+                    <div class="text-slate-900 dark:text-white text-lg font-medium" v-if="dashboardData.product">
+                      {{ dashboardData.product['count'] }}
                     </div>
                   </div>
                 </div>
@@ -50,8 +75,36 @@
                     type="area"
                     height="41"
                     width="124"
-                    :options="item.name.chartOptions"
-                    :series="item.name.series"
+                    :options="shapeLine2.chartOptions"
+                    :series="shapeLine2.series"
+                  />
+                </div>
+              </Card>
+            </div>
+            <div>
+              <Card bodyClass="pt-4 pb-3 px-4">
+                <div class="flex space-x-3 rtl:space-x-reverse">
+                  <div class="flex-none">
+                    <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl" :class="'bg-[#E5F9FF] dark:bg-slate-900 text-info-500'">
+                      <Icon :icon="'heroicons:arrow-trending-up-solid'" />
+                    </div>
+                  </div>
+                  <div class="flex-1">
+                    <div class="text-slate-600 dark:text-slate-300 text-sm mb-1 font-medium">
+                      Growth
+                    </div>
+                    <div class="text-slate-900 dark:text-white text-lg font-medium" v-if="dashboardData.order">
+                      {{ dashboardData.order['count'] }}
+                    </div>
+                  </div>
+                </div>
+                <div class="ltr:ml-auto rtl:mr-auto max-w-[124px]">
+                  <apexchart
+                    type="area"
+                    height="41"
+                    width="124"
+                    :options="shapeLine3.chartOptions"
+                    :series="shapeLine3.series"
                   />
                 </div>
               </Card>
@@ -79,17 +132,9 @@
             </template>
             <div class="grid md:grid-cols-2 grid-cols-1 gap-5">
               <div class="bg-slate-50 dark:bg-slate-900 rounded pt-3 px-4">
-                <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
-                  Orders
-                </div>
-                <div
-                  class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"
-                >
-                  123k
-                </div>
-                <div
-                  class="font-normal text-xs text-slate-600 dark:text-slate-300"
-                >
+                <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]"> Orders </div>
+                <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">  123k </div>
+                <div class="font-normal text-xs text-slate-600 dark:text-slate-300">
                   <span class="text-warning-500">-60%</span>
                   From last Week
                 </div>
@@ -106,14 +151,10 @@
                 <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
                   Profit
                 </div>
-                <div
-                  class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"
-                >
+                <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
                   654k
                 </div>
-                <div
-                  class="font-normal text-xs text-slate-600 dark:text-slate-300"
-                >
+                <div class="font-normal text-xs text-slate-600 dark:text-slate-300">
                   <span class="text-primary-500">+02%</span>
                   From last Week
                 </div>
@@ -306,6 +347,8 @@
   import SelectMonth from "./Analytics-Component/SelectMonth";
   import Breadcrumb from "./Analytics-Component/Breadcrumbs";
   import widgetbg2 from "@/assets/images/all-img/widget-bg-2.png"
+  import apiClient from "@/plugins/axios";
+  import axios from "axios";
   export default {
     components: {
       Card,
@@ -333,6 +376,9 @@
         donutChartDark,
         radarChart,
         radarChartDark,
+        shapeLine1: shapeLine1,
+        shapeLine2: shapeLine2,
+        shapeLine3: shapeLine3,
         widgetbg2,
         statistics: [
           {
@@ -386,8 +432,38 @@
             id: 6,
           },
         ],
+        authUser: JSON.parse(localStorage.getItem("Julie_shop_auth_user")),
+        dashboardData: {},
+        topCustomers: [],
+        bestSellers: [],
+
       };
     },
+    mounted() {
+      this.getDashboardData();
+      //this.columnCharthomeComputed();
+      //this.donutChartDarkComputed();
+    },
+    methods:{
+      getDashboardData(){
+        //this.tableData.loading = true;
+        axios.get(`/api/admin/dashboard`)
+        .then(response => {
+          const results = response.data;
+          this.dashboardData = results.dashboardData;
+          this.topCustomers = results.topCustomers;
+          this.bestSellers = results.bestSelling;
+          //console.log(this.dashboardData);
+          console.log(results);
+
+        })
+        .catch(message => {
+          console.error('Error fetching brands:', message);
+        });
+        //this.tableData.loading = false;
+      },
+    },
+
     computed: {
       columnCharthomeComputed() {
         return {
@@ -585,6 +661,7 @@
           },
         };
       },
+      
     },
   };
   </script>

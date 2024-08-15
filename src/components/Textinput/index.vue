@@ -117,9 +117,13 @@ export default {
       type: String,
       default: "classinput",
     },
+    showClass: {
+      type: String,
+      default: "input-control",
+    },
     type: {
       type: String,
-      default: "text",
+      default: "number",
       //required: true,
     },
     name: {

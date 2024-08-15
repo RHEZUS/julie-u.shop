@@ -13,7 +13,13 @@
                           v-model="form.desc" :error="descError" 
                            hasicon classInput="min-h-[48px]"></Textarea>
                 <div class="py-3 flex justify-end space-x-3 border-t border-slate-100 dark:border-slate-700">
-                    <Button type="submit" text="Save" btnClass="btn-primary h-10 flex items-center"/>
+                    <Button v-if="!storing" type="submit" text="Save" btnClass="btn-primary h-10 flex items-center"/>
+                    <button v-else type="button"class="px-3 py-2 bg-blue-600 flex items-center gap-2 rounded">
+                        <div class="flex flex-row space-x-4">
+                            <div class="w-4 h-4 rounded-full animate-spin border-2 border-dashed border-white border-t-transparent"></div>
+                        </div>
+                        Saving
+                    </button>
                 </div>
             </form>
             
@@ -30,12 +36,13 @@ import * as yup from "yup";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import apiClient from "@/plugins/axios";
+import axios from "axios";
 export default {
     data(){
         return {
             form:{
                 name: '',
-                parent_category_id: '',
+                parent_category_id: 0,
                 desc: '',
             },
             nameError: '',
@@ -44,6 +51,7 @@ export default {
             toast: useToast(),
             router: useRouter(),
             formOptions:[],
+            storing: false,
         }
     },
     components: {
@@ -79,7 +87,7 @@ export default {
         },
 
         async FetchData(){
-            await apiClient.get(`/api/admin/categories/id-name`, { withCredentials: true })
+            await axios.get(`/api/admin/categories/id-name`, { withCredentials: true })
             .then((response) => {
                 this.formOptions = response.data.categories;
             }).catch((error) => {
@@ -104,9 +112,10 @@ export default {
 
         },
         createItem(){
+            this.storing = true;
             const schema = yup.object({
                 name: yup.string().required("Name is required"),
-                parent_category_id: yup.number().nullable(),
+                //parent_category_id: yup.number().nullable(),
                 desc: yup.string().nullable(),
             });
             schema.validate({
@@ -114,12 +123,13 @@ export default {
                 parent_category_id: this.form.parent_category_id,
                 desc: this.form.desc,
             }).then(() =>{
-                apiClient.post(`/api/admin/category/create`, this.form, {withCredentials:true})
+                axios.post(`/api/admin/category/create`, this.form, {withCredentials:true})
                .then(response => {
                     this.$refs.modal1.closeModal();
                     this.toast.success("Registered successfully", { timeout: 2000 });
                     this.resetForm();
                     this.loadData();
+                    this.storing = false;
                 }).catch(error => {
                     const errors = error.response.data.errors;
                     if (errors.hasOwnProperty('name')){
@@ -132,6 +142,7 @@ export default {
                         this.descError = errors.desc[0];
                     }
                     this.toast.error(error.message, { timeout: 6000 });
+                    this.storing = false;
                 })
             }).catch((error) => {
                 if (error.path === 'name'){
@@ -141,21 +152,24 @@ export default {
                 } else if (error.path === 'desc') {
                     this.descError = error.errors[0];
                 }
+                this.storing = false;
             });
         },
         updateItem(){
+            this.storing = true;
             const schema = yup.object({
                 name: yup.string().required("Name is required"),
             });
             schema.validate({
                 name: this.form.name,
             }).then(() =>{
-                apiClient.put(`/api/admin/category/update/${this.form.id}`, this.form)
+                axios.put(`/api/admin/category/update/${this.form.id}`, this.form)
                .then(response => {
                     this.$refs.modal1.closeModal();
                     this.toast.success("Registered successfully", { timeout: 2000 });
                     this.resetForm();
                     this.loadData();
+                    this.storing = false;
                 }).catch(error => {
                     const errors = error.response.data.errors;
                     if (errors.hasOwnProperty('name')){
@@ -168,6 +182,7 @@ export default {
                         this.descError = errors.desc[0];
                     }
                     this.toast.error(error.message, { timeout: 6000 });
+                    this.storing = false;
                 })
             }).catch((error) => {
                 if (error.path === 'name'){
@@ -177,6 +192,7 @@ export default {
                 } else if (error.path === 'desc') {
                     this.descError = error.errors[0];
                 }
+                this.storing = false;
             });
         }
     },

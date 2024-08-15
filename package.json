@@ -33,6 +33,7 @@
     "dayjs": "^1.11.6",
     "gsap": "^3.11.3",
     "leaflet": "^1.9.2",
+    "mitt": "^3.0.1",
     "pinia": "^2.0.28",
     "postcss": "^8",
     "simplebar-vue": "^2.3.3",
@@ -60,6 +61,7 @@
     "vue3-dropzone": "^2.0.1",
     "vue3-perfect-scrollbar": "^2.0.0",
     "vuedraggable": "^4.1.0",
+    "vuex": "^4.0.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {

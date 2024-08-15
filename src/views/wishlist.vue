@@ -1,5 +1,16 @@
 <template>
-    <div class="bg-white text-black-500 h-max">
+    <div class="bg-white h-max w-full" v-if="pageLoading == true">
+        <NavLoader/>
+        <Section>
+            <div class="grid grid-cols-12 gap-6 px-2 md:px-10">
+                <div class="col-span-6 sm:col-span-6 md:col-span-4 mt-6 lg:col-span-3 border" v-for="product in 8">
+                    <ProductLoader />
+                </div>
+            </div>
+        </Section>
+    </div>
+
+    <div v-else class="bg-white text-black-500 h-max">
         <HomeHeader />
         <div class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6">
             <div class="col-span-full">
@@ -19,8 +30,17 @@
 import ProductCart from '@/components/Product/index.vue';
 import HomeHeader from '@/components/HomeHeader/index.vue';
 import Footer from '@/components/HomeFooter/index.vue';
+
+import NavLoader from "@/components/ComponentLoaders/NavbarLoader.vue";
+import HeroLoader from "@/components/ComponentLoaders/HeroLoader.vue";
+import Section from "@/components/ComponentLoaders/Section.vue";
+import ProductLoader from "@/components/ComponentLoaders/ProductCardLoader.vue";
+
+
 import apiClient from '@/plugins/axios';
 import { useToast } from 'vue-toastification';
+import axios from 'axios';
+import { sleep } from '@amcharts/amcharts5/.internal/core/util/Time';
 export default {
     name: 'Wishlist',
     data() {
@@ -28,15 +48,22 @@ export default {
             products: [],
             productsW: [],
             toast: useToast(),
+            pageLoading: false,
+
         };
     },
     components: {
         ProductCart,
         HomeHeader,
         Footer,
+
+        NavLoader,
+        HeroLoader,
+        Section,
+        ProductLoader,
     },
     methods: {
-        getProducts(){
+        async getProducts(){
             try{
                 let wishlist = JSON.parse(localStorage.getItem('wishlist'));
                 if (!wishlist) {
@@ -52,10 +79,14 @@ export default {
                 }
                 console.log(wishlist);
                 if (wishlist.length > 0) {
-                    apiClient.post('api/wishlist/products', {'productIds': wishlist})
+                    await axios.post('api/wishlist/products', {'productIds': wishlist})
                     .then((response) => {
                         this.products = response.data.products;
-                        //console.log(this.products);
+                        // remove whishlist items that are not in the products
+                        wishlist = wishlist.filter((id) => this.products.map((product) => product.id).includes(id));
+                        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+                        console.log('wishlist', wishlist);
                     }).catch((error) => {
                         //console.log(error);
                         //this.toast.error('Failed to fetch products');
@@ -66,6 +97,8 @@ export default {
 
             }catch(error){
                 console.log(error);
+            } finally {
+                this.pageLoading = false;
             }
         },
         loadProducts(){
@@ -74,7 +107,12 @@ export default {
         }
     },
     mounted(){
-        this.getProducts();
+        this.pageLoading = true;
+        this.getProducts().then(() => {
+            this.pageLoading = false;
+        });
+            
+        //this.getProducts();
     }
 };
 </script>

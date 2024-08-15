@@ -6,13 +6,13 @@
           <div class="col-span-full">
               <h1 class="text-2xl font-bold text-center">Shopping Cart</h1>
           </div>
-          <div class="col-span-full md:col-span-7">
+          <div class="col-span-full md:col-span-8">
             <Card noborder>
               <div class=" pb-6 md:space-y-0 space-y-3 items-center">
                 <h5 class="text-start mb-3">Shopping Address</h5>
                 <div class="grid grid-cols-12 gap-6">
                   <div class="col-span-full sm:col-span-6">
-                    <Select v-model="form.ville" placeholder="Ville" :options="locationOptions"/>
+                    <Select v-model="form.city" placeholder="Ville" :options="locationOptions" @change="" />
                   </div>
                   <div class="col-span-full sm:col-span-6">
                     <TextInput v-model="form.quartier" placeholder="Quartier"/>
@@ -21,30 +21,47 @@
               </div>
             </Card>
           </div>
-          <div class="h-full col-span-full md:col-span-5 gap-2 flex bg-white">
+          
+          <div class="h-full col-span-full md:col-span-4 gap-2 rounded-lg flex bg-white">
               <div class="min-w-full flex flex-col gap-3 ml-auto border p-2  font-medium">
                 <h3 class="text-lg"> Order Summary</h3>
                 <div class=" border-b pb-2">
-                  <div class="grid grid-cols-12 items-center justify-between py-1"  v-for="item in cartItems">
-                    <div class="col-span-2 text-sm text-start">{{ item.quantity }}</div>
-                    <div class="col-span-7 text-sm text-start">{{ item.title }}</div>
-                    <div class="col-span-3 text-sm text-end">{{ item.price * item.quantity  + 'FCFA'}}</div>
+                  <div class="flex items-center justify-between py-1">
+                    <div class="text-sm text-start">Product Total</div>
+                    <div class="text-sm text-end">{{ total + 'FCFA' }}</div>
+                  </div>
+                  <div class="flex items-center justify-between py-1">
+                    <div class="text-sm text-start">Delivery</div>
+                    <div class="text-sm text-end">{{ delivery + 'FCFA' }}</div>
                   </div>
                 </div>
-                <div class="grid grid-cols-12 items-center justify-between py-1">
-                  <div class="col-span-9 text-sm text-start">Delivery</div>
-                  <div class="col-span-3 text-sm text-end">{{ delivery + 'FCFA' }}</div>
-                </div>
-                <div class="grid grid-cols-12 items-center justify-between py-1">
-                  <div class="col-span-9 text-sm text-start">Total</div>
-                  <div class="col-span-3 text-sm text-end">{{ total + delivery + 'FCFA' }}</div>
+                <div class="flex items-center justify-between py-1">
+                  <div class="text-sm text-start">Total</div>
+                  <div class="text-sm text-end">{{ total + delivery + 'FCFA' }}</div>
                 </div>
                 <div class="col-span-full">
-                  <button  @click="cart.length > 0 ? placeOrder() : ''" :class="{'pointer-events-none':cart.length <=0, 'pointer-events-auto':cart.length > 0}" class="text-center w-full mt-10 font-medium text-base text-white bg-[#0e0e0e] py-3 rounded">
+                  <button  @click="cart.length > 0 ? placeOrder() : ''" :class="{'pointer-events-none':cart.length <=0, 'pointer-events-auto':cart.length > 0}" class="text-center bg-pink-600 w-full mt-10 font-medium text-base text-white py-3 rounded">
                     Proceed to Checkout
                   </button>
                 </div>
               </div>
+          </div>
+
+          <!--Shopping addresses-->
+          <div class="col-span-full visible">
+            <Card noborder>
+              <div class=" pb-6 md:space-y-0 space-y-3 items-center">
+                <h5 class="text-start mb-3">Shopping Address</h5>
+                <div class="grid grid-cols-12 gap-6">
+                  <div class="col-span-full sm:col-span-6">
+                    <Select v-model="form.city" placeholder="Ville" :options="locationOptions" @change="" />
+                  </div>
+                  <div class="col-span-full sm:col-span-6">
+                    <TextInput v-model="form.quartier" placeholder="Quartier"/>
+                  </div>
+                </div>
+              </div>
+            </Card>
           </div>
         </div>
 
@@ -65,15 +82,16 @@
 //import { EventBus } from '@/eventBus';
 import ProductCart from '@/components/Product/index.vue';
 import Header from '@/components/HomeHeader/index.vue';
-import Card from '@/components/Card/index.vue';
+import Card from '@/components/Card/frontCart.vue';
 import Footer from '@/components/HomeFooter/index.vue';
 import apiClient from '@/plugins/axios';
 import Modal from '@/components/Modal/ProdModal.vue';
 import Button from '@/components/Button';
-import TextInput from '@/components/Textinput';
-import Select from '@/components/Select';
+import TextInput from "@/components/Textinput/white.vue";
+import Select from '@/components/Select/white.vue';
 import Icon from "@/components/Icon";
 import {checkAuth} from '@/utils/checkAuth';
+import axios from 'axios';
 export default {
     data() {
         return {
@@ -118,7 +136,7 @@ export default {
             }
             console.log(cart);
             if (cart.length > 0) {
-              await apiClient.post('api/cart/items', {'productVariantIds': cart})
+              await axios.post('api/cart/items', {'productVariantIds': cart})
               .then((response) => {
                 let products = response.data.products;
                 for (let index = 0; index < products.length; index++) {
@@ -126,6 +144,7 @@ export default {
                   this.total += products[index].price * products[index].quantity;
                 }
                 this.cartItems = products;
+                console.log(this.cartItems);
               }).catch((error) => {
                   console.log(error);
               });
@@ -133,7 +152,7 @@ export default {
         },
 
         getLocations () {
-          apiClient.get('api/delivery-locations').then((response) => {
+          axios.get('api/delivery-locations/active').then((response) => {
             this.locationOptions = response.data.locations.map((location) => {
               return {
                 value: location.id,
@@ -141,6 +160,7 @@ export default {
               }
             });
             this.locations = response.data.locations;
+            console.log(this.locationOptions);
           }).catch((error) => {
             console.log(error);
           });
@@ -159,7 +179,7 @@ export default {
           for (let i = 0; i < cart.length; i++) {
             productVariantIds.push(cart[i].productVariantId);
           }
-          await apiClient.post('api/orders', {
+          await axios.post('api/orders', {
             'productVariantIds': productVariantIds,
             'ville': this.form.ville,
             'quartier': this.form.quartier
@@ -176,6 +196,7 @@ export default {
       
     async mounted() {
       this.getCartItems();
+      this.getLocations();
     },
     }
 </script>

@@ -39,8 +39,8 @@
         class="h-4 w-4 border rounded inline-flex mr-3 relative flex-none top-1 transition-all duration-150"
         :class="
           checkbox
-            ? 'ring-2 ring-black-500 dark:ring-offset-slate-600 dark:ring-slate-900  dark:bg-slate-900 ring-offset-2 bg-slate-900'
-            : 'bg-slate-100 dark:bg-slate-600 border-slate-100 dark:border-slate-600 '
+            ? 'ring-2 ring-black-500 ring-offset-2 bg-slate-900'
+            : 'bg-slate-100 border-slate-100 '
         "
       >
         <img
@@ -50,18 +50,18 @@
           v-if="checkbox"
         />
       </span>
-      <span class="text-slate-500 dark:text-slate-400 text-sm leading-6"
+      <span class="text-slate-500 text-sm leading-6"
         >You accept our Terms and Conditions and Privacy Policy</span
       >
     </label>
 
-    <button type="submit" class="btn btn-dark block w-full text-center">
+    <button type="submit" class="btn bg-pink-600 text-white block w-full text-center">
       Create an account
     </button>
   </form>
 </template>
 <script>
-import Textinput from "@/components/Textinput";
+import Textinput from "@/components/Textinput/white.vue";
 import { useField, useForm } from "vee-validate";
 import * as yup from "yup";
 
@@ -76,9 +76,9 @@ export default {
   },
   data() {
     return {
-      email: 'admin@gmail.com',
-      password: 'Demo1234',
-      name: 'Admin',
+      email: '',
+      password: '',
+      name: '',
       nameError: '',
       checkbox: false,
       emailError: '',

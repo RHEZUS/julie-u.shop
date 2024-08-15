@@ -12,17 +12,17 @@
             
         </div>
         <!-- Responsive Sidebar -->
-        <div :class="{'translate-x-0' : showSidebar, '-translate-x-[600px]': !showSidebar}" class="duration-700 border lg:hidden absolute left-0 top-[0px] p-5 w-full sm:w-[400px] z-50 bg-white text-black"  ref="sidebar" style="height: calc(100vh - 0px); box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
+        <div :class="{'translate-x-0' : showSidebar, '-translate-x-[600px]': !showSidebar}" class="duration-700 border lg:hidden absolute left-0 top-[0px] p-5 w-full sm:w-[400px] h-fit overflow-y-scroll z-50 bg-white text-black"  ref="sidebar" style="height: calc(100vh - 0px); box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
             <div class="flex justify-between items-center gap-2">
-                <a href="#" class="bg-black-50 w-1/4 py-1 text-center rounded-md"><i class='text-2xl bx bx-user'></i></a>
-                <a href="/cart" class="bg-black-50 w-1/4 py-1 text-center rounded-md"><i class="text-2xl bi bi-cart3"></i></a>
-                <a href="/wishlist" class="bg-black-50 w-1/4 py-1 text-center rounded-md"><i class='text-2xl bx bx-heart' ></i></a>
+                <a href="#" class="bg-black-50 hover:bg-pink-600 hover:text-white w-1/4 py-1 text-center rounded-md"><i class='text-2xl bx bx-user'></i></a>
+                <a href="/cart" class="bg-black-50 hover:bg-pink-600 hover:text-white w-1/4 py-1 text-center rounded-md"><i class="text-2xl bi bi-cart3"></i></a>
+                <a href="/wishlist" class="bg-black-50 hover:bg-pink-600 hover:text-white  w-1/4 py-1 text-center rounded-md"><i class='text-2xl bx bx-heart' ></i></a>
                 <button  @click="showSidebar = false" class="w-1/4"><i v-if="showSidebar"  class='text-2xl text-black bx bx-x'></i></button>
             </div>
 
             <div class=" justify-between flex-wrap items-center gap-2 my-3">
                 <p class="col-span-2 mt-3 text-black-500 font-medium text-center py-[4px] text-[18px]">Categories</p>
-                <a href="#" v-for="category in categories.slice(0, 8)" class="group py-2 text-start px-2 gap-2 rounded-md flex items-center justify-start">
+                <a v-if="categories.length > 0" href="#" v-for="category in categories.slice(0, 8)" class="group hover:text-pink-600 py-2 text-start px-2 gap-2 rounded-md flex items-center justify-start">
                     <span>{{category.name}}</span>
                     <i class='hidden group-hover:block text-lg bx bx-right-arrow-alt'></i>
                 </a>
@@ -30,10 +30,10 @@
 
             <div class="grid grid-cols-5 justify-between flex-wrap items-center gap-2 my-3">
                 <p class="col-span-5 mt-3 text-black-500 font-medium text-center py-[4px] text-[18px]">Social Media</p>
-                <a href="#" target="_blank" class="col-span-1 text-2xl text-start rounded-md"><i class='bx bxl-facebook' ></i></a>
-                <a href="#" target="_blank" class="col-span-1 text-2xl text-start rounded-md"><i class='bx bxl-instagram' ></i></a>
-                <a href="#" target="_blank" class="col-span-1 text-2xl text-start rounded-md"><i class='bx bxl-twitter' ></i></a>
-                <a href="#" target="_blank" class="col-span-1 text-2xl text-start rounded-md"><i class='bx bxl-pinterest-alt' ></i></a>
+                <a href="#" target="_blank" class="hover:text-pink-600 col-span-1 text-2xl text-start rounded-md"><i class='bx bxl-facebook' ></i></a>
+                <a href="#" target="_blank" class="hover:text-pink-600 col-span-1 text-2xl text-start rounded-md"><i class='bx bxl-instagram' ></i></a>
+                <a href="#" target="_blank" class="hover:text-pink-600 col-span-1 text-2xl text-start rounded-md"><i class='bx bxl-twitter' ></i></a>
+                <a href="#" target="_blank" class="hover:text-pink-600 col-span-1 text-2xl text-start rounded-md"><i class='bx bxl-pinterest-alt' ></i></a>
                 <a href="https://www.tiktok.com/@sybirine?_t=8oGsA1Nj9AD&_r=1" target="_blank" class="col-span-1 text-2xl text-start rounded-md"><i class='bx bxl-tiktok' ></i></a>
             </div>
 

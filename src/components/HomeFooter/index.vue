@@ -54,7 +54,7 @@
         </div>
         <div class="capitalize col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2">
             <p class="text-xl font-medium py-3"> Categories</p>
-            <a v-for="category in categories.slice(0, 6)"  :href="'/product/category/' + category.name">
+            <a v-if="categories.length > 0" v-for="category in categories.slice(0, 6)"  :href="'/products/category/' + category.slug">
                 <li class="py-2 text-black-500 flex items-start gap-4">
                     {{category.name}}
                 </li>
@@ -85,7 +85,7 @@
         methods:{
             fetchBrands() {
                 //this.tableData.loading = true;
-                apiClient.get('api/brands/top')
+                axios.get('api/brands/top')
                 .then(response => {
                     const results = response.data;
                     this.brands = results.brands;
@@ -97,10 +97,12 @@
             },
             fetchCategories() {
                 //this.tableData.loading = true;
-                apiClient.get('api/categories/top')
+                axios.get('api/categories/top')
                 .then(response => {
-                    const results = response.data;
-                    this.categories = results.categories;
+                    //const results = response.data;
+                    this.categories = response.data.categories;
+                    console.log(this.categories);
+                    
                 })
                 .catch(message => {
                     console.error('Error fetching categories:', message);

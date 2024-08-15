@@ -28,7 +28,7 @@
           @change="toggleCheckbox"
         />
         <span
-          class="h-4 w-4 border rounded flex-none inline-flex mr-3 relative top-1 transition-all duration-150"
+          class="h-4 w-4 hidden border rounded flex-none inline-flex mr-3 relative top-1 transition-all duration-150"
           :class="
             checkbox
               ? 'ring-2 ring-black-500 dark:ring-offset-slate-600 dark:ring-slate-900  dark:bg-slate-900 ring-offset-2 bg-slate-900'
@@ -42,30 +42,31 @@
             v-if="checkbox"
           />
         </span>
-        <span class="text-slate-500 dark:text-slate-400 text-sm leading-6"
+        <span class="text-slate-500 hidden dark:text-slate-400 text-sm leading-6"
           >Keep me signed in</span
         >
       </label>
       <router-link
         to="/forgot-password"
-        class="text-sm text-slate-800 dark:text-slate-400 leading-6 font-medium"
+        class="text-sm hidden text-slate-800 dark:text-slate-400 leading-6 font-medium"
         >Forgot Password?</router-link
       >
     </div>
 
-    <button type="submit" class="btn btn-dark block w-full text-center">
+    <button type="submit" class="btn bg-pink-600 text-white block w-full text-center">
       Sign in
     </button>
   </form>
 </template>
 
 <script>
-import Textinput from "@/components/Textinput";
+import Textinput from "@/components/Textinput/white.vue";
 import * as yup from "yup";
 
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
-import apiClient from '@/plugins/axios';
+//import apiClient from '@/plugins/axios';
+import axios from 'axios';
 
 export default {
   components: {
@@ -73,8 +74,8 @@ export default {
   },
   data() {
     return {
-      email: 'admin@gmail.com',
-      password: 'Demo1234',
+      email: '',
+      password: '',
       checkbox: false,
       emailError: '',
       passwordError: '',
@@ -98,11 +99,13 @@ export default {
       })
       .then(() => {
         console.log('Login in.......');
-        apiClient.post(`/api/login/`, {'email': this.email, 'password': this.password})
+        axios.post(`/api/login/`, {'email': this.email, 'password': this.password})
        .then((response) => {
           this.toast.success("Login successfully", { timeout: 2000 });
-          localStorage.setItem('token', response.data.token);
+          //localStorage.setItem('token', response.data.token);
           const user = response.data.user;
+          //this.$store.commit('SET_AUTHENTICATED', true, user);
+          //localStorage.setItem('Julie_shop_auth_user', JSON.stringify(user));
           if (['admin', 'vendor'].includes(user.role)) {
             this.router.push('/dashboard/home');
           } else {

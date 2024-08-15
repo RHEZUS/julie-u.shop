@@ -17,7 +17,7 @@
         <vue-good-table
           :columns="columns"
           styleClass="vgt-table bordered centered"
-          :rows="categories"
+          :rows="orders"
           :pagination-options="{
             enabled: true,
             perPage: perpage,
@@ -40,9 +40,6 @@
                 class="text-sm text-slate-600 dark:text-slate-300 capitalize"
                 >{{ props.row.customer.name }}</span
               >
-            </span>
-            <span v-if="props.column.field == 'order'">
-              {{ "#" + props.row.order }}
             </span>
             <span
               v-if="props.column.field == 'created_at'"
@@ -76,12 +73,12 @@
             </span>
             
             <span v-if="props.column.field == 'action'">
-              <div class="flex space-x-3 rtl:space-x-reverse">
-                <Tooltip placement="top" v-if="0 == 1" arrow theme="dark">
+              <div class="flex justify-between space-x-3 rtl:space-x-reverse">
+                <Tooltip placement="top" arrow theme="dark">
                   <template #button>
-                    <div class="action-btn">
+                    <a :href="'order-details/' + props.row.id" class="action-btn">
                       <Icon icon="heroicons:eye" />
-                    </div>
+                    </a>
                   </template>
                   <span> View</span>
                 </Tooltip>
@@ -107,11 +104,11 @@
           <template #pagination-bottom="props">
             <div class="py-4 px-3">
               <Pagination
-                :total="50"
+                :total="total"
                 :current="current"
                 :per-page="perpage"
                 :pageRange="pageRange"
-                @page-changed="current = $event"
+                @page-changed="current = $event; changePage($event)"
                 :pageChanged="props.pageChanged"
                 :perPageChanged="props.perPageChanged"
                 enableSearch
@@ -140,6 +137,7 @@
   import { useToast } from "vue-toastification";
   import apiClient from "@/plugins/axios";
   import Breadcrumb from "@/components/Breadcrumbs";
+import axios from "axios";
   export default {
     components: {
       Pagination,
@@ -157,19 +155,12 @@
   
     data() {
       return {
-        categories: [],
+        orders: [],
         toast: useToast(),
-        formMode: 'create',
-        form: {
-          name: '',
-          email: '',
-          role: '',
-          phone_number: '',
-          password: '',
-        },
         item: [],
         current: 1,
         perpage: 10,
+        total: 0,
         pageRange: 1,
         searchTerm: "",
         actions: [
@@ -206,12 +197,12 @@
                 field: "id",
             },
             {
-                label: "Name",
-                field: "name",
+                label: "Customer",
+                field: "user.name",
             },
             {
-                label: "No. Stories",
-                field: "products_count",
+                label: "No. Products",
+                field: "items_sum_quantity",
             },
             {
                 label: "Date",
@@ -225,13 +216,22 @@
       };
     },
     methods: {
-        async FetchData(){
-            await apiClient.get(`/api/admin/orders`, { withCredentials: true })
+        async FetchData(page = 1){
+            await axios.get(`/api/admin/orders?page=${page}`)
             .then((response) => {
-                this.orders = response.data.orders;
+                this.orders = response.data.orders.data;
+                this.total = response.data.orders.total;
+                this.perpage = response.data.orders.per_page;
+                this.current = response.data.orders.current_page;
+                console.log(this.orders);
             }).catch((error) => {
-                this.toast.error('Failed to fetch orders', { timeout: 2000 });
+              console.log(error);
+              this.toast.error('Failed to fetch orders', { timeout: 2000 });
             });
+        },
+
+        changePage(page) {
+          this.FetchData(page);
         },
   
         formatDate(dateString) {
@@ -247,7 +247,7 @@
           }
         },
         async deleteItem(itemId) {
-          await apiClient.delete(`/api/admin/orders/delete/${itemId}`, { withCredentials: true })
+          await axios.delete(`/api/admin/orders/delete/${itemId}`, { withCredentials: true })
           .then((response) => {
               this.FetchData();
               this.toast.success('Orders has been deleted successfully', { timeout: 2000 });
@@ -255,6 +255,7 @@
               this.toast.error('Failed to delete Orders', { timeout: 2000 });
           });
         },
+        
     },
     mounted() {
       this.FetchData();
