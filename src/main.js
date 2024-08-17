@@ -24,6 +24,9 @@ import { VueQueryPlugin } from "@tanstack/vue-query";
 import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 //import "vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css";
 
+// i18n
+import i18n from "./i18n";
+
 const pinia = createPinia();
 
 //emit event
@@ -49,6 +52,7 @@ const app = createApp(App)
   //.use(PerfectScrollbar)
   .use(VCalendar)
   .use(store);
+app.use(i18n);
 app.config.globalProperties.emitter = emitter
 app.config.globalProperties.store = {};
 app.mount("#app");
@@ -59,10 +63,12 @@ app.component('PerfectScrollbar', PerfectScrollbar);
 // Axios default config
 import axios from "axios";
 axios.defaults.headers.common["X-csrf-token"] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+axios.defaults.headers.common['Target-Language'] = localStorage.getItem('locale') || 'fr';
 //https://api.Julie-u.shop
 //http://localhost:8000/
-axios.defaults.baseURL = 'http://localhost:8000/';
+axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
+
 
 // Theme settings
 import { useThemeSettingsStore } from "@/store/themeSettings";

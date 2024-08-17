@@ -1,4 +1,19 @@
 <template>
+    <div class="bg-white h-max w-full" v-if="loading == true">
+      <NavLoader/>
+
+      <ProductModalLoader/>
+
+      <Section>
+          <div class="grid grid-cols-12 gap-6 px-2 md:px-10">
+              <div class="col-span-6 sm:col-span-6 md:col-span-4 mt-6 lg:col-span-3 border" v-for="product in 4">
+                  <ProductLoader />
+              </div>
+          </div>
+      </Section>
+  </div>
+
+
   <div class="bg-white" v-if="!loading">
     <Header />
     <!-- Single result -->
@@ -144,9 +159,9 @@
 
 
     <!--Similar products-->
-    <div class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6">
+    <div v-if="relatedProducts.length > 1" class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6">
       <div class="col-span-full">
-          <h1 class="text-2xl font-bold text-start">Similar Products</h1>
+          <h1 class="text-2xl font-bold text-center">Similar Products</h1>
       </div>
       <div class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in relatedProducts.slice(0, 8)">
           <ProductCart :product="product" />
@@ -155,7 +170,7 @@
 
 
     <!-- Reviews and Rating -->
-    <div class="col-span-full py-5  px-2 md:px-10">
+    <div class="col-span-full py-5  hidden px-2 md:px-10">
       <div class="mb-4 border-b border-gray-200 ">
           <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
               <li class="me-2" role="presentation">
@@ -399,6 +414,13 @@ import Footer from '@/components/HomeFooter/index.vue';
 import apiClient from '@/plugins/axios';
 import Modal from '@/components/Modal/ProdModal.vue';
 import Button from '@/components/Button';
+
+import NavLoader from "@/components/ComponentLoaders/NavbarLoader.vue";
+import HeroLoader from "@/components/ComponentLoaders/HeroLoader.vue";
+import Section from "@/components/ComponentLoaders/Section.vue";
+import ProductLoader from "@/components/ComponentLoaders/ProductCardLoader.vue";
+import ProductModalLoader from '@/components/ComponentLoaders/ProductModalLoader.vue';
+
 import { products } from '@/constant/data';
 import Icon from "@/components/Icon";
 import Badge from "@/components/Badge";
@@ -408,7 +430,7 @@ import { useToast } from 'vue-toastification';
     export default {
       data() {
         return {
-          apiUrl: apiClient.defaults.baseURL,
+          apiUrl: axios.defaults.baseURL,
           images: [],
           inWishlist: null,
           loading: true,
@@ -438,6 +460,12 @@ import { useToast } from 'vue-toastification';
         Icon,
         Badge,
         Carousel,
+
+        NavLoader,
+        HeroLoader,
+        Section,
+        ProductLoader,
+        ProductModalLoader,
       },
       methods: {
         async getProduct(){

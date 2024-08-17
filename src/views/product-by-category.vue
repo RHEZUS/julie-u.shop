@@ -1,17 +1,17 @@
 <template>
-    <div class="bg-white h-max w-full" v-if="pageLoading == true">
-        <NavLoader/>
-        <Section>
-            <div class="grid grid-cols-12 gap-6 px-2 md:px-10">
-                <div class="col-span-6 sm:col-span-6 md:col-span-4 mt-6 lg:col-span-3 border" v-for="product in 8">
-                    <ProductLoader />
-                </div>
-            </div>
-        </Section>
-    </div>
-    <div v-else  class="bg-white text-black-500 h-max">
+    <div  class="bg-white text-black-500 h-max">
         <HomeHeader />
-        <div class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6">
+
+        <div class="bg-white h-max w-full" v-if="pageLoading == true">
+            <Section>
+                <div class="grid grid-cols-12 gap-6 px-2 md:px-10">
+                    <div class="col-span-6 sm:col-span-6 md:col-span-4 mt-6 lg:col-span-3 border" v-for="product in 8">
+                        <ProductLoader />
+                    </div>
+                </div>
+            </Section>
+        </div>
+        <div v-else class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6">
             <div class="col-span-full">
                 <p class="text-2xl font-bold text-center uppercase">{{category.name}}</p>
             </div>
@@ -45,7 +45,7 @@ export default {
         return {
             products: [],
             category: [],
-            pageLoading: false,
+            pageLoading: true,
             toast: useToast(),
         };
     },
@@ -64,7 +64,7 @@ export default {
             try{
                 const slug = this.$route.params.slug;
                 if (slug) {
-                    axios.get(`/api/category/products/${slug}`)
+                    await axios.get(`/api/category/products/${slug}`)
                     .then((response) => {
                         this.products = response.data.products;
                         this.category = response.data.category;
@@ -86,6 +86,9 @@ export default {
         this.pageLoading = true;
         this.getProducts().then(() => {
             this.pageLoading = false;
+            //setTimeout(() => {
+            //    this.pageLoading = false;
+            //}, 1000)
         });
     }
 };

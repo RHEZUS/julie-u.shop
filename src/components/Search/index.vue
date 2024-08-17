@@ -18,7 +18,7 @@
               </a>
             </div>
             <form @keyup.prevent="search()" class="col-span-10 md:col-span-6 relative w-full h-10 border border-black rounded">
-              <input v-model="keyword" type="search" class="font-normal w-full h-full rounded focus:ring-0 border-none focus:border-none pl-4" :placeholder="'Search Product'" style="padding-right: 45px;"  name="" id="">
+              <input v-model="keyword" type="search" class="font-normal w-full h-full rounded focus:ring-0 border-none focus:border-none pl-4" :placeholder="$t('searchProduct')" style="padding-right: 45px;"  name="" id="">
               
               <a v-if="keywordSet && !loading" :href="'/products/search/' + keyword" class="absolute top-2 right-0 w-[40px]  h-full">
                 <svg v-if="loading" aria-hidden="true" class="mr-3 inline w-5 h-5 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,24 +58,33 @@
   
           <!-- Search Result -->
           <div class="grid grid-cols-12 gap-3">
-            <h1 v-if="keywordSet" class="col-span-12 capitalize mb-2 text-lg text-center font-medium mt-3 text-[#afaeae]">{{products.length}} {{ 'Results For' }}: <span class="text-black">{{'"' + keyword + '"'}}</span> </h1>
+            <h1 v-if="keywordSet" class="col-span-12 capitalize mb-2 text-lg text-center font-medium mt-3 text-[#afaeae]">{{products.length}} {{ $t('resultsFor') }}: <span class="text-black">{{'"' + keyword + '"'}}</span> </h1>
             
             <!-- Single search result -->
   
-            <div  v-for="product in products.slice(0, 4)"  :product="product" class="col-span-6 sm:col-span-3 border md:col-span-3">
-              <a :href="'/product/' + product.slug">
-                  <img class="w-full max-h-[300px]" :src="`${apiUrl}/storage/${product.image_url}`" alt="">
+            <div v-if="products.length > 0"  v-for="product in products.slice(0, 1)"  :product="product" class="col-span-6 sm:col-span-3 border md:col-span-3">
+
+              <!--Current way of displaying image-->
+              <div class="w-full h-[260px] overflow-hidden bg-cover bg-center bg-no-repeat" :style="{ backgroundImage: `url(${apiUrl}/storage/${product.image_url})` }" >
+                <a :href="'/product/' + product.slug" class="">
+                  <div class="w-full h-full bg-transparent"></div>
+                </a>
+              </div>
+              
+              <!--Previous way of displaying image-->
+              <a :href="'/product/' + product.slug" class="w-full h-[260px] overflow-hidden hidden"  :style="{backgroundImage: `${apiUrl}/storage/${product.image_url}`}" >
+                  <img class="w-full max-h-[300px] hidden" :src="`${apiUrl}/storage/${product.image_url}`" alt="">
               </a>
               <a href="#">
-                  <h1 class="text-base font-medium mt-3 text-black">{{product.title}}</h1>
+                  <h1 class="text-base font-medium mt-3 px-2 text-black">{{product.title}}</h1>
               </a>
-              <p class="text-md font-medium text-black"><span>{{product.variants[0].price + ' FCFA'}}</span></p>
+              <p class="text-md font-medium px-2 text-black"><span>{{product.variants[0].price + ' FCFA'}}</span></p>
               <div v-if="product.options.length > 0 && product.options[0].name == 'color'" class="flex gap-4 text-black-500 items-center px-2 py-5">
                 <div v-for="color in product.options[0].values" :style="{ backgroundColor: color.value }"  class="w-8 h-8 rounded-full border"></div>
               </div>
             </div> 
             <div v-if="keywordSet" class="col-span-full flex justify-center">
-              <a :href="'/products/search/' + keyword" class="mx-auto text-center px-3  font-medium text-base text-white bg-[#0e0e0e] py-2 rounded mb-3">Load More Results: </a>
+              <a :href="'/products/search/' + keyword" class="mx-auto text-center px-3  font-medium text-base text-white bg-[#0e0e0e] py-2 rounded mb-3">{{ $t('loadMoreResults') }} </a>
             </div>  
           </div>
   
@@ -89,17 +98,17 @@
 <script>
 import apiClient from "@/plugins/axios";
 import axios from "axios";
-      export default {
-      data() {
-        return {
-            showSearch: false,
-            keywordSet: false,
-            apiUrl: apiClient.defaults.baseURL,
-            keyword: '',
-            products: [],
-            loading: false,
-        }
-      },
+export default {
+  data() {
+    return {
+        showSearch: false,
+        keywordSet: false,
+        apiUrl: axios.defaults.baseURL,
+        keyword: '',
+        products: [],
+        loading: false,
+    }
+  },
       methods:{
         async search() {
           this.loading = true;
@@ -107,7 +116,7 @@ import axios from "axios";
           
           if (trimmedKeyword) {
               axios.get(`/api/products/search/${trimmedKeyword}`).then(response => {
-                this.products = response.data.products;
+                this.products = response.data.products.data;
                 this.keywordSet = true;
                 console.log(response.data);
                 console.log('products length: ' + this.products.length);

@@ -34,4 +34,14 @@
   </div>
 </template>
 <script>
+export default {
+  name: 'NavbarLoader',
+
+  props: {
+    pageLoading: {
+      type: Boolean,
+      default: false
+    }
+  }
+};
 </script>

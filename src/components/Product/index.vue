@@ -6,9 +6,12 @@
       <div class="relative group z-0">
         <!-- Image -->
         <div class="flex items-center justify-center">
-        <a :href="'/product/' + product.slug" class="">
-          <img class="h-[260px] w-full" :src="apiUrl + 'storage/' + product.image_url" alt="">
-        </a>
+        <!--Current way of displaying image-->
+        <div class="w-full h-[260px] overflow-hidden bg-cover bg-center bg-no-repeat" :style="{ backgroundImage: `url(${apiUrl}/storage/${product.image_url})` }" >
+          <a :href="'/product/' + product.slug" class="">
+            <div class="w-full h-full bg-transparent"></div>
+          </a>
+        </div>
         </div>
         <!-- Product buttons -->
         <div class="absolute top-4 md:top-14 group-hover:right-1 -right-16 duration-500 flex flex-col gap-4">

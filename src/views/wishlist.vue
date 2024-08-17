@@ -1,20 +1,16 @@
 <template>
-    <div class="bg-white h-max w-full" v-if="pageLoading == true">
-        <NavLoader/>
-        <Section>
+    <div class="bg-white text-black-500 h-max">
+        <HomeHeader />
+        <Section v-if="pageLoading == true">
             <div class="grid grid-cols-12 gap-6 px-2 md:px-10">
                 <div class="col-span-6 sm:col-span-6 md:col-span-4 mt-6 lg:col-span-3 border" v-for="product in 8">
                     <ProductLoader />
                 </div>
             </div>
         </Section>
-    </div>
-
-    <div v-else class="bg-white text-black-500 h-max">
-        <HomeHeader />
-        <div class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6">
+        <div v-if="pageLoading == false" class="px-2 md:px-10 min-h-80 py-10  grid grid-cols-12 gap-6">
             <div class="col-span-full">
-                <p class="text-2xl font-bold text-center">My Wishlist</p>
+                <p class="text-2xl font-bold text-center">{{ $t('wishlist') }}</p>
             </div>
             <div v-if="products.length > 0" class="col-span-6 sm:col-span-6 md:col-span-4 lg:col-span-3 border" v-for="product in products">
                 <ProductCart :product="product" :fetch-data="loadProducts" />
