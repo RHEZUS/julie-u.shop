@@ -3,14 +3,15 @@ import axios from 'axios';
 //https://api.Julie-u.shop
 //const token = localStorage.getItem('token');
 const apiClient = axios.create({
-  baseURL: 'https://api.Julie-u.shop',
+  baseURL: 'http://localhost:8000',
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    //'Authorization': `Bearer ${localStorage.getItem('token')}`,
   }
 });
+//put -r /media/ludivin/DATA1/Projects/Julie-u.shop/dist/
 
 export default apiClient;
 

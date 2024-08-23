@@ -21,7 +21,7 @@
           </button>
 
           <div class="modal-groups">
-            <Modal themeClass="bg-white " labelClass="btn-outline-dark  bg-white" ref="modal4" sizeClass="max-w-5xl">
+            <Modal themeClass="bg-white " labelClass="btn-outline-dark bg-white" ref="modal4" sizeClass="max-w-5xl">
               <!-- Product Image -->
                <div class="grid grid-cols-12">
                 <div class="col-span-full  lg:col-span-6 group  flex items-center justify-center overflow-hidden">
@@ -279,7 +279,9 @@ import axios from 'axios';
         this.price = this.getVariantPrice(variantId);
       },
       getColorsVariants(color){
-        const variants = this.product.variants.filter(variant => variant.option1 === color);
+        const variants = this.product.variants.filter(variant => variant.option1 === color || variant.title.split(' ')[0]=== color);
+        console.log('Color: ', color, '\n', 'Variants: ', variants);
+        
         this.form.product_variant_id = variants[0].id;
         this.selected_color = color;
         return variants;

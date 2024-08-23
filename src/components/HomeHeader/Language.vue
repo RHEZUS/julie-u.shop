@@ -36,9 +36,8 @@ export default {
     },
 
     mounted() {
-        this.selectedLanguage = localStorage.getItem('locale') || this.$i18n.locale;
+        this.selectedLanguage = localStorage.getItem('locale') || 'fr';
         this.$i18n.locale = this.selectedLanguage;
-        
     },
 }
 </script>

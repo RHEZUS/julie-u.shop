@@ -54,7 +54,7 @@
                 <Search />
                 <button class="group relative" style="z-index: 1;">
                     <i class='text-2xl bx bx-user hover:text-pink-600'></i>
-                    <div v-if="isAuth === false" class="bg-white w-max hidden group-hover:inline-block font-medium hover:cursor-pointer flex-col gap-3 absolute -right-2 top-8 border h-max" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
+                    <div v-if="!authStore.isAuthenticated" class="bg-white w-max hidden group-hover:inline-block font-medium hover:cursor-pointer flex-col gap-3 absolute -right-2 top-8 border h-max" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
                         <div class="border-b-2 p-6 flex flex-col gap-4">
                             <div class="text-lg font-semibold">{{ $t('notLoggedInYet') }} </div>
                             <a href="/login" class="w-full border py-2 btn-dark"> Login </a>
@@ -68,7 +68,7 @@
                             </a>
                         </div>
                     </div>
-                    <div v-if="isAuth != false" class="bg-white w-max hidden group-hover:inline-block font-medium hover:cursor-pointer flex-col gap-3 absolute -right-2 top-8 border h-max" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
+                    <div v-if="authStore.isAuthenticated" class="bg-white w-max hidden group-hover:inline-block font-medium hover:cursor-pointer flex-col gap-3 absolute -right-2 top-8 border h-max" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
                         <div class="border-b p-4 flex flex-col gap-4">
                             <a href="/profile-setting" class="text-start flex gap-2 hover:text-pink-600"><i class='text-lg nullbx bx-user'></i> Profile</a>
                             <a href="#" class="text-start flex gap-2 hover:text-pink-600"><i class="text-lg bi bi-cart3"></i> Track Orders</a>
@@ -111,6 +111,7 @@ import Button from "@/components/Button/index.vue";
 import { categories } from "@/constant/data";
 import Responsive from './Responsive.vue';
 import Language from "./Language.vue";
+import { authStore } from "@/store/auth";
 
 import NavLoader from "@/components/ComponentLoaders/NavbarLoader.vue";
 
@@ -123,6 +124,7 @@ export default {
     name: 'HomeHeader',
     data() {
         return {
+            authStore: authStore(),
             isShow: false,
             isAuth: checkAuth() ? true : false,
             categories: [],
@@ -169,12 +171,6 @@ export default {
         this.pageLoading = true;
         this.fetchCategories().then(() => {
             this.countCart();
-            //checkAuth() ? this.isAuth = true : this.isAuth = false;
-            this.isAuth = checkAuth().then((res) => {
-                console.log(this.isAuth);
-            });
-            this.isAuth = this.isAuth ? true : false;
-            
             this.emitter.on('cartUpdated', (evt) => {
                 this.cartItemCount = evt.eventContent;
             });

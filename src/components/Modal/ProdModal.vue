@@ -24,7 +24,7 @@
           />
         </TransitionChild>
   
-        <div class="fixed inset-0 overflow-y-auto">
+        <div class="fixed inset-0 overflow-y-auto z-20">
           <div
             class="flex min-h-full justify-center text-center p-6"
             :class="centered ? 'items-center' : 'items-start '"

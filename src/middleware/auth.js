@@ -6,7 +6,9 @@ export default function auth (allowedRoles = []) {
   return async function ({ next, store }) {
     try {
       // Fetch the current user's details
-      const response = await axios.get(`/api/user/`);
+      const response = await axios.get(`/api/user`);
+      console.log(response.data);
+      
       const user = response.data.user;
 
       // Check if the user is authenticated

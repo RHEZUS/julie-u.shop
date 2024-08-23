@@ -30,7 +30,7 @@
             <span v-if="props.column.field == 'image_url'" class="flex">
               <span class="w-12 h-12 overflow-hidden rounded flex-none">
                 <img
-                  :src="apiClient + 'storage/' + props.row.image_url"
+                  :src="apiClient + '/storage/' + props.row.image_url"
                   :alt="props.row.name"
                   class="object-cover w-full h-full"
                 />
@@ -42,13 +42,9 @@
             <span v-if="props.column.field == 'variants'">
               {{ props.row.variants.reduce((sum, item) => sum + item.inventory_quantity, 0) }}
             </span>
-            <span v-if="props.column.field == 'category'">
+            <span v-if="props.column.label == 'category'">
               {{ props.row.category.name }}
             </span>
-            <span
-              class="text-sm text-slate-600 dark:text-slate-300 capitalize"
-              >{{ props.row.name }}</span
-            >
             <span
               v-if="props.column.field == 'created_at'"
               class="text-slate-500 dark:text-slate-300"
@@ -215,7 +211,7 @@ import axios from "axios";
             },
             {
                 label: "Category",
-                field: "category",
+                field: "category.name",
             },
             {
                 label: "Stock",

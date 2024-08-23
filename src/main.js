@@ -4,8 +4,11 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import { createApp } from "vue";
 import "simplebar-vue/dist/simplebar.min.css";
 import VueFlatPickr from "vue-flatpickr-component";
+
+
 import VueGoodTablePlugin from "vue-good-table-next";
 import "vue-good-table-next/dist/vue-good-table-next.css";
+
 import VueSweetalert2 from "vue-sweetalert2";
 import VueTippy from "vue-tippy";
 import Toast from "vue-toastification";
@@ -33,7 +36,6 @@ const pinia = createPinia();
 import mitt from 'mitt'
 const emitter = mitt()
 
-import store from "./store";
 
 // vue use
 const app = createApp(App)
@@ -51,10 +53,9 @@ const app = createApp(App)
   .use(VueApexCharts)
   //.use(PerfectScrollbar)
   .use(VCalendar)
-  .use(store);
 app.use(i18n);
 app.config.globalProperties.emitter = emitter
-app.config.globalProperties.store = {};
+app.config.globalProperties.$store = {};
 app.mount("#app");
 app.use(VueQueryPlugin);
 app.component('PerfectScrollbar', PerfectScrollbar);
@@ -132,6 +133,7 @@ if (localStorage.getItem("monochrome") !== null) {
   themeSettingsStore.monochrome = true;
   document.getElementsByTagName("html")[0].classList.add("grayscale");
 }
+
 
 
 // fake server

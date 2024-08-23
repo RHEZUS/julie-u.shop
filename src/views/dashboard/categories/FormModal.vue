@@ -90,8 +90,12 @@ export default {
             await axios.get(`/api/admin/categories/id-name`, { withCredentials: true })
             .then((response) => {
                 this.formOptions = response.data.categories;
+                //console.log(response);
+                
             }).catch((error) => {
                 this.toast.error('Failed to fetch categories', { timeout: 2000 });
+                //console.log(error);
+                
             });
         },
 

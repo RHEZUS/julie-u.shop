@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <form @submit.prevent="updateProduct()" class="flex flex-col gap-4 relative z-[100]">
+        <form @submit.prevent="validateForm()" class="flex flex-col gap-4 relative z-[100]">
             <!--Product details-->
             <Card noborder>
               <div class="md:flex justify-between pb-6 md:space-y-0 space-y-3 items-center">
@@ -18,6 +18,7 @@
                 </div>
                 <div class="col-span-12 sm:col-span-6">
                     <input type="file" name="file-input-medium" id="file-input-medium" @change="handleFileUpload" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500   file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4">
+                    <div class="col-span-full text-danger-500 mt-2 text-sm block" v-if="formErrors.image"> {{ formErrors.image }} </div>
                 </div>
                 <div class="col-span-12">
                     <Textarea  placeholder="Description of the product" v-model="product.description" :error="formErrors.description" hasicon classInput="min-h-[48px]"></Textarea>
@@ -48,7 +49,7 @@
                                 <button @click="deleteOption(optionIndex)" type="button" class="float-end text-xl text-danger-600 flex items-center"><span class="text-base "> Delete option </span> </button>
                             </div>
   
-                            <Select v-model="option.name" :error="formErrors.options.name" :options="[{label:'Color', value:'color'}, {label: 'Size', value: 'size'}]" :placeholder="'Select option'" classInput="h-[35px]"></Select>
+                            <Select v-model="option.name" :error="formErrors[`options[${optionIndex}].name`]" :options="[{label:'Color', value:'color'}, {label: 'Size', value: 'size'}]" :placeholder="'Select option'" classInput="h-[35px]"></Select>
   
                         </div>
                         
@@ -57,19 +58,26 @@
                                 <label for=""> Option Values  </label>
                                 <button @click="addValue(optionIndex)" type="button" class="float-end text-xl text-blue-600 flex items-center"><i class='bx bx-plus'></i> <span class="text-base "> Add another {{ option.name ? option.name : 'Value' }}</span> </button>
                             </div>
+                            <div class="mt-2 text-danger-500 text-sm" v-if="formErrors[`options[${optionIndex}].values`]">{{ formErrors[`options[${optionIndex}].values`] }} </div>
                             <div class="grid grid-cols-12 relative gap-2 pr-10 items-center justify-between mt-3" v-for="(value, valueIndex) in option.values" :key="value.code">
                                 <div class="relative h-fit" :class="{'col-span-6' : option.name == 'color', 'col-span-12' : option.name != 'color' }">
-                                    <Textinput type="text" placeholder="Value" v-model="value.value" v-on:keyup="updateValue(value)" :error="formErrors.options.values" classInput="h-[35px]"/>
+                                    <Textinput type="text" placeholder="Value" v-model="value.value" v-on:keyup="updateValue(value)"  :error="formErrors[`options[${optionIndex}].values[${valueIndex}].value`]" classInput="h-[35px]"/>
                                     <div v-if="option.name == 'color'" class="w-4 h-4 rounded-full absolute top-3 right-3" :style="{ backgroundColor: value.value }"></div>
                                 </div>
                                 <div class="col-span-6" v-if="option.name == 'color'" >
                                     <input type="file" multiple name="file-input-medium" id="file-input-medium" @change="handleOptionFileSelected($event, optionIndex, valueIndex)" class="block w-full border border-gray-200 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500   file:bg-gray-50 file:border-0 file:me-4 file:py-3 file:px-4">
-                                    
-                                    <div class="flex gap-3 py-2" v-if="value.images_urls">
+                                    <p v-if="formErrors[`options[${optionIndex}].values[${valueIndex}].images_urls`]" class="text-danger-600 text-sm">{{ formErrors[`options[${optionIndex}].values[${valueIndex}].images_urls`] }}</p>
+                                    <div class="flex gap-3 py-2" v-if="value.images_urls && !value.images">
                                       <div class="relative" v-for="(image, index) in JSON.parse(value.images_urls)" :key="index">
-                                          <label for="file-input-medium" @click="deleOptionImage(optionValueId, index)" class="cursor-pointer text-danger-600 absolute right-0 "><i class='bx bx-trash'></i></label>
+                                          <label for="file-input-medium hidden" @click="deleOptionImage(optionValueId, index)" class="cursor-pointer text-danger-600 absolute right-0 "><i class='bx bx-trash'></i></label>
                                           <img class="h-20 w-16" :src="mediaUrl + image" alt="">
                                       </div>
+                                    </div>
+                                    <div class="flex gap-3 py-2" v-if="value.images">
+                                        <div class="relative" v-for="(image, index) in value.images" :key="index">
+                                            <label for="file-input-medium hidden" @click="deleOptionImage(optionValueId, index)" class="cursor-pointer text-danger-600 absolute right-0 hidden"><i class='bx bx-trash'></i></label>
+                                            <img class="h-20 w-16" :src="createImageUrl(image)" alt="">
+                                        </div>
                                     </div>
                                 </div>
                                 <button @click="deleteOptionValue(optionIndex, valueIndex)" type="button" class="float-end text-xl absolute top-0 bottom-0 right-0"><i class='bx bx-trash'></i></button>
@@ -89,15 +97,15 @@
                             <th class="text-left h6 text-sm">Price</th>
                             <th class="text-left h6 text-sm">Inventory Quantity</th>
                         </tr>
-                        <tr v-for="variant in product.variants" :key="variant.id">
+                        <tr v-for="(variant, variantIndex) in product.variants" :key="variantIndex">
                             <td>
-                                <Textinput type="text" placeholder="Title" name="title" v-model="variant.title" :error="formErrors.variants.title" classInput="h-[35px]"/>
+                                <Textinput type="text" aria-readonly="true" placeholder="Title" name="title" v-model="variant.title" :error="formErrors[`variants[${variantIndex}].title`]"  classInput="h-[35px]"/>
                             </td>
                             <td>
-                                <Textinput type="text" placeholder="Price" name="price" v-model="variant.price" :error="formErrors.variants.price" classInput="h-[35px]"/>
+                                <Textinput type="text" placeholder="Price" name="price" v-model="variant.price" :error="formErrors[`variants[${variantIndex}].price`]" classInput="h-[35px]"/>
                             </td>
                             <td>
-                                <Textinput :type="'number'" placeholder="Inventory Quantity" name="inventory_quantity" v-model="variant.inventory_quantity" :error="formErrors.variants.inventory_quantity" classInput="h-[35px]"/>
+                                <Textinput :type="'number'" placeholder="Inventory Quantity" name="inventory_quantity" v-model="variant.inventory_quantity" :error="formErrors[`variants[${variantIndex}].inventory_quantity`]" classInput="h-[35px]"/>
                             </td>
                         </tr>
                     </table>
@@ -127,6 +135,7 @@ import FileInput from "@/components/Fileinput";
 import Switch from "@/components/Switch";
 import { useToast } from "vue-toastification";
 import axios from "axios";
+import * as yup from "yup";
 export default {
   data() {
       return {
@@ -154,7 +163,7 @@ export default {
               description: '',
               brand_id : '',
               category_id : '',
-              tags: [],
+              tags: '',
               image: '',
               price: '',
               status: '',
@@ -204,6 +213,9 @@ export default {
         },
         handleOptionFileSelected(event, optionIndex, valueIndex) {
             this.product.options[optionIndex].values[valueIndex].images = Array.from(event.target.files);
+        },
+        createImageUrl(file) {
+            return URL.createObjectURL(file);
         },
         addOption() {
             this.product.options.push({
@@ -303,16 +315,21 @@ export default {
             this.product.variants.forEach(variant => {
                 if (variant.option1UniqueCode === value.uniqueCode) {
                     const title = variant.title.split('-');
+                    variant.option1 = value.value;
                     variant.title = `${value.value.trim()} ${title[1] ? '-' + title[1] : ''}`;
                 }else if (variant.option2UniqueCode && variant.option2UniqueCode === value.uniqueCode){
                     const title = variant.title.split('-');
                     variant.title = `${title[0].trim()} - ${value.value}`;
+                    variant.option2 = value.value;
                 }
             })
         },
         
         removeValue(optionIndex, valueIndex) {
-            this.product.options[optionIndex].values.splice(valueIndex, 1);
+            const valueToRemove = this.product.options[optionIndex].values[valueIndex];
+            //remove all the values that are requal to the content of the variable value
+            this.product.options[optionIndex].values = this.product.options[optionIndex].values.filter((value) => value != valueToRemove)
+            //this.product.options[optionIndex].values.splice(valueIndex, 1);
             this.generateVariants();
         },
         deleteOption(optionIndex) {
@@ -442,11 +459,72 @@ export default {
             return this.product.options.some(option => option.values.length > 0);
         },
         
+        async validateForm(){
+            //console.log('Validating form: ', this.product);
+            //return;
+            this.formErrors = {};
+            this.storing = true;
 
+            const uniqueValues = (array) => {
+                const values = array.map(item => item.value);
+                return new Set(values).size === values.length;
+            };
+
+            const schema = yup.object({
+                title: yup.string().required('Title field is required'),
+                description: yup.string().required('Description field is required'),
+                brand_id: yup.number().nullable(),
+                category_id: yup.number().required('Category field is required'),
+                image: yup.mixed().nullable(),
+                price: yup.number().required('Price field is required').min(1, 'Price must be greater than 0'),
+                quantity: yup.number().required('Quantity field is required').min(1, 'Quantity must be greater than 0'),
+                status: yup.string().required('Status field is required'),
+                variants: yup.array().of(
+                    yup.object().shape({
+                        title: yup.string().required('Title field is required'),
+                        price: yup.number().required('Price field is required'),
+                        inventory_quantity: yup.number().required('Inventory Quantity field is required'),
+                    })
+                ),
+                options: yup.array().of(
+                    yup.object().shape({
+                        name: yup.string().required('Option name field is required'),
+                        values: yup.array().of(
+                            yup.object().shape({
+                                value: yup.string().required('Option value field is required'),
+                                images: yup.array().of(
+                                    yup.mixed()
+                                ).nullable()
+                            })
+                        ).test('unique', 'Option values must be unique', uniqueValues)
+                    })
+                )
+            });
+
+            schema.validate(this.product, { abortEarly: false }).then(() => {
+                // If the form is valid, create the product
+                console.log('Form is valid, Creating products');
+                
+                this.updateProduct().then(() => {
+                    this.storing = false;
+                });
+
+            }).catch((error) => {
+                console.log('Form is invalid');
+                
+                error.inner.forEach(e => {
+                    this.formErrors[e.path] = e.message;
+                });
+                console.log('Form errors', this.formErrors);
+                console.log('Error', error);
+                
+                
+                this.storing = false;
+            });
+        },
         async updateProduct() {
             //console.log(this.product);
             //return
-            this.storing = true;
             this.errors = [];
             //if (this.product.variants.length === 0) {
             //    this.createVariant();
@@ -461,21 +539,12 @@ export default {
                 this.toast.success('Product created successfully', { timeout: 2000 });
                 console.log(response);
                 //this.clearForm();
-                this.storing = false;
                 this.$router.push({ name: 'products' });
             }).catch((error) => {
                 this.toast.error('Failed to create product', { timeout: 2000 });
                 console.log(error);
-                this.storing = false;
             });
-
-            this.isCreating = false;
-            
         },
-
-        async validateForm(){
-
-        }
 
     },
 
@@ -495,20 +564,22 @@ export default {
             for (let i = 0; i < this.product.options.length; i++) {
                 for (let j = 0; j < this.product.options[i].values.length; j++) {
                     let valueId = this.product.options[i].values[j].id;
+                    let value = this.product.options[i].values[j].value;
                     let uniqueCode = Math.random().toString(36).substr(2, 9);
                     this.product.options[i].values[j].uniqueCode = uniqueCode;
                     uniqueCodes[valueId] = uniqueCode;
+                    uniqueCodes[value] = uniqueCode;
                 }
             }
 
             // Assign unique codes to variants based on option values
             this.product.variants.forEach(variant => {
                 variant.inventory_quantity = variant.inventory_quantity.toString();
-                if (uniqueCodes[variant.option1_id]) {
-                    variant.option1UniqueCode = uniqueCodes[variant.option1_id];
+                if (uniqueCodes[variant.option1_id] || uniqueCodes[variant.option1]) {
+                    variant.option1UniqueCode = uniqueCodes[variant.option1_id] || uniqueCodes[variant.option1];
                 }
-                if (uniqueCodes[variant.option2_id]) {
-                    variant.option2UniqueCode = uniqueCodes[variant.option2_id];
+                if (uniqueCodes[variant.option2_id] || uniqueCodes[variant.option1]) {
+                    variant.option2UniqueCode = uniqueCodes[variant.option2_id]  || uniqueCodes[variant.option1];
                 }
             });
 

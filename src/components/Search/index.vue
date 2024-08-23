@@ -62,7 +62,7 @@
             
             <!-- Single search result -->
   
-            <div v-if="products.length > 0"  v-for="product in products.slice(0, 1)"  :product="product" class="col-span-6 sm:col-span-3 border md:col-span-3">
+            <div v-if="products.length > 0"  v-for="product in products.slice(0, 4)"  :product="product" class="col-span-6 sm:col-span-3 border md:col-span-3">
 
               <!--Current way of displaying image-->
               <div class="w-full h-[260px] overflow-hidden bg-cover bg-center bg-no-repeat" :style="{ backgroundImage: `url(${apiUrl}/storage/${product.image_url})` }" >

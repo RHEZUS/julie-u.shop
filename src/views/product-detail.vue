@@ -538,7 +538,8 @@ import { useToast } from 'vue-toastification';
           this.price = this.getVariantPrice(variantId);
         },
         getColorsVariants(color){
-          const variants = this.product.variants.filter(variant => variant.option1 === color);
+          const variants = this.product.variants.filter(variant => variant.option1 === color || variant.title.split(' ')[0]=== color);
+          console.log('Color: ', color, '\n', 'Variants: ', variants);
           this.form.product_variant_id = variants[0].id;
           this.selected_color = color;
           return variants;

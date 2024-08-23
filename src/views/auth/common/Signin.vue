@@ -65,6 +65,7 @@ import * as yup from "yup";
 
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
+import { authStore } from "@/store/auth";
 //import apiClient from '@/plugins/axios';
 import axios from 'axios';
 
@@ -81,6 +82,7 @@ export default {
       passwordError: '',
       toast: useToast(),
       router: useRouter(),
+      authStore: authStore(),
     };
   },
   methods: {
@@ -104,7 +106,7 @@ export default {
           this.toast.success("Login successfully", { timeout: 2000 });
           //localStorage.setItem('token', response.data.token);
           const user = response.data.user;
-          //this.$store.commit('SET_AUTHENTICATED', true, user);
+          this.authStore.storeUser(true, user);
           //localStorage.setItem('Julie_shop_auth_user', JSON.stringify(user));
           if (['admin', 'vendor'].includes(user.role)) {
             this.router.push('/dashboard/home');

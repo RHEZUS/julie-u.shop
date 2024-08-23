@@ -1,46 +1,40 @@
-import axios from 'axios';
+import { defineStore } from "pinia";
 
-const state = {
-  isAuthenticated: false,
-  user: null,
-};
+// Utility functions to manage localStorage
+function saveToLocalStorage(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
 
-const mutations = {
-  SET_AUTHENTICATED(state, payload) {
-    state.isAuthenticated = payload.isAuthenticated;
-    state.user = payload.user || null;
+function loadFromLocalStorage(key) {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+}
+
+export const authStore = defineStore("auth", {
+  state: () => ({
+    isAuthenticated: loadFromLocalStorage("isAuthenticated") || false,
+    user: loadFromLocalStorage("user") || {},
+  }),
+  actions: {
+    storeUser(isAuthenticated, user) {
+      this.isAuthenticated = isAuthenticated;
+      this.user = user;
+      saveToLocalStorage("isAuthenticated", isAuthenticated);
+      saveToLocalStorage("user", user);
+    },
+    clearUser() {
+      this.isAuthenticated = false;
+      this.user = {};
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("user");
+    },
   },
-};
-
-const actions = {
-  async checkAuthentication({ commit }) {
-    try {
-      const response = await axios.get('/api/user');
-      const user = response.data.user;
-      commit('SET_AUTHENTICATED', { isAuthenticated: true, user });
-    } catch (error) {
-      commit('SET_AUTHENTICATED', { isAuthenticated: false });
-    }
+  getters: {
+    getAuthState() {
+      return this.isAuthenticated;
+    },
+    getUser() {
+      return this.user;
+    },
   },
-
-  isloggedIn({ commit }, user) {
-    commit('SET_AUTHENTICATED', { isAuthenticated: true, user });
-  },
-
-  isloggedOut({ commit }) {
-    commit('SET_AUTHENTICATED', { isAuthenticated: false, user: null });
-  }
-};
-
-const getters = {
-  isAuthenticated: (state) => state.isAuthenticated,
-  user: (state) => state.user,
-};
-
-export default {
-  namespaced: true,
-  state,
-  mutations,
-  actions,
-  getters,
-};
+});

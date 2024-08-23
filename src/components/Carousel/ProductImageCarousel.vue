@@ -60,6 +60,7 @@
   
   <style lang="scss">
   .main-caro {
+    @apply z-0;
     .swiper-button-next:after,
     .swiper-button-prev:after {
       font-family: unset !important;

@@ -13,7 +13,7 @@
             <div>
               <h4 class="text-xl font-medium text-white mb-2">
                 <span class="block font-normal">Good evening,</span>
-                <span class="block">{{ authUser.name }}</span>
+                <span class="block">Mr/Mrs. {{authStore.user ? authStore.user.name : ''}}</span>
               </h4>
               <p class="text-sm text-white font-normal">Welcome to Dashcode</p>
             </div>
@@ -348,6 +348,7 @@
   import Breadcrumb from "./Analytics-Component/Breadcrumbs";
   import widgetbg2 from "@/assets/images/all-img/widget-bg-2.png"
   import apiClient from "@/plugins/axios";
+  import { authStore } from "@/store/auth";
   import axios from "axios";
   export default {
     components: {
@@ -363,6 +364,7 @@
     },
     data() {
       return {
+        authStore: authStore(),
         mostSales2,
         columnCharthome,
         columnCharthomeDark,
