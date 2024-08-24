@@ -1,1 +1,0 @@
-import{u as s,f as e,$ as a}from"./index-88b678ca.js";import{a as r}from"./auth-b77d730a.js";function c(){const t=s();e.post("/api/logout",{}).then(o=>{r().clearUser(),console.log(o.data),t.success("Logged out successfully!",{timeout:2e3}),a.push({name:"Login"})}).catch(o=>{console.log("Error message: ",o),t.error("Failed to log out",{timeout:2e3})})}export{c as l};

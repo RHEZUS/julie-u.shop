@@ -7,7 +7,7 @@
             <div class="text-lg px-2 uppercase">{{ selectedLanguage }}</div>
 
 
-            <div class="bg-white w-max p-4 hidden group-hover:flex font-medium hover:cursor-pointer flex-col gap-3 absolute left-0 top-7 border h-max" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
+            <div class="bg-white w-max p-4 hidden group-hover:flex font-medium hover:cursor-pointer flex-col gap-3 absolute left-0 top-7 border h-max" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; z-index: 1;">
                 <p><i class='bx bx-world'></i> {{ $t('chooseLanguage') }} </p>
                 <div class="flex gap-2">
                     <button class="border py-1 px-2" :class="selectedLanguage == 'en' ? 'border-pink-500' : '' " @click="changeLanguage('en')"> English </button>

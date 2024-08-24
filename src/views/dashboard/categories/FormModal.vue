@@ -4,12 +4,15 @@
                label="Create User" labelClass="btn-outline-primary h-10 flex items-center" 
                ref="modal1" themeClass="bg-primary-500">
             <form @submit.prevent="formMode === 'create' ? createItem() : updateItem()"  class="text-base text-slate-600 dark:text-slate-300">
-                <Textinput type="text" placeholder="Full Name"
-                           name="name" v-model="form.name" :error="nameError" 
+                <Textinput label="Name in French" type="text" placeholder="Enter the name in French"
+                           name="name" v-model="form.name_fr" :error="nameFRError" 
+                           classInput="h-[48px] mb-3"/>
+                <Textinput label="Name in English" type="text" placeholder="Enter the name in English"
+                           name="name" v-model="form.name_en" :error="nameENError" 
                            classInput="h-[48px] mb-3"/>
                 <Select v-model="form.parent_category_id" :error="parentError" :options="formOptions" 
-                        :placeholder="'Select parent category'" classInput="h-[48px] mb-3"></Select>
-                <Textarea  placeholder="Description of the category"
+                       label="Parent Category" :placeholder="'Select parent category'" classInput="h-[48px] mb-3"></Select>
+                <Textarea label="Description"  placeholder="Description of the category"
                           v-model="form.desc" :error="descError" 
                            hasicon classInput="min-h-[48px]"></Textarea>
                 <div class="py-3 flex justify-end space-x-3 border-t border-slate-100 dark:border-slate-700">
@@ -41,11 +44,13 @@ export default {
     data(){
         return {
             form:{
-                name: '',
+                name_fr: '',
+                name_en: '',
                 parent_category_id: 0,
                 desc: '',
             },
-            nameError: '',
+            nameFRError: '',
+            nameENError: '',
             parentError: '',
             descError: '',
             toast: useToast(),
@@ -94,23 +99,28 @@ export default {
                 
             }).catch((error) => {
                 this.toast.error('Failed to fetch categories', { timeout: 2000 });
-                //console.log(error);
+                console.log(error);
                 
             });
         },
 
         loadEditData(item){
             this.form.id = item.id
-            this.form.name = item.name;
+            this.form.name_fr = item.name_fr;
+            this.form.name_en = item.name_en;
             this.form.parent_category_id = item.parent_category_id;
             this.form.desc = item.desc;
+            console.log('Item:', item , '\nForm:', this.form);
+            
         },
 
         resetForm(){
-            this.form.name = '';
+            this.form.name_fr = '';
+            this.form.name_en = '';
             this.form.parent_category_id = '';
             this.form.desc = '';
-            this.nameError = '';
+            this.nameFRError = '';
+            this.nameENError = '';
             this.parentError = '';
             this.descError = '';
 
@@ -118,12 +128,14 @@ export default {
         createItem(){
             this.storing = true;
             const schema = yup.object({
-                name: yup.string().required("Name is required"),
-                //parent_category_id: yup.number().nullable(),
+                name_fr: yup.string().required("French Name is required"),
+                name_en: yup.string().required("English Name is required"),
+                parent_category_id: yup.number().nullable(),
                 desc: yup.string().nullable(),
             });
             schema.validate({
-                name: this.form.name,
+                name_fr: this.form.name_fr,
+                name_en: this.form.name_en,
                 parent_category_id: this.form.parent_category_id,
                 desc: this.form.desc,
             }).then(() =>{
@@ -162,10 +174,16 @@ export default {
         updateItem(){
             this.storing = true;
             const schema = yup.object({
-                name: yup.string().required("Name is required"),
+                name_fr: yup.string().required("French Name is required"),
+                name_en: yup.string().required("English Name is required"),
+                parent_category_id: yup.number().nullable(),
+                desc: yup.string().nullable(),
             });
             schema.validate({
-                name: this.form.name,
+                name_fr: this.form.name_fr,
+                name_en: this.form.name_en,
+                parent_category_id: this.form.parent_category_id,
+                desc: this.form.desc,
             }).then(() =>{
                 axios.put(`/api/admin/category/update/${this.form.id}`, this.form)
                .then(response => {
@@ -176,8 +194,11 @@ export default {
                     this.storing = false;
                 }).catch(error => {
                     const errors = error.response.data.errors;
-                    if (errors.hasOwnProperty('name')){
-                        this.nameError = errors.name[0];
+                    if (errors.hasOwnProperty('name_fr')){
+                        this.nameFRError = errors.name_fr[0];
+                    }
+                    if (errors.hasOwnProperty('name_en')){
+                        this.nameENError = errors.name_en[0];
                     }
                     if (errors.hasOwnProperty('parent_category_id')){
                         this.parentError = errors.parent_category_id[0];
@@ -189,8 +210,10 @@ export default {
                     this.storing = false;
                 })
             }).catch((error) => {
-                if (error.path === 'name'){
-                    this.nameError = error.errors[0];
+                if (error.path === 'name_fr'){
+                    this.nameFRError = error.errors[0];
+                } else if (error.path === 'name_en') {
+                    this.nameENError = error.errors[0];
                 } else if (error.path === 'parent_category_id') {
                     this.parentError = error.errors[0];
                 } else if (error.path === 'desc') {

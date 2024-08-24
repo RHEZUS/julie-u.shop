@@ -12,7 +12,7 @@
               class="h-full w-full object-cover rounded-full"
           /></span>
           <span
-            class="text-sm md:block hidden font-medium text-slate-600 dark:text-slate-300"
+            class="text-sm capitalize md:block hidden font-medium text-slate-600 dark:text-slate-300"
             >{{ selectLanguage.name }}</span
           >
         </ListboxButton>
@@ -39,6 +39,7 @@
                     : 'text-slate-600 dark:text-slate-300',
                   'w-full border-b border-b-gray-500 border-opacity-10 px-2 py-2 last:border-none last:mb-0 cursor-pointer first:rounded-t last:rounded-b',
                 ]"
+                @click="changeLanguage(item)"
               >
                 <div class="flex items-center space-x-2 rtl:space-x-reverse">
                   <span class="flex-none">
@@ -65,9 +66,9 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import langImg1 from "@/assets/images/flags/usa.png"
-import langImg2 from "@/assets/images/flags/gn.png"
+import langImg2 from "@/assets/images/flags/fr.png"
 import { ref } from "vue";
 import {
   Listbox,
@@ -76,9 +77,46 @@ import {
   ListboxOption,
 } from "@headlessui/vue";
 
-const months = [
-  { name: "En", image: langImg1 },
-  { name: "Fr", image: langImg2 },
-];
-const selectLanguage = ref(months[0]);
+export default {
+  components: {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  },
+  setup() {
+    const months = [
+      { name: "en", image: langImg1 },
+      { name: "fr", image: langImg2 },
+    ];
+    const selectLanguage = ref(months[0]);
+
+    const changeLanguage = (language) => {
+      console.log(language);
+      
+      //this.$i18n.locale = language; // Update the locale
+      //locale.value = language.code; // Update the locale
+      localStorage.setItem('locale', language.name); // Store the selected language in localStorage
+      selectLanguage.value = language; // Update the selected language
+
+      // Reload the page to apply the language change across the entire app
+      window.location.reload();
+    };
+
+    return {
+      months,
+      selectLanguage,
+      changeLanguage,
+    };
+  },
+
+  mounted() {
+    // Get the selected language from localStorage
+    const selectedLanguage = localStorage.getItem('locale') || 'fr';
+    if (selectedLanguage && selectedLanguage !== 'undefined') {
+      console.log('Selected Language: ', selectedLanguage);
+      this.selectLanguage = this.months.find((lang) => lang.name === selectedLanguage);
+    }
+  },
+};
 </script>

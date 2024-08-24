@@ -40,9 +40,9 @@
         </div> 
     </div>
 
-    <div v-else class="px-2 md:px-10 grid grid-cols-12 lg:grid-cols-10 bg-white border-t py-10 gap-8 text-black-500">
-        <div class="capitalize col-span-full md:col-span-6 lg:col-span-4">
-            <p class="text-xl font-medium py-3"> Julie Underweare</p>
+    <div v-else class="px-2 md:px-10 grid grid-cols-12 bg-white border-t py-10 gap-8 text-black-500">
+        <div class="capitalize col-span-full md:col-span-6 lg:col-span-6">
+            <p class="text-xl font-medium py-3"> Julie Underwear</p>
             <p class="py-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia, nulla rem.</p>
             <ul>
                 <li class="py-2 flex items-start gap-4">
@@ -65,7 +65,7 @@
                 </li>
             </ul>
         </div>
-        <div class="capitalize text-base col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2">
+        <div class="capitalize text-base col-span-6  md:col-span-3 lg:col-span-3">
             <p class="text-xl font-medium py-3"> {{ $t('usefulLinks') }}</p>
             <a href="/">
                 <li class="py-2 text-base text-black-500 flex items-start gap-4">
@@ -93,7 +93,7 @@
                 </li>
             </a>
         </div>
-        <div class="capitalize col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2">
+        <div class="capitalize col-span-6  md:col-span-3 lg:col-span-3">
             <p class="text-xl font-medium py-3"> {{ $t('categories') }}</p>
             <a v-if="categories.length > 0" v-for="category in categories.slice(0, 6)"  :href="'/products/category/' + category.slug">
                 <li class="py-2 text-black-500 flex items-start gap-4">
@@ -101,14 +101,6 @@
                 </li>
             </a>
         </div>
-        <div class="capitalize text-base col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2">
-            <p class=" text-xl font-medium py-3"> {{ $t('brands') }}</p>
-            <a v-for="brand in brands.slice(0, 6)"  :href="'/product/brand/' + brand.name">
-                <li class="py-2 text-black-500 flex items-start gap-4">
-                    {{brand.name}}
-                </li>
-            </a>
-        </div> 
     </div>
     
 </template>
